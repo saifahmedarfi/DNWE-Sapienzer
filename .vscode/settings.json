@@ -1,0 +1,19 @@
+{
+  // VS Code Live Server reloads the page when a workspace file changes. The engine writes its parse
+  // cache and PDF conversions into out/ during a request, which would reload the page and wipe the
+  // result, so those folders are ignored. Open the app at http://127.0.0.1:5500/web/index.html
+  // while `.venv/bin/python server.py` runs (API on http://127.0.0.1:8765).
+  "liveServer.settings.ignoreFiles": [
+    ".vscode/**",
+    "**/*.scss",
+    "**/*.sass",
+    "**/*.ts",
+    "out/**",
+    ".venv/**",
+    "resources/**",
+    "backups/**",
+    "corpus/**",
+    "**/*.ipynb",
+    ".git/**"
+  ]
+}

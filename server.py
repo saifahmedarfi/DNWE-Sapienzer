@@ -23,6 +23,7 @@ ACCEPTED = (".txt", ".md", ".markdown", ".docx", ".pdf", ".tex")
 MIME = {".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         ".md": "text/markdown", ".txt": "text/plain", ".tex": "application/x-tex"}
 
+LOCAL_ORIGIN = re.compile(r"https?://(127\.0\.0\.1|localhost|\[::1\])(:\d{1,5})?")
 STATE = {"engine": None, "error": None, "loading_since": time.time(), "ready_at": None}
 ENGINE_LOCK = threading.Lock()              # the engine keeps caches and one LanguageTool server
 
@@ -138,8 +139,11 @@ class Handler(BaseHTTPRequestHandler):
         return {f"127.0.0.1:{self.port}", f"localhost:{self.port}"}
 
     def _origin_ok(self):
+        """Pages from THIS computer may call the API: server.py's own page, the file opened from disk
+        (Origin: null) and local dev servers such as VS Code Live Server (http://127.0.0.1:5500).
+        Pages from any other site are refused."""
         origin = self.headers.get("Origin")
-        return origin is None or origin == "null" or origin in {f"http://{h}" for h in self._allowed_hosts()}
+        return origin is None or origin == "null" or bool(LOCAL_ORIGIN.fullmatch(origin))
 
     def _send(self, code, body, ctype="application/json; charset=utf-8"):
         data = body if isinstance(body, bytes) else json.dumps(body, ensure_ascii=False).encode("utf-8")
@@ -177,7 +181,8 @@ class Handler(BaseHTTPRequestHandler):
             return
         path = self.path.split("?", 1)[0]
         if path in ("/", "/index.html"):
-            self._send(200, PAGE.read_bytes(), "text/html; charset=utf-8")
+            page = PAGE.read_bytes().replace(b'<html lang="en">', b'<html lang="en" data-served="dnwe">', 1)
+            self._send(200, page, "text/html; charset=utf-8")   # marked: the page then calls this same address
         elif path == "/api/health":
             E = STATE["engine"]
             self._send(200, {"ready": E is not None, "error": STATE["error"],

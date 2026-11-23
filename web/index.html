@@ -261,9 +261,11 @@
 </div>
 
 <script>
-// Same origin when served by server.py; when this file is opened from disk, talk to the default port.
+// server.py marks the page it serves (data-served="dnwe") and then the API is on the same address.
+// Opened any other way (VS Code Live Server on :5500, or straight from disk), the API is server.py's
+// default address. Override with ?api=http://127.0.0.1:9000 if you start server.py on another port.
 const API = new URLSearchParams(location.search).get("api")
-  || (location.protocol === "file:" ? "http://127.0.0.1:8765" : "");
+  || (document.documentElement.dataset.served === "dnwe" ? "" : "http://127.0.0.1:8765");
 const $ = (id) => document.getElementById(id);
 const MAX_FILE = 20 * 2 ** 20;
 let chosenFile = null;
@@ -278,7 +280,7 @@ async function poll() {
     if (h.error) { s.dataset.state = "error"; t.textContent = "Engine failed to load — see the server window"; return; }
     s.dataset.state = "loading"; t.textContent = `Engine loading… ${h.loading_seconds}s`;
   } catch {
-    s.dataset.state = "error"; t.textContent = "Server not reachable — start it with: python server.py";
+    s.dataset.state = "error"; t.textContent = `Server not reachable at ${API || location.origin} — start it with: .venv/bin/python server.py`;
   }
   setTimeout(poll, 1500);
 }
