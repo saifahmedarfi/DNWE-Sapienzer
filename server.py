@@ -111,7 +111,9 @@ def humanize(req):
         downloads = [{"format": k, "name": f"{stem}.dnwe.{k}", "mime": E.EXPORT_MIME[k],
                       "data": base64.b64encode(exports[k]).decode()} for k in order]
     sc = rep["style_check"]
+    changed = {(r.block, r.sentence_before) for r in recs if r.status == "applied"}
     return {
+        "sentences": {"total": rep["style_before"]["sentences"], "changed": len(changed)},
         "mode": mode, "intensity": intensity, "format": doc.fmt, "seconds": round(seconds, 2),
         "words": rep["profile"].words, "integrity": rep["integrity"],
         "output_text": after, "diff": word_diff(before, after), "downloads": downloads,

@@ -16,3 +16,6 @@ resources/languagetool/
 
 # transient files the engine creates while verifying output
 out/.integrity_tmp.*
+
+# web-app uploads are private: never version their extracted text
+out/web_*

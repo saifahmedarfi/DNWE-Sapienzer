@@ -8,10 +8,35 @@ rid,decision,status,family,rule,section,confidence,conf_source,before,after,reas
   mv ~/Downloads/DNWE_2.ipynb /home/saifarfi/Volumetric/Sapienaizerv2/
   ```
 - You do not need the `."
+01eb516b9ab3,accept,applied,synonym,synonym:need->require,body,0.8,prior,need,require,'need' -> 'require': same sense in research prose (curated thesaurus),,"- In the terminal, run:
+  ```
+  mv ~/Downloads/DNWE_2.ipynb /home/saifarfi/Volumetric/Sapienaizerv2/
+  ```
+- You don't need the `.","- In the terminal, run:
+  ```
+  mv ~/Downloads/DNWE_2.ipynb /home/saifarfi/Volumetric/Sapienaizerv2/
+  ```
+- You don't require the `."
+bc4487521ee8,accept,applied,synonym,synonym:mostly->largely,body,0.8,prior,mostly,largely,'mostly' -> 'largely': same sense in research prose (curated thesaurus),,"## Part 2 — First run (the first time takes 15–30 minutes, mostly downloads)","## Part 2 — First run (the first time takes 15–30 minutes, largely downloads)"
+5f99b4f5b142,,rejected-gate,restructure,restructure:end-pp-in,body,0.84,prior,"In the browser tab that opens, click **Run → Run All Cells**.",Click **Run → Run All Cells** in the browser tab that opens.,moving the opening phrase to the end varies the sentence shape,"re-parse changed the main clause (root 'Cells'/'*', subject 'all'/'click')","In the browser tab that opens, click **Run → Run All Cells**.",Click **Run → Run All Cells** in the browser tab that opens.
+9a4386025b19,accept,applied,synonym,synonym:show->illustrate,body,0.784,prior,shows,illustrates,'shows' -> 'illustrate': same sense in research prose (curated thesaurus),,"**What you should see:**
+- Section 2 shows download progress.","**What you should see:**
+- Section 2 illustrates download progress."
+6a56ca07261a,accept,applied,synonym,synonym:main->primary,body,0.8,prior,main,primary,'main' -> 'primary': same sense in research prose (curated thesaurus),,"## Part 3 — Label the dev set (30–60 minutes, the main manual task)","## Part 3 — Label the dev set (30–60 minutes, the primary manual task)"
 00005debc603,accept,applied,register,register:expand:haven't,body,0.92,prior,haven't,have not,academic writing spells out contractions,,"Back in the notebook, set `RUN_INSTALL = False` if you haven't, then click **Run All** again.","Back in the notebook, set `RUN_INSTALL = False` if you have not, then click **Run All** again."
+44bd7d121c57,accept,applied,rephrase,rephrase:for example->for instance,body,0.83,prior,for example,for instance,'for example' and 'for instance' say the same,,"In the notebook, scroll to section 19 and set the path, for example:
+   ```
+   MY_PAPER = CORPUS / ""my_draft.docx""
+   ```
+   For LaTeX, use `CORPUS / ""my_latex_paper"" / ""main.tex""`.","In the notebook, scroll to section 19 and set the path, for instance:
+   ```
+   MY_PAPER = CORPUS / ""my_draft.docx""
+   ```
+   For LaTeX, use `CORPUS / ""my_latex_paper"" / ""main.tex""`."
 0220d2162cd1,accept,applied,register,register:expand:don't,body,0.92,prior,don't,do not,academic writing spells out contractions,,"For each edit you don't want, change **accept** to **reject** in **decision** (column B).","For each edit you do not want, change **accept** to **reject** in **decision** (column B)."
 d30da0becc06,accept,applied,register,register:expand:don't,body,0.92,prior,Don't,Do not,academic writing spells out contractions,,"**
    - Don't type `accept` on rows that were blank.","**
    - Do not type `accept` on rows that were blank."
 02e337bae8f1,accept,applied,register,register:expand:don't,body,0.92,prior,Don't,Do not,academic writing spells out contractions,,"- Don't rerun the section 19 cell after editing the CSV, because that overwrites the CSV with a fresh one.","- Do not rerun the section 19 cell after editing the CSV, because that overwrites the CSV with a fresh one."
+1dda5038e5aa,accept,applied,synonym,synonym:extra->additional,body,0.8,prior,extra,additional,'extra' -> 'additional': same sense in research prose (curated thesaurus),,"- **Section 14 says ""Put your papers in…"":** `corpus/` is empty or the files are inside an extra subfolder.","- **Section 14 says ""Put your papers in…"":** `corpus/` is empty or the files are inside an additional subfolder."
 675de6aefe72,accept,applied,register,register:expand:isn't,body,0.92,prior,isn't,is not,academic writing spells out contractions,,"- **""No module named …"":** the kernel isn't `.","- **""No module named …"":** the kernel is not `."

@@ -107,8 +107,8 @@ corpus/
 | Level | Behavior |
 |:--|:--|
 | 🟢 **Conservative** | Fixes + stock phrasing |
-| 🔵 **Balanced** | Conservative + discourse / syntax reconstruction |
-| 🟣 **Extensive** | Balanced + open lexical variation |
+| 🔵 **Balanced** | Conservative + discourse / syntax reconstruction + **whole-text rewriting** of every sentence it safely can (curated thesaurus, phrase and connective swaps, parse-verified clause moves) |
+| 🟣 **Extensive** | Balanced + more swaps per sentence, every eligible clause moved, open lexical variation |
 
 *Intensity controls the **scope** of transformations; mode controls the **writing context**.*
 

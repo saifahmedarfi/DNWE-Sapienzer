@@ -32,7 +32,7 @@ Keep `--seed` in that command: it installs `pip` inside the environment, which t
   ```
   mv ~/Downloads/DNWE_2.ipynb /home/saifarfi/Volumetric/Sapienaizerv2/
   ```
-- You do not need the `.executed` copy or the HTML sample to run anything.
+- You do not require the `.executed` copy or the HTML sample to run anything.
 
 **5. Put your papers in `corpus/`** using this layout:
 ```
@@ -46,7 +46,7 @@ Sapienaizerv2/
         └── sections/...
 ```
 
-## Part 2 — First run (the first time takes 15–30 minutes, mostly downloads)
+## Part 2 — First run (the first time takes 15–30 minutes, largely downloads)
 
 **In VS Code:**
 1. Click **File → Open Folder…**, choose `Sapienaizerv2`, then click **Open**.
@@ -57,14 +57,14 @@ Sapienaizerv2/
 **Or in JupyterLab:** run `source .venv/bin/activate && jupyter lab DNWE_2.ipynb` in the terminal. In the browser tab that opens, click **Run → Run All Cells**.
 
 **What you should see:**
-- Section 2 shows download progress.
+- Section 2 illustrates download progress.
 - Section 14 prints one line per paper, each ending in `integrity OK`.
 - Section 15 prints `31/31 tests passed`.
 - Section 17 prints `Wrote … dev and … test items`.
 
 **After the first successful run**, scroll to section 2 and change `RUN_INSTALL = True` to `RUN_INSTALL = False`. Press **Ctrl+S**.
 
-## Part 3 — Label the dev set (30–60 minutes, the main manual task)
+## Part 3 — Label the dev set (30–60 minutes, the primary manual task)
 
 1. In a file manager, open `Sapienaizerv2/out/` and double-click **dev_set.csv**. It opens in LibreOffice Calc.
 2. In the **Text Import** dialog:
@@ -93,7 +93,7 @@ Sapienaizerv2/
 
 ## Part 5 — Undo individual edits (only if you disagree with some)
 
-1. In the notebook, scroll to section 19 and set the path, for example:
+1. In the notebook, scroll to section 19 and set the path, for instance:
    ```
    MY_PAPER = CORPUS / "my_draft.docx"
    ```
@@ -111,5 +111,5 @@ Sapienaizerv2/
 ## If something fails
 - **Section 1 fails on Java:** repeat step 1, then click **Restart** in the notebook toolbar and **Run All** again.
 - **Section 2 says "retrying in 20s":** the parser download is rate-limited. Leave it; it retries on its own.
-- **Section 14 says "Put your papers in…":** `corpus/` is empty or the files are inside an extra subfolder. Check the layout in Part 1 step 5.
+- **Section 14 says "Put your papers in…":** `corpus/` is empty or the files are inside an additional subfolder. Check the layout in Part 1 step 5.
 - **"No module named …":** the kernel is not `.venv`. Click **Select Kernel** again and choose `.venv`.

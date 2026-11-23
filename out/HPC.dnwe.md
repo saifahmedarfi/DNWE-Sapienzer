@@ -6,19 +6,19 @@ Scope: SLURM scheduling and execution in a portal-based HPC, from resource reque
 
 ## 1	Purpose and Scope
 
-This document explains SLURM as an HPC scheduling and resource-management system and places it inside the proposed portal-based HPC architecture.
+This document clarifies SLURM as an HPC scheduling and resource-management system and places it inside the introduced portal-based HPC architecture.
 
-The architecture used throughout this document is:
+The architecture employed throughout this document is:
 
 The central architectural principle is:
 
-The portal is the user interface, SLURM is the scheduling and resource-allocation layer, compute nodes execute workloads, and Ceph provides shared persistent storage.
+The portal is the user interface, SLURM is the scheduling and resource-allocation layer, compute nodes run workloads, and Ceph provides shared persistent storage.
 
 SLURM does not replace the portal, GPU driver, CUDA, filesystem, or physical hardware. It coordinates these components according to the cluster’s policies and resource inventory.
 
 ## 2	System Architecture
 
-The proposed physical cluster is organized into distinct roles:
+The introduced physical cluster is organized into distinct roles:
 
 | Nodes | Role | Typical Services |
 | --- | --- | --- |
@@ -27,13 +27,13 @@ The proposed physical cluster is organized into distinct roles:
 | 05–07 | CPU Compute | slurmd, CPU/RAM workloads |
 | 08–15 | Storage | Ceph MON/OSD/MDS and storage services |
 
-The control plane should be protected from ordinary research workloads. Compute nodes execute jobs. Storage nodes provide storage. This separation makes failure domains and administrative responsibilities clearer.
+The control plane should be protected from ordinary research workloads. Compute nodes run jobs. Storage nodes offer storage. This separation makes failure domains and administrative responsibilities clearer.
 
 ## 3	1. Who Uses the HPC?
 
-The primary users are researchers and research groups.
+The main users are researchers and research groups.
 
-A researcher should not normally need to know the physical location of a server or GPU. They express a resource requirement such as:
+A researcher should not normally need to know the physical location of a server or GPU. They express a resource requirement including:
 
 - CPU cores;
 
@@ -47,7 +47,7 @@ A researcher should not normally need to know the physical location of a server 
 
 - application or notebook requirements.
 
-In the portal model, the researcher can select these requirements using a web interface rather than manually writing every SLURM directive.
+The researcher can select these requirements using a web interface rather than manually writing every SLURM directive in the portal model.
 
 ## 4	2. How Researchers Submit Work
 
@@ -55,7 +55,7 @@ The portal is the user-facing entry point.
 
 A researcher might see:
 
-The portal backend validates the request and translates it into a SLURM job or allocation request.
+The portal backend verifies the request and translates it into a SLURM job or allocation request.
 
 The researcher therefore interacts with a service, while SLURM remains the infrastructure scheduler underneath that service.
 
@@ -98,17 +98,17 @@ For example:
 
 python train.py
 
-The exact GPU syntax depends on how the cluster’s GRES configuration represents GPUs and MIG devices.
+The exact GPU syntax relies on how the cluster’s GRES configuration represents GPUs and MIG devices.
 
 ## 6	4. What Is sbatch?
 
-sbatch is a SLURM client command used to submit a batch job.
+sbatch is a SLURM client command employed to submit a batch job.
 
 For example:
 
 sbatch job.slurm
 
-The important distinction is:
+The key distinction is:
 
 - sbatch submits the request;
 
@@ -140,23 +140,23 @@ It maintains the cluster’s view of:
 
 - node state.
 
-It answers questions such as:
+It answers questions including:
 
 Which waiting job should run next, and on which resources can it run?
 
-It does not execute the researcher’s Python program itself.
+It does not run the researcher’s Python program itself.
 
 The conceptual flow is:
 
 ## 8	6. Control Plane and High Availability
 
-The proposed architecture uses Nodes 02–04 as control-plane servers.
+The proposed architecture employs Nodes 02–04 as control-plane servers.
 
-A production design may use an active/standby controller arrangement.
+A production design may employ an active/standby controller arrangement.
 
 For example:
 
-The exact placement of slurmdbd, the accounting database, and supporting services must be designed separately. Merely putting services on three servers does not automatically make the entire control plane highly available.
+The exact placement of slurmdbd, the accounting database, and supporting services must be designed independently. Merely putting services on three servers does not automatically make the whole control plane highly available.
 
 ## 9	7. What Is slurmd?
 
@@ -166,9 +166,9 @@ It runs on nodes that are intended to execute SLURM jobs.
 
 For the proposed architecture:
 
-- Node 01 runs slurmd for GPU workloads;
+- Node 01 executes slurmd for GPU workloads;
 
-- Nodes 05–07 run slurmd for CPU workloads.
+- Nodes 05–07 execute slurmd for CPU workloads.
 
 Its conceptual responsibilities are:
 
@@ -176,7 +176,7 @@ Its conceptual responsibilities are:
 
 - establish the job’s execution environment;
 
-- enforce the relevant resource allocation mechanisms;
+- enforce the pertinent resource allocation mechanisms;
 
 - launch the application;
 
@@ -193,11 +193,11 @@ slurmd = compute-node execution daemon
 
 The core sequence is:
 
-This is the most important flow to understand.
+This is the most key flow to understand.
 
 ## 11	9. How SLURM Selects a Compute Node
 
-When a job enters the queue, slurmctld evaluates its requirements against the cluster inventory and configured policies.
+When a job enters the queue, slurmctld assesses its requirements against the cluster inventory and configured policies.
 
 Typical considerations include:
 
@@ -232,7 +232,7 @@ The controller searches for a node and resource set satisfying the request and t
 
 ## 12	10. SLURM Partitions
 
-A SLURM partition is a logical group of nodes with common scheduling characteristics. It is often analogous to a queue.
+A SLURM partition is a logical group of nodes with common scheduling traits. It is frequently analogous to a queue.
 
 A cluster might define:
 
@@ -253,7 +253,7 @@ For the proposed cluster:
 | gpu | Node 01 | GPU/MIG workloads |
 | cpu | Nodes 05–07 | CPU workloads |
 
-A portal can hide partition details from users and select the appropriate partition based on their resource request.
+A portal can hide partition details from users and choose the suitable partition based on their resource request.
 
 ## 13	11. CPU Resource Requests
 
@@ -263,7 +263,7 @@ A CPU job might request:
 #SBATCH --mem=128G
 #SBATCH --time=08:00:00
 
---cpus-per-task is particularly relevant to a multithreaded task or process.
+--cpus-per-task is especially pertinent to a multithreaded task or process.
 
 Examples include:
 
@@ -283,11 +283,11 @@ A memory request such as:
 
 #SBATCH --mem=128G
 
-asks SLURM to allocate the specified amount of node RAM according to the cluster’s configured memory accounting policy.
+asks SLURM to assign the specified quantity of node RAM according to the cluster’s set up memory accounting policy.
 
-The scheduler uses memory as a resource when determining whether a node can host a job.
+When determining whether a node can host a job, the scheduler uses memory as a resource.
 
-Memory is different from GPU memory.
+Memory is distinct from GPU memory.
 
 | Resource | Location |
 | --- | --- |
@@ -306,13 +306,13 @@ places a maximum runtime constraint on the job according to the cluster’s poli
 
 Runtime limits are important to scheduling because the scheduler can reason about when resources are expected to become available.
 
-A cluster may therefore have different time policies for different partitions or QoS levels.
+A cluster may hence have distinct time policies for distinct partitions or QoS levels.
 
 ## 16	14. GRES – Generic Resources
 
 GRES means Generic RESources.
 
-SLURM has native concepts for CPUs, memory, nodes, and other scheduling resources. Specialized devices such as GPUs can be represented through GRES.
+SLURM has native notions for CPUs, memory, nodes, and other scheduling resources. Specialized devices including GPUs can be represented through GRES.
 
 A simple GPU request may look like:
 
@@ -332,15 +332,15 @@ The proposed GPU node contains eight NVIDIA GPUs. If the exact GPU model support
 
 Conceptually:
 
-MIG is not simply arbitrary percentage-based GPU sharing. Supported MIG profiles are hardware-defined. The exact number of tenant instances depends on the actual GPU model and supported profile combinations.
+MIG is not simply arbitrary percentage-based GPU sharing. Supported MIG profiles are hardware-defined. The exact number of tenant instances relies on the real GPU model and supported profile combinations.
 
-Consequently, a statement such as “22 tenant slots” must be validated against the exact GPU model and actual MIG configuration.
+As a result, a statement including “22 tenant slots” must be validated against the exact GPU model and real MIG configuration.
 
 ## 18	16. SLURM and MIG
 
 The relationship is:
 
-The crucial distinction is:
+The vital distinction is:
 
 - MIG creates/configures hardware GPU partitions;
 
@@ -352,9 +352,9 @@ SLURM does not itself manufacture MIG instances.
 
 ## 19	17. Job Priority
 
-SLURM can use a priority system rather than simply executing every job strictly in submission order.
+SLURM can employ a priority system instead of simply running every job strictly in submission order.
 
-Depending on configuration, priority may incorporate factors such as:
+Depending on configuration, priority may integrate factors including:
 
 - job age;
 
@@ -383,13 +383,13 @@ Conceptually:
 | A | Very high | Lower relative priority |
 | B | Low | Higher relative priority |
 
-Fair-share is not a simple “who used more always goes last” rule. Its behavior depends on configured accounting and priority policies.
+Fair-share is not a simple “who used more always goes last” rule. Its behavior relies on configured accounting and priority policies.
 
 ## 21	19. QoS – Quality of Service
 
-SLURM QoS provides another policy mechanism.
+SLURM QoS offers another policy mechanism.
 
-A QoS can impose or influence:
+A QoS can impose or impact:
 
 - maximum runtime;
 
@@ -413,15 +413,15 @@ The portal can map researcher-facing service choices to appropriate QoS policies
 
 ## 22	20. Backfill Scheduling
 
-Backfill allows SLURM to run smaller jobs when they can finish without delaying a higher-priority job that has already been planned.
+Backfill enables SLURM to execute smaller jobs when they can finish without delaying a higher-priority job that has already been planned.
 
 Conceptually:
 
-Backfill improves cluster use while respecting higher-priority scheduling commitments.
+Backfill enhances cluster use while respecting higher-priority scheduling commitments.
 
 ## 23	21. Job States
 
-A researcher may inspect job state using commands such as:
+A researcher may inspect job state using commands including:
 
 squeue
 scontrol show job <JOBID>
@@ -463,7 +463,7 @@ scontrol show node <NODE>
 
 ## 25	23. Node Draining and Maintenance
 
-When a compute node requires maintenance, the administrator can drain it so that new jobs are not placed there.
+When a compute node needs maintenance, the administrator can drain it so that new jobs are not placed there.
 
 For example:
 
@@ -477,7 +477,7 @@ The intended operational pattern is:
 
 - drain the node;
 
-- allow existing work to finish or handle it according to policy;
+- enable existing work to finish or manage it according to policy;
 
 - perform maintenance;
 
@@ -493,7 +493,7 @@ slurmdbd is the SLURM Database Daemon.
 
 It supports accounting and historical resource usage.
 
-It is important to distinguish:
+It is important to differentiate:
 
 | Component | Primary Function |
 | --- | --- |
@@ -517,29 +517,29 @@ Accounting can support reporting by:
 
 - elapsed time.
 
-Thus the HPC can answer questions such as:
+Thus the HPC can answer questions including:
 
 How much GPU time did this research project consume this month?
 
 ## 27	25. Accounts and Research Groups
 
-A multi-user HPC normally needs identity and accounting structures.
+A multi-user HPC normally requires identity and accounting structures.
 
 A conceptual hierarchy is:
 
 University / Organization  Research Group / Project  User  Jobs
 
-This allows resource usage and policies to be associated with research projects rather than treating every user as an isolated entity.
+This permits resource usage and policies to be associated with research projects rather than treating every user as an isolated entity.
 
-The exact authentication and authorization stack is a separate design decision from SLURM itself.
+The exact authentication and authorization stack is a distinct design decision from SLURM itself.
 
 ## 28	26. Portal-to-SLURM Architecture
 
-The portal introduces an additional layer between the researcher and SLURM.
+The portal introduces a further layer between the researcher and SLURM.
 
-The complete interaction is:
+The full interaction is:
 
-The portal backend may generate a batch script, request an interactive allocation, or use another supported SLURM interface. The precise mechanism should be selected during implementation.
+The portal backend may produce a batch script, request an interactive allocation, or employ another supported SLURM interface. During implementation, the precise mechanism should be selected.
 
 The important architectural point is:
 
@@ -547,11 +547,11 @@ The portal abstracts SLURM from the researcher; it does not replace SLURM.
 
 ## 29	27. Interactive Jupyter / Notebook Execution
 
-In the proposed user experience, a researcher requests resources and then receives an interactive notebook environment.
+A researcher requests resources and then receives an interactive notebook environment in the proposed user experience.
 
 The conceptual flow is:
 
-The important nuance is that Jupyter is not inherently part of SLURM. It is an application/service launched within or associated with a resource allocation.
+The key nuance is that Jupyter is not inherently part of SLURM. It is an application/service launched within or associated with a resource allocation.
 
 The production implementation must define how the notebook server is created, authenticated, isolated, exposed to the user, and terminated when the allocation expires.
 
@@ -561,13 +561,13 @@ SLURM is one layer of the stack.
 
 A GPU execution path can be viewed as:
 
-The layers have different responsibilities:
+The layers have distinct responsibilities:
 
 - SLURM allocates and schedules resources;
 
 - the application performs computation;
 
-- CUDA provides GPU programming/runtime facilities;
+- CUDA offers GPU programming/runtime facilities;
 
 - the NVIDIA driver communicates with the GPU through the operating system;
 
@@ -575,19 +575,19 @@ The layers have different responsibilities:
 
 - the physical GPU performs the hardware computation.
 
-This distinction is essential when diagnosing failures.
+This distinction is vital when diagnosing failures.
 
 ## 31	29. Storage: Where SLURM’s Execution Boundary Meets Ceph
 
-The proposed architecture uses Ceph as shared persistent storage.
+The proposed architecture employs Ceph as shared persistent storage.
 
 The key point is:
 
-SLURM schedules compute resources; Ceph provides storage. SLURM’s job execution does not end because Ceph is part of SLURM. They are separate infrastructure layers that cooperate.
+SLURM schedules compute resources; Ceph offers storage. SLURM’s job execution does not end because Ceph is part of SLURM. They are distinct infrastructure layers that cooperate.
 
 The execution relationship is:
 
-A running job may read input data from Ceph and write results back to Ceph. The scheduler does not become the filesystem.
+A running job may read input data from Ceph and write findings back to Ceph. The scheduler does not become the filesystem.
 
 Thus:
 
@@ -597,21 +597,21 @@ Thus:
 
 ## 32	30. The Complete 1–30 Architecture and Operational Findings
 
-The thirty concepts can be condensed into the following operational architecture:
+The thirty notions can be condensed into the following operational architecture:
 
-The architecture therefore separates four major responsibilities:
+The architecture hence separates four major responsibilities:
 
 - User interaction: the portal collects researcher requirements and presents the resulting environment.
 
 - Scheduling: SLURM determines when and where the requested resources can be allocated.
 
-- Execution: compute nodes run the application or notebook inside the allocation.
+- Execution: compute nodes execute the application or notebook inside the allocation.
 
-- Data infrastructure: Ceph supplies shared persistent data independently of the scheduler.
+- Data infrastructure: Ceph supplies shared persistent data separately of the scheduler.
 
 ## 33	31. What the HPC Developer Installs Before Researchers Arrive
 
-Although this section is numbered beyond the requested 1–30 findings, it records an essential implementation consequence of those findings.
+Although this section is numbered beyond the requested 1–30 findings, it records a vital implementation consequence of those results.
 
 SLURM is installed and configured before normal researcher use.
 
@@ -633,7 +633,7 @@ The infrastructure team prepares:
 
 - GRES configuration;
 
-- GPU drivers and CUDA where required;
+- GPU drivers and CUDA where needed;
 
 - MIG configuration where supported;
 
@@ -649,7 +649,7 @@ They do not normally install SLURM themselves.
 
 ## 34	32. Where Each Component Is Deployed
 
-The word “deploy” means installing and configuring software on actual Linux servers or virtual machines.
+The word “deploy” means installing and configuring software on real Linux servers or virtual machines.
 
 A simplified deployment map is:
 
@@ -691,7 +691,7 @@ Before execution, the developer:
 
 - tests failure recovery.
 
-During execution, the developer generally does not manually intervene in healthy jobs.
+During execution, the developer generally does not by hand intervene in healthy jobs.
 
 Instead, they monitor:
 
@@ -711,13 +711,13 @@ Instead, they monitor:
 
 When a failure occurs, investigation can move down the stack:
 
-This is where kernel-level GPU diagnostics can become useful.
+This is where kernel-level GPU diagnostics can become helpful.
 
 ## 36	34. What SLURM Does Not Do
 
-A correct mental model requires knowing what is outside SLURM’s direct responsibility.
+A correct mental model needs knowing what is outside SLURM’s direct responsibility.
 
-SLURM does not inherently:
+SLURM does not intrinsically:
 
 - write the researcher’s code;
 
@@ -733,7 +733,7 @@ SLURM does not inherently:
 
 - automatically make a portal;
 
-- automatically create a Jupyter service;
+- automatically build a Jupyter service;
 
 - automatically configure Ceph;
 
@@ -749,11 +749,11 @@ The proposed design is coherent, but several details must be validated before pr
 
 ### 37.1	Exact GPU and MIG capability
 
-The exact GPU model must be checked before specifying the number of MIG instances. “22 tenant slots” should be derived from real hardware profiles rather than treated as an arbitrary capacity number.
+Before specifying the number of MIG instances, the exact GPU model must be checked. “22 tenant slots” should be derived from real hardware profiles rather than treated as an arbitrary capacity number.
 
 ### 37.2	GRES configuration
 
-The actual GRES configuration must correspond to what the NVIDIA driver and SLURM can discover and schedule. GPU identifiers, device files, MIG resources, and resource counts must be tested.
+The real GRES configuration must correspond to what the NVIDIA driver and SLURM can discover and schedule. GPU identifiers, device files, MIG resources, and resource counts must be tested.
 
 ### 37.3	Notebook lifecycle
 
@@ -773,19 +773,19 @@ The portal must define:
 
 ### 37.4	Container isolation
 
-If containers are used, the architecture must explicitly specify the container runtime and its SLURM integration. A container technology cannot simply be assumed to become part of SLURM automatically.
+If containers are employed, the architecture must explicitly specify the container runtime and its SLURM integration. A container technology cannot simply be assumed to become part of SLURM automatically.
 
 ### 37.5	Ceph roles
 
-The eight Ceph nodes should have explicit MON, OSD, MDS, and storage-pool roles. High availability depends on how those roles are distributed.
+The eight Ceph nodes should have explicit MON, OSD, MDS, and storage-pool roles. High availability relies on how those roles are distributed.
 
 ### 37.6	Network separation
 
-High-speed storage, client access, management traffic, and monitoring may use separate VLANs or network paths depending on the physical design.
+High-speed storage, client access, management traffic, and monitoring may employ distinct VLANs or network paths depending on the physical design.
 
 ## 38	36. Final Mental Model
 
-The entire system can be remembered as one chain:
+The whole system can be remembered as one chain:
 
 Researcher  Portal  Portal Backend  SLURM  Compute Node  Application  GPU/CPU
 
@@ -797,6 +797,6 @@ And the GPU-specific execution path:
 
 SLURM  GPU Allocation  CUDA  NVIDIA Driver  Linux Kernel  GPU
 
-The most important principle is:
+The most key principle is:
 
-The researcher asks the portal for resources. The portal translates the request into a scheduling request. SLURM decides when and where those resources are allocated. slurmd launches the workload on the selected compute node. The application then uses the allocated CPU/GPU resources and accesses persistent data through Ceph. The HPC developer maintains the infrastructure beneath this workflow rather than manually allocating resources for every researcher.
+The researcher asks the portal for resources. The portal translates the request into a scheduling request. SLURM decides when and where those resources are allocated. slurmd launches the workload on the selected compute node. The application then employs the allocated CPU/GPU resources and accesses persistent data through Ceph. The HPC developer maintains the infrastructure beneath this workflow instead of by hand allocating resources for every researcher.

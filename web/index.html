@@ -191,8 +191,8 @@
             <legend>Intensity</legend>
             <div class="options">
               <label class="opt"><input type="radio" name="intensity" value="conservative"><span class="name">Conservative</span><span class="desc">Fixes and stock phrasing only.</span></label>
-              <label class="opt"><input type="radio" name="intensity" value="balanced" checked><span class="name">Balanced</span><span class="desc">Also transitions, openers and sentence rhythm.</span></label>
-              <label class="opt"><input type="radio" name="intensity" value="extensive"><span class="name">Extensive</span><span class="desc">Also open vocabulary variation, stronger targets.</span></label>
+              <label class="opt"><input type="radio" name="intensity" value="balanced" checked><span class="name">Balanced</span><span class="desc">Rewords every sentence it safely can: vocabulary, phrasing, clause order, transitions.</span></label>
+              <label class="opt"><input type="radio" name="intensity" value="extensive"><span class="name">Extensive</span><span class="desc">More swaps per sentence, every eligible clause moved, stronger targets.</span></label>
             </div>
           </fieldset>
 
@@ -376,7 +376,9 @@ function editItem(x, withGate) {
 function render(d) {
   $("result").hidden = false;
   const c = d.counts;
+  const sc = d.sentences || { changed: 0, total: 0 };
   $("summary").replaceChildren(
+    el("span", {}, el("b", {}, `${sc.changed} of ${sc.total}`), " sentences rewritten"),
     el("span", {}, el("b", {}, String(c.applied)), " edits applied"),
     el("span", {}, el("b", {}, String(c["rejected-gate"] + c["below-threshold"] + c.overlap + c["refused-docx"])), " not applied"),
     el("span", {}, el("b", {}, `${d.input_words} → ${d.output_words}`), " words"),
