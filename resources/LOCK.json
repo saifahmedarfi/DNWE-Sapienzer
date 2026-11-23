@@ -1,0 +1,6 @@
+{
+  "stanford-parser-3.9.2.jar": "sha1:652e57ece7904a7d2ba9723d7971c892d944da6e",
+  "stanford-parser-3.9.2-models.jar": "sha1:432e75a159c5a0c57769898b9aa72f2a7f5511f7",
+  "ppdb-2.0-l-all.gz": "sha256:0fde517b55fcaa08a87534df78236d8803c9e8c00382415f5f15ae51ecf3330e",
+  "pcfg_model_sha256": "ed674cce7311f76c018806e61cdb045e219258ee30014da4e3e686b9230ebea9"
+}

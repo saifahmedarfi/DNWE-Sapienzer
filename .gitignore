@@ -1,0 +1,18 @@
+# environments and caches (machine-specific; recreate with requirements.txt)
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+
+# editor/agent internals
+.claude/
+
+# downloaded resources (~2.6 GB, too large for GitHub; section 2 re-downloads and
+# checksum-verifies them). resources/LOCK.json stays tracked: it pins their exact versions.
+resources/*.jar
+resources/*.gz
+resources/*.sqlite
+resources/sp/
+resources/languagetool/
+
+# transient files the engine creates while verifying output
+out/.integrity_tmp.*

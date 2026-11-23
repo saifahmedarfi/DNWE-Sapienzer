@@ -1,0 +1,9 @@
+document,ingest,analysis,parse,languagetool,rules_and_gate,select,render
+CANTOR.pdf,2.4,4.5,0.01,8.36,1.46,0.03,0.0
+CONVERSION.md,0.0,0.14,0.0,0.42,0.22,0.01,0.0
+HPC.docx,0.79,0.92,0.0,5.9,1.6,0.02,0.76
+llmqqm9.pdf,5.79,1.65,0.03,5.22,2.61,0.09,0.0
+sapienzer.txt,0.01,0.42,0.0,1.08,0.79,0.08,0.0
+main_bhortijuddho.tex,0.02,0.83,0.01,2.87,1.31,0.01,0.0
+main_celeba.tex,0.03,0.86,0.03,4.55,1.53,0.08,0.0
+main_morphena.tex,0.04,1.1,0.03,4.57,1.97,0.14,0.0

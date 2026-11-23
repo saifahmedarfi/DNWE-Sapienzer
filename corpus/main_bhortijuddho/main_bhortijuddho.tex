@@ -1,0 +1,411 @@
+\documentclass[conference,letterpaper]{IEEEtran}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{times}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc,fit}
+\usepackage{booktabs,tabularx,array,multirow}
+\usepackage{enumitem}
+\usepackage{balance}
+\usepackage{url}
+\usepackage[colorlinks=true,linkcolor=black,citecolor=blue,urlcolor=blue]{hyperref}
+
+\graphicspath{{figures/}}
+\setlist[itemize]{leftmargin=1.25em,label=\textbullet,itemsep=0pt,parsep=0pt,topsep=2pt}
+\setlist[enumerate]{leftmargin=1.6em,itemsep=0pt,parsep=0pt,topsep=2pt}
+\setlength{\emergencystretch}{1em}
+
+% ---------- Float spacing (prevents large white gaps around floats) ----------
+\setlength{\textfloatsep}{6pt plus 1pt minus 2pt}
+\setlength{\floatsep}{5pt plus 1pt minus 2pt}
+\setlength{\intextsep}{5pt plus 1pt minus 2pt}
+\setlength{\dbltextfloatsep}{6pt plus 1pt minus 2pt}
+\setlength{\abovecaptionskip}{3pt}
+\setlength{\belowcaptionskip}{0pt}
+\renewcommand{\topfraction}{0.92}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.08}
+\renewcommand{\floatpagefraction}{0.85}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{5}
+
+\urlstyle{same}
+\definecolor{userblue}{HTML}{1765A8}
+\definecolor{securitygreen}{HTML}{257440}
+\definecolor{frontendorange}{HTML}{A95413}
+\definecolor{serviceteal}{HTML}{087A70}
+\definecolor{databaseviolet}{HTML}{61419C}
+\definecolor{storagepurple}{HTML}{88419B}
+\definecolor{diagramink}{HTML}{243443}
+\tikzset{
+  flow/.style={-{Stealth[length=2mm,width=1.35mm]},draw=diagramink!80,line width=0.65pt},
+  component/.style={rounded corners=2pt,draw,line width=0.75pt,align=center,
+    font=\sffamily\scriptsize,text=diagramink,inner sep=3.5pt,minimum height=0.8cm},
+  usercomponent/.style={component,draw=userblue,fill=userblue!9},
+  securitycomponent/.style={component,draw=securitygreen,fill=securitygreen!9},
+  frontendcomponent/.style={component,draw=frontendorange,fill=frontendorange!10},
+  servicecomponent/.style={component,draw=serviceteal,fill=serviceteal!9},
+  databasecomponent/.style={component,draw=databaseviolet,fill=databaseviolet!9},
+  storagecomponent/.style={component,draw=storagepurple,fill=storagepurple!9}
+}
+
+\title{BhortiJuddho: A Unified Admission Platform with\\
+AI-Assisted Counseling for Higher Education in Bangladesh}
+\author{
+\IEEEauthorblockN{Syed Mohaiminul Islam}
+\IEEEauthorblockA{
+\texttt{mohaiminul.islam.232@northsouth.edu}\\
+Department of Electrical and Computer Engineering\\
+North South University, Dhaka, Bangladesh
+}
+\and
+\IEEEauthorblockN{Israt Jahan Sanjana}
+\IEEEauthorblockA{
+\texttt{israt.sanjana@northsouth.edu}\\
+Department of Electrical and Computer Engineering\\
+North South University, Dhaka, Bangladesh
+}
+\and[\hfill\mbox{}\par\mbox{}\hfill]
+\IEEEauthorblockN{M Saif Ahmed}
+\IEEEauthorblockA{
+\texttt{saif.ahmed03@northsouth.edu}\\
+Department of Electrical and Computer Engineering\\
+North South University, Dhaka, Bangladesh
+}}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+BhortiJuddho is a web-based admission prototype for Bangladesh that allows applicants to maintain one profile, academic record, and document repository for reuse across university applications. The platform combines a React single-page application with Supabase authentication, PostgreSQL, object storage, institution-specific eligibility rules, and an AI-assisted counselor with a deterministic fallback for supported calculations. Row-level security enforces student ownership and university-scoped administrative access. Developer-run prototype benchmarks reported 18 minutes to complete five applications, a 2.1\% data-entry error rate, 92~ms profile retrieval, and no unauthorized disclosure in 50 access-control attempts. These aggregate results indicate the feasibility of master-data reuse, but the absence of participant-level records, load-test traces, and a labeled AI-answer dataset prevents broader claims about usability, scalability, or counseling accuracy. The paper therefore presents the architecture, requirements, security model, benchmark evidence, and limitations as a basis for a larger field evaluation with Bangladeshi universities.
+\end{abstract}
+
+\begin{IEEEkeywords}
+university admission, common application, Bangladesh, row-level security, eligibility checking, AI-assisted counseling
+\end{IEEEkeywords}
+
+\section{Introduction}
+Bangladesh combines coordinated and institution-specific admission processes. For the 2025--2026 cycle, the General, Science, and Technology (GST) process coordinated admission activity for 19 public universities \cite{gst}; other institutions retain their own application portals, requirements, and tests, as illustrated by BRAC University's separate online process \cite{bracapply}. This coexistence requires applicants targeting institutions outside one cluster to repeat profile, grade, and document entry.
+
+\emph{BhortiJuddho} roughly means “admission battle” in Bangla. The prototype addresses that burden through a reusable master profile and a common application workspace. Its contributions are: (1) a master-data model that reuses personal, academic, and document records; (2) configurable eligibility rules for SSC/HSC and O/A-Level applicants; (3) profile-grounded AI counseling with a rule-based fallback; and (4) database-level access control evaluated through prototype efficiency, latency, error, and authorization checks. Section~II compares related systems; Sections~III and IV present requirements and design; Sections~V--VII report the available evidence, discuss limitations, and identify future work.
+
+\section{Related Work}
+Centralized admission can alter applicant composition and allocation outcomes \cite{candelaria}, while earlier e-governance and multi-agent systems demonstrate workflow consolidation and rule-based processing \cite{muralidhara,auddy}. Machine-learning studies extend admission decision support \cite{assiri}; educational-AI and chatbot research motivates interactive guidance but also requires domain-specific validation \cite{ahmad,baviskar}.
+
+\begin{table}[!t]
+\caption{Comparison of Admission Platforms}
+\label{tab:systems}
+\centering\scriptsize
+\setlength{\tabcolsep}{2.2pt}\renewcommand{\arraystretch}{1.08}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+Capability & Common & UCAS & GST & Private & Bhorti-\\[-2pt]
+ & App & & BD & portals & Juddho\\
+\midrule
+Reusable common profile & \checkmark & \checkmark & Partial & -- & \checkmark\\
+Multi-institution scope & \checkmark & \checkmark & \checkmark & -- & \checkmark\\
+Private-university focus & \checkmark & \checkmark & -- & Single & \checkmark\\
+Dual-curriculum rules & Varies & Varies & Limited & Varies & \checkmark\\
+AI-assisted guidance & -- & -- & -- & -- & Prototype\\
+Application tracking & \checkmark & \checkmark & \checkmark & Varies & \checkmark\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:systems} positions BhortiJuddho against operational platforms. Common App reuses common responses across more than 1,100 institutions \cite{commonapp}; UCAS supports up to five undergraduate choices \cite{ucas}; JoSAA performs centralized seat allocation for Indian technical institutes \cite{josaa}; and GST coordinates a subset of Bangladeshi public universities \cite{gst}. The gap addressed here is a Bangladesh-focused profile-reuse layer spanning institution-specific applications, dual-curriculum eligibility, tracking, and counseling. BhortiJuddho remains a prototype rather than a deployed replacement for these systems.
+
+\section{Requirements and Methodology}
+Requirements were derived from a review of admission workflows and public portal documentation, not from a formal student survey. The scope includes profile creation, academic records, document upload, program discovery, eligibility checking, application submission and tracking, counseling, PDF export, and university administration. Table~\ref{tab:req} links representative requirements to the available verification evidence.
+
+\begin{table}[!t]
+\caption{Requirements, Use Cases, and Verification}
+\label{tab:req}
+\centering\scriptsize
+\setlength{\tabcolsep}{2.1pt}\renewcommand{\arraystretch}{1.08}
+\begin{tabularx}{\columnwidth}{@{}l l X l@{}}
+\toprule
+ID & Actor & Requirement / use case & Evidence\\
+\midrule
+FR1 & Student & Maintain one reusable profile and documents & CRUD check\\
+FR2 & Student & Search programs and check eligibility & Rule tests\\
+FR3 & Student & Submit and track applications & Workflow check\\
+FR4 & Student & Request AI or fallback guidance & Functional check\\
+FR5 & Admin & Manage own university, programs, and applicants & RLS tests\\
+NFR1 & System & Protect tenant and student records & 50 attempts\\
+NFR2 & System & Retrieve profile interactively & 92~ms aggregate\\
+NFR3 & System & Support accessible, responsive interaction & Not measured\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The implementation was evaluated using the aggregate project log available for this paper. It records completion time, field errors, profile latency, and authorization outcomes, but does not retain participant counts, trial-level distributions, test location, database region, or workload traces. Consequently, the evaluation reports prototype observations and mathematically implied baselines, not a controlled user study or load test. Authentication uses email/password sessions and optional OAuth login; the resulting access token supplies the database authorization context. This avoids the earlier, imprecise description of authentication as “JWT-based OAuth.”
+
+\section{System Design and Implementation}
+Figure~\ref{fig:architecture} shows the headless architecture. The React client calls Supabase services over HTTPS; PostgreSQL stores relational data and object storage holds documents. This separation simplifies deployment, but reliability remains dependent on the hosted provider. The project repository is available online \cite{repository}.
+
+\begin{figure}[!t]
+\centering
+\resizebox{0.67\columnwidth}{!}{\input{figures/system-architecture.tikz}}
+\caption{System architecture of BhortiJuddho. Authorization is enforced at the data layer rather than only in the client.}
+\label{fig:architecture}
+\end{figure}
+
+\subsection{Master Data and Eligibility}
+As Fig.~\ref{fig:master-data} illustrates, applications reference one student-owned master record instead of copying it. University-specific fields remain attached to the corresponding application. Program discovery is a conventional filter over tuition, location, and intake; eligibility is evaluated separately against configurable program rules.
+
+\begin{figure}[!t]
+\centering
+\input{figures/master-data-reuse.tikz}
+\caption{Master-data reuse: one verified profile supplies multiple university applications while institution-specific answers remain separate.}
+\label{fig:master-data}
+\end{figure}
+
+Table~\ref{tab:grades} documents the normalization policy used for rule comparison. Local GPA is represented on its native five-point scale. O/A-Level letters use the published BRAC University scale as one institution-specific configuration \cite{bracgrades}; the platform does not treat it as a national equivalence standard. For a rule with minimum score $m$, the eligibility ratio is $r=s/m$; all mandatory rules must satisfy $r\geq1$. Special subject, portfolio, or test requirements remain explicit Boolean predicates.
+
+\begin{table}[!t]
+\caption{Configurable Grade Normalization Example}
+\label{tab:grades}
+\centering\scriptsize
+\setlength{\tabcolsep}{2.5pt}\renewcommand{\arraystretch}{1.06}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Input system & Stored score $s$ & Eligibility comparison\\
+\midrule
+SSC/HSC & Reported GPA (0--5) & $s/$ required GPA\\
+O-Level & A=5, B=4, C=3, D=2 & Mean / configured minimum\\
+A-Level & A=5, B=4, C=3, D=2, E=1 & Mean / configured minimum\\
+Special rule & Subject/test predicate & Must evaluate true\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{AI Counselor and Privacy}
+The counselor uses profile-grounded prompting, not retrieval-augmented generation: selected grades and preferences are inserted into the request sent to the configured Gemini service. The implementation record identifies the service as “Gemini Pro” but does not preserve a model identifier or API version; this limits reproducibility. As Fig.~\ref{fig:ai-flow} shows, timeout, rate-limit, or API errors trigger regex-based rules for supported GPA calculations and financial-constraint queries. Unsupported requests receive a message directing the applicant to official university information. Because profile data can leave the platform, production deployment requires explicit consent, data minimization, retention controls, and a verified model configuration.
+
+\begin{figure}[!t]
+\centering
+\input{figures/ai-counselor-flow.tikz}
+\caption{AI counselor decision flow. The fallback covers only declared rule types and does not silently invent an answer.}
+\label{fig:ai-flow}
+\end{figure}
+
+Figure~\ref{fig:counselor-ui} shows the implemented conversational interface. Its presence demonstrates the interaction path only; answer quality is evaluated separately.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.46\columnwidth]{ai-counselor.png}
+\caption{AI-assisted counselor interface. Production use requires validated answers, explicit consent, and data minimization.}
+\label{fig:counselor-ui}
+\end{figure}
+
+\subsection{Security, Roles, and Workflow}
+PostgreSQL row-level security filters visible and modifiable rows by policy \cite{postgresql}. Student policies match \texttt{auth.uid()} to record ownership; university-admin policies additionally require the application's university identifier to belong to the administrator. Platform administrators manage global reference data through privileged server-side operations. Supabase notes that denied reads commonly return no rows rather than a 403 response \cite{supabase}; the evaluation therefore records disclosure outcomes, not assumed HTTP codes.
+
+\begin{table}[!t]
+\caption{Role and Permission Summary}
+\label{tab:roles}
+\centering\scriptsize
+\setlength{\tabcolsep}{2.2pt}\renewcommand{\arraystretch}{1.05}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Data & Student & University admin & Platform admin\\
+\midrule
+Profile/documents & Own C/R/U/D & No access & Support only\\
+Applications & Own C/R/U & Assigned university R/U & All R/U\\
+Programs & Read & Own C/R/U & All C/R/U/D\\
+Universities & Read & Own read/update & All C/R/U/D\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Figure~\ref{fig:erd} makes the ownership boundaries explicit: a student owns reusable records and applications; each application targets one program; each program belongs to one university; and a university administrator is scoped to one university. Figure~\ref{fig:operations} summarizes both the tracked status lifecycle and the authenticated request path.
+
+\begin{figure}[!t]
+\centering
+\resizebox{0.94\columnwidth}{!}{\input{figures/er-diagram.tikz}}
+\caption{Core entity relationships. Foreign keys connect applications to both the applicant and the selected program.}
+\label{fig:erd}
+\end{figure}
+
+The request path validates input in the service layer, attaches the session token, and relies on database policy for final authorization.
+
+\begin{figure}[!t]
+\centering
+\resizebox{0.94\columnwidth}{!}{\input{figures/application-lifecycle.tikz}}\\[3pt]
+\resizebox{0.62\columnwidth}{!}{\input{figures/system-workflow.tikz}}
+\caption{Operational flow: application status transitions (top) and authenticated requests with database-enforced row-level security (bottom).}
+\label{fig:operations}
+\end{figure}
+
+\section{Evaluation}
+\subsection{Efficiency and Response Time}
+The aggregate benchmark reports 18 minutes for five applications and a 60\% reduction, implying a 45-minute baseline; a 2.1\% error rate and 75\% reduction imply an 8.4\% baseline. These derived values are visualized in Fig.~\ref{fig:performance}. They should not be interpreted as population estimates because raw trials and participant characteristics are unavailable. Profile retrieval was reported as 92~ms, with neither percentile latency nor test region retained. No concurrent-user load test was recorded, so scalability is not claimed.
+
+\begin{figure}[!t]
+\centering
+\input{figures/performance-chart.tikz}
+\caption{Reported prototype outcomes and baselines implied by the original percentage reductions. Scales are separated to avoid comparing unlike units.}
+\label{fig:performance}
+\end{figure}
+
+\subsection{Security and AI Evaluation}
+Table~\ref{tab:security} documents the five authorization classes represented in the 50-attempt aggregate. The per-class attempt distribution was not retained. The observed result was no unauthorized row disclosure or unauthorized update; denied reads returned empty results where row policies filtered all records.
+
+\begin{table}[!t]
+\caption{Authorization Test Coverage}
+\label{tab:security}
+\centering\scriptsize
+\setlength{\tabcolsep}{2pt}\renewcommand{\arraystretch}{1.04}
+\begin{tabularx}{\columnwidth}{@{}X l l@{}}
+\toprule
+Scenario & Expected & Aggregate result\\
+\midrule
+Read another student's profile & No rows & No disclosure\\
+Edit another student's application & Rejected & No update\\
+Admin reads another university & No rows & No disclosure\\
+Unauthenticated request & No rows & No disclosure\\
+Direct API request bypassing UI & Policy enforced & No disclosure\\
+\midrule
+Total & 50 attempts & 0 unauthorized successes\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+No labeled question set or expert answer key was preserved for the counselor. Accordingly, this paper does not report AI accuracy, hallucination rate, or fallback coverage as measured outcomes. A preregistered follow-up should sample eligibility, GPA, deadline, fee, program, and general-advice questions; score factual correctness against official notices; and report accuracy and latency separately for AI, rule fallback, and unanswered paths.
+
+\begin{table}[!t]
+\caption{Planned AI Counselor Evaluation Protocol}
+\label{tab:ai-eval}
+\centering\scriptsize
+\setlength{\tabcolsep}{2pt}\renewcommand{\arraystretch}{1.04}
+\begin{tabularx}{\columnwidth}{@{}l X l@{}}
+\toprule
+Question class & Reference answer source & Reported measure\\
+\midrule
+Eligibility & Official program rules & Exact-rule accuracy\\
+GPA calculation & Hand-computed cases & Numeric accuracy\\
+Deadlines and fees & Dated official notices & Factual accuracy\\
+Program information & University catalogue & Supported claims\\
+General advice & Expert rubric & Helpfulness / safety\\
+\midrule
+All classes & Timed AI and fallback runs & Latency, route, unanswered rate\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[!t]
+\caption{Revised Prototype Performance Summary}
+\label{tab:performance}
+\centering\scriptsize
+\setlength{\tabcolsep}{1.8pt}\renewcommand{\arraystretch}{1.03}
+\begin{tabularx}{\columnwidth}{@{}X l l X@{}}
+\toprule
+Metric & Result & Baseline & Method / qualification\\
+\midrule
+Five applications & 18 min & 45 min$^*$ & Aggregate timed workflow\\
+Entry error rate & 2.1\% & 8.4\%$^*$ & Aggregate field comparison\\
+Profile retrieval & 92 ms & 297 ms$^*$ & Aggregate client timing\\
+Unauthorized access & 0/50 & N/A & Cross-tenant RLS attempts\\
+AI answer accuracy & Not measured & N/A & Labeled dataset required\\
+\bottomrule
+\multicolumn{4}{l}{\scriptsize $^*$Baseline inferred from the percentage reported in the original project table.}
+\end{tabularx}
+\end{table}
+
+\subsection{Validity of the Evidence}
+The aggregate measurements support only a feasibility assessment. Construct validity is limited because “completion time” and “data-entry error” were not accompanied by operational definitions or trial-level records. The inferred baselines in Table~\ref{tab:performance} are algebraically consistent with the reported percentage improvements, but they are not independently observed values. A follow-up study should timestamp each task, define an error as a submitted field that differs from a verified source record, and publish anonymized per-participant results.
+
+Internal validity is also limited by the absence of counterbalancing, repeated trials, and environment metadata. Familiarity with the prototype, network conditions, browser caching, or differences between comparison portals could account for part of the observed timing gap. Response-time experiments should therefore fix the client location and database region, report median and 95th-percentile latency, clear caches between prescribed runs, and repeat each operation under controlled concurrency.
+
+External validity remains untested because the prototype has not been used in a live admission cycle. The authorization checks cover important cross-tenant cases, but not injection, credential theft, denial-of-service, storage-policy errors, or administrative misuse. Likewise, the counselor protocol in Table~\ref{tab:ai-eval} must be executed against dated official notices before any claim of factual accuracy or applicant benefit is made.
+
+\section{Results and Discussion}
+The available evidence is consistent with the expected advantage of master-data reuse: the fixed cost of completing a profile is paid once, so additional applications require fewer repeated fields. The authorization tests support the intended isolation model, but do not constitute penetration testing. Figure~\ref{fig:student-dashboard} shows how the implemented student view consolidates progress and document status; it demonstrates implementation coverage, not usability.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.90\columnwidth]{student-dashboard.png}
+\caption{Student dashboard. The summary cards expose application progress and document completeness in one view.}
+\label{fig:student-dashboard}
+\end{figure}
+
+The hosted backend reduces implementation effort while introducing provider, region, cost, and availability dependencies. National-scale adoption would require peak-load testing, shared data standards, payment integration, governance, and agreement from universities that currently control their own portals. Figure~\ref{fig:admin-dashboard} illustrates the institution-scoped management view. No anxiety reduction, satisfaction, or administrative-efficiency claim is made without a field study.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.92\columnwidth]{admin-dashboard.png}
+\caption{University administration dashboard. The view groups institution-owned programs, applicants, and status controls.}
+\label{fig:admin-dashboard}
+\end{figure}
+
+\subsection{Adoption Implications}
+A shared admission layer changes institutional responsibilities as well as software architecture. Universities would need to agree on a minimum common data schema, ownership of applicant records, retention periods, correction procedures, and service-level expectations during peak submission windows. Institution-specific essays, portfolios, tests, and quotas should remain configurable rather than being forced into one national rule set. This preserves local autonomy while allowing common identity, profile, document, and tracking services.
+
+Operational deployment also requires a governance model for onboarding universities and publishing authoritative program data. Each institution should designate administrators who can update deadlines and eligibility rules, while platform operators maintain audit logs and versioned policy changes. Applicants should be shown the source and effective date of consequential guidance. These controls are particularly important for AI-assisted responses: the counselor should support navigation and calculation, but official university notices must remain the final authority for deadlines, fees, and eligibility decisions.
+
+\subsection{Operational Safeguards}
+A production service should preserve an immutable audit trail for profile changes, application submissions, status transitions, administrative edits, and document access. High-impact operations should record the actor, institution, timestamp, affected record, and policy version. Role changes and bulk exports require additional approval, while repeated authorization failures should trigger review without exposing applicant data in diagnostic logs.
+
+The counselor should display when an answer was generated, identify the institutional source used for factual claims, and offer a direct escalation path when confidence or source freshness is inadequate. Applicants should be able to withhold optional profile fields from external AI processing without losing access to core application functions. A documented incident-response process should cover erroneous guidance, compromised accounts, incorrect university rules, and service outages during deadline periods.
+
+\section{Limitations}
+The prototype has not been deployed with real universities or evaluated through a controlled applicant study. Aggregate benchmark records omit sample size and distributions; load, usability, and AI-accuracy tests remain outstanding. Documents are verified manually, notifications are absent, payments are simulated, university data is static, and the interface is English-only. Grade rules may not cover equivalency and international cases. Profile-grounded AI requests may expose personal data to an external service and can produce incorrect advice. Finally, the platform depends on university participation and acceptance of a shared application workflow.
+
+\section{Conclusion and Future Work}
+BhortiJuddho demonstrates a six-component prototype for reusable admission data, configurable eligibility, application tracking, AI-assisted guidance, and database-level isolation. Aggregate benchmarks suggest lower repeated-entry effort and successful blocking of the tested cross-tenant requests, but the current evidence is insufficient for claims of national scalability, improved usability, or counselor accuracy.
+
+Priority work is automated document verification, partnerships with universities, a larger controlled evaluation, Bangla support, and a versioned admission knowledge base. Subsequent work should add payment and notification services, publish load-test traces, evaluate AI answers with expert-labeled questions, obtain informed consent for external processing, and test the platform during a real admission cycle.
+
+\balance
+\begin{thebibliography}{15}
+\bibitem{gst}
+Bangladesh Sangbad Sangstha, “Application process for GST admission test begins on Dec. 10,” Dec. 7, 2025. [Online]. Available: \url{https://www.bssnews.net/news/339611}
+
+\bibitem{bracapply}
+BRAC University, “Admissions,” accessed Sep. 30, 2026. [Online]. Available: \url{https://www.bracu.ac.bd/admissions}
+
+\bibitem{candelaria}
+J. Candelaria, L. Carnoy, and B. Khavul, “Centralized college admissions and student composition,” \emph{Economics of Education Review}, vol. 85, Art. no. 102184, 2021.
+
+\bibitem{muralidhara}
+M. B. L. Muralidhara and G. C. Babu, “Centralized admission: A novel student-centric e-governance process,” \emph{Int. J. Computer Applications}, vol. 66, no. 23, pp. 41--46, 2013.
+
+\bibitem{auddy}
+A. Auddy and S. Mukhopadhyay, “Modelling online admission system: A multi-agent based approach,” \emph{Int. J. Modern Education and Computer Science}, vol. 5, pp. 26--32, 2014.
+
+\bibitem{assiri}
+B. Assiri, M. Bashraheel, and A. Alsuri, “Enhanced student admission procedures at universities using data mining and machine learning techniques,” \emph{Applied Sciences}, vol. 14, no. 3, Art. no. 1109, 2024.
+
+\bibitem{ahmad}
+S. F. Ahmad \emph{et al.}, “Academic and administrative role of artificial intelligence in education,” \emph{Sustainability}, vol. 14, no. 3, Art. no. 1101, 2022.
+
+\bibitem{baviskar}
+S. Baviskar \emph{et al.}, “EduAssist: Chatbot for student admission queries,” \emph{IJRASET}, 2024, doi: 10.22214/ijraset.2024.65069.
+
+\bibitem{commonapp}
+Common App, “How to apply to college with Common App,” accessed Sep. 30, 2026. [Online]. Available: \url{https://www.commonapp.org/apply/}
+
+\bibitem{ucas}
+UCAS, “Dates and deadlines for university applications,” accessed Sep. 30, 2026. [Online]. Available: \url{https://www.ucas.com/applying/applying-to-university/dates-and-deadlines-for-uni-applications}
+
+\bibitem{josaa}
+Joint Seat Allocation Authority, “JoSAA 2026,” accessed Sep. 30, 2026. [Online]. Available: \url{https://josaa.nic.in/josaa/}
+
+\bibitem{repository}
+M. S. Ahmed, “BhortiJuddho source code repository,” GitHub, accessed Sep. 30, 2026. [Online]. Available: \url{https://github.com/saifahmed03/bhortiwar.git}
+
+\bibitem{bracgrades}
+BRAC University, “Undergraduate admission requirements,” accessed Sep. 30, 2026. [Online]. Available: \url{https://www.bracu.ac.bd/admissions/undergraduate}
+
+\bibitem{postgresql}
+PostgreSQL Global Development Group, “Row security policies,” PostgreSQL 17 Documentation, accessed Sep. 30, 2026. [Online]. Available: \url{https://www.postgresql.org/docs/17/ddl-rowsecurity.html}
+
+\bibitem{supabase}
+Supabase, “Row Level Security,” accessed Sep. 30, 2026. [Online]. Available: \url{https://supabase.com/docs/guides/database/postgres/row-level-security}
+\end{thebibliography}
+
+\end{document}

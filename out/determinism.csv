@@ -1,0 +1,4 @@
+document,check,runs,distinct_outputs
+CANTOR.pdf,same process,3,1
+CONVERSION.md,same process,3,1
+CONVERSION.md,"fresh processes, PYTHONHASHSEED 1/2",2,1

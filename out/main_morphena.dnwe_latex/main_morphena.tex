@@ -1,0 +1,386 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{cite}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+
+\title{Morphena: dual-channel evidence compilation for token bounded video editing agents\\
+% {\footnotesize \textsuperscript{*}Note: Sub-titles are not captured in Xplore and
+% should not be used}
+% \thanks{Identify applicable funding agency here. If none, delete this.}
+}
+
+% \author{\IEEEauthorblockN{1\textsuperscript{st} Given Name Surname}
+% \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
+% \textit{name of organization (of Aff.)}\\
+% City, Country \\
+% email address or ORCID}
+% \and
+% \IEEEauthorblockN{2\textsuperscript{nd} Given Name Surname}
+% \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
+% \textit{name of organization (of Aff.)}\\
+% City, Country \\
+% email address or ORCID}
+% \and
+% \IEEEauthorblockN{3\textsuperscript{rd} Given Name Surname}
+% \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
+% \textit{name of organization (of Aff.)}\\
+% City, Country \\
+% email address or ORCID}
+% \and
+% \IEEEauthorblockN{4\textsuperscript{th} Given Name Surname}
+% \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
+% \textit{name of organization (of Aff.)}\\
+% City, Country \\
+% email address or ORCID}
+% \and
+% \IEEEauthorblockN{5\textsuperscript{th} Given Name Surname}
+% \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
+% \textit{name of organization (of Aff.)}\\
+% City, Country \\
+% email address or ORCID}
+% \and
+% \IEEEauthorblockN{6\textsuperscript{th} Given Name Surname}
+% \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
+% \textit{name of organization (of Aff.)}\\
+% City, Country \\
+% email address or ORCID}
+% }
+
+\maketitle
+
+\begin{abstract}
+Video is an expensive modality for multimodal editing agents: a finite context window and inference budget must absorb a high-rate stream of visual states, transitions, speech, and audio events. Uniform or dense frame sampling either wastes budget on redundant material or scales poorly with duration, and both can miss brief, decisive events. We formulate video preparation for editing agents as a budgeted rate-distortion problem, in which representation cost is minimized subject to a task-conditioned editorial-fidelity constraint. We propose Morphena, a dual-channel evidence-compilation framework: an inexpensive quantitative channel scans the complete source using visual change, stable-frame information, motion, and streamed audio events, and its output gates a sparser, more expensive qualitative channel that extracts grounded visual and textual evidence with full source provenance. On controlled internal benchmarks, Morphena recovers all annotated sub-second events at a $13.8\times$ lower token cost than a strong raw top-change baseline, though at matched packaging the same baseline is within 0.001 fidelity---the selector's advantage appears on referred states. Morphena also recovers quiet referred visual states missed entirely by change-based selection at up to $215\times$ lower cost than the cheapest competitive baseline. On a real-world clip, the resulting package reduces representation cost by $33.5\times$ relative to an every-frame encoding while maintaining full temporal coverage. These are internal, controlled measurements under each benchmark's own accounting rules, not claims of general superiority.
+\end{abstract}
+
+\begin{IEEEkeywords}
+
+\end{IEEEkeywords}
+
+\section{Introduction}
+
+\subsection{Background and Motivation}
+
+Text is the efficient, natural medium for language models, whereas video is expensive because it requires substantially more computation and context. A video with duration $D$ and frame rate $f$ consists of roughly $Df$ frames, so dense input cost grows linearly with duration before the model begins reasoning about meaning. Editing, however, requires reasoning jointly about visual states, transitions, speech, and audio events.
+
+The usual alternatives are brute-force processing and uniform downsampling. Both are inadequate: brute-force processing does not scale, while uniform downsampling assumes equal value across all time segments and can ignore short cuts, text changes, beats, reaction shots, and brief audio snippets. Long-video benchmarks also stress the difficulty of efficient search and temporal alignment~\cite{wu2024longvideobench}.
+
+Instead we advocate representing the video based on time-specific evidence that can be quantified. The video clip is first analyzed inexpensively, followed by expensive visual and linguistic analysis focused on regions that the video itself shows to be richer in information content. We refer to the representation obtained from this process as an \textit{evidence package}.
+
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figg1.png}
+    \caption{Frame allocation on a 90-second source with 12 annotated sub-second events. A 1~fps sampler spends 90 frames and observes none of them; a uniform sampler at Morphena's budget observes 3. Frames are not scarce in either case --- they are spent on time rather than on evidence.}
+    \label{fig:sampling_comparison}
+\end{figure}
+
+Fig.~\ref{fig:sampling_comparison} illustrates this distinction using a test source. Unlike video summarization, which aims to produce a brief, watchable account, our goal is an \textit{inspectable working memory} for editing agents. The package records selected frames, temporal transitions, speech, local measurements, model-based evidence, and uncertainty, enabling queries such as: When does the title change? What precedes a reaction? Is the relevant detail visible in the supporting evidence?
+
+
+Morphena offers a budget-sensitive layer for preparing the raw video before it is handed off to multimodal editing agents. Morphena can efficiently analyze the entire input signal, using temporal evidence to selectively apply more expensive analysis and preserve brief events and long-term states even under budget constraints. It also incorporates multiple complementary quantitative measurements without integrating discovery and reasoning.
+
+\subsection{Contributions}
+
+This work makes four contributions:
+
+\begin{itemize}
+    \item We pose video preparation for editing agents as an information bottleneck problem centered around editorial fidelity.
+    \item We propose a dual-channel pipeline wherein comprehensive and inexpensive quantitative cues direct rare and expensive qualitative evaluation, along with downstream interpretable visual, textual, and citation evidence.
+    \item We propose a budgeted fusion task incorporating event saliency, temporal state coverage, and observability, with a monotone submodular coverage module for greedy solution (Sec.~\ref{sec:submodularity}).
+    \item We demonstrate our formulation as Morphena, a lightweight memory pipeline producing contact sheets, detail frames, motion/audio sidecars, model context, and persistent agent memory.
+\end{itemize}
+
+Neither do we claim that pixels, optical flow, audio RMS, submodular selection, contact sheets, nor embeddings are individually novel, since all of them have extensive prior art. What we claim is that we synthesized a system which treats the qualitative model attention as a precious resource and understands its allocation, citation, and recovery.
+
+
+\section{Related Work}
+
+\subsection{Long-Context Video Understanding}
+
+Video-language models use vision-language reasoning in temporally structured data. Video-ChatGPT pioneered video-specific reasoning abilities by learning video-specific representations and following instructions on temporally structured video dialogue~\cite{maaz2024videochatgpt}. The Video-LLaVA model combined video and image representations for multimodal reasoning~\cite{lin2024videollava}. Yet, understanding videos of longer duration is computationally challenging because visual context grows with the number and resolution of sampled frames.
+
+There are several techniques used to minimize the cost of representing long videos. For instance, LLaMA-VID uses compressed visual representations that lower the visual tokens~\cite{li2023llamavid}. On the other hand, MovieChat uses sparse memory that preserves temporally scattered information from long videos~\cite{song2024moviechat}. Some recent research is done in the field of structured and adaptive visual token reduction~\cite{ju2026forestprune,xu2026score}. Examples of benchmarking include LongVideoBench and Video-MME demonstrate the difficulty of retrieval, temporal reasoning, and multimodal understanding as video context becomes longer and more diverse~\cite{wu2024longvideobench,fu2025videomme}.
+
+Morphena solves a different problem. It does not involve changing or training video-language models but creates external evidence representation that works with any multimodal agent. This approach allows using remote or proprietary video-language models or models limited to images and texts only without making evidence selection opaque.
+
+\subsection{Adaptive Sampling and Video Summarization}
+
+There are well-established techniques for compressing long videos using frame sampling, shot detection, keyframe selection, and video summarization. TransNet V2 detects both abrupt and gradual changes in shots, giving valuable temporal information~\cite{soucek2020transnetv2}. Video summarization techniques employ optimization of various objectives like representativeness, diversity, interestingness, and story coverage; Gygli \textit{et al.} apply submodular objectives, and Summary Transfer involves subset selection~\cite{gygli2015submodular,zhang2016summarytransfer}.
+
+These techniques lead to a fundamental concept of Morphena: selected evidence needs to be temporally comprehensive while being redundant in terms of time as little as possible. In contrast to regular summarization techniques, which seek to create a compact and viewable summary, Morphena seeks an inspectable evidence structure to help with the process of editing by the agents. This results in keeping the time coordinates, detecting blind-spots, maintaining interesting stable states, and documenting the rationale behind the selections.
+
+In contrast to visual transformation alone, Morphena uses multiple low-cost signals. The candidate frontiers include scene boundaries, local changes, state probes, sound events, and coverage anchors, which are followed by cost-conscious fusion according to salience, coverage in time, and observability. Hence, Morphena builds on existing sampling and summarization principles, which have been developed for viewer-centric summaries but now for working representations.
+
+\subsection{AI-Assisted Video Editing}
+
+Computational video editing is a task that has previously made use of shot boundary detection, aligning transcripts, searching for semantics, audiovisual clues, and user guidelines to help it make sense of and edit video libraries. Learning To Cut by Watching Movies shows how learned audiovisual and temporal cues can be used for cutting~\cite{pardo2021learningtocut}. Multimodal learning has moved from just making sense of videos to editing videos through systems like Vidi~\cite{vidi2025} and VEBench~\cite{deng2026vebench}.
+
+This work demonstrates the capacity of multimodal agents to help with editing processes; however, the success of the process relies on the exposure of the source evidence. Long videos have large visual token and inference costs associated with them, whereas sampling may eliminate critical evidence necessary for the editing process. Therefore, Morphena comes in handy as an auxiliary layer before editing, where it does not perform aesthetic cut selection or video-language model replacement, but creates a concise package of evidence.
+
+It places Morphena in the space between approaches for token-compression techniques inside the black-box model and end-to-end editing algorithms. It intends to make the downstream evidence tangible, accessible, and recoverable. This would enable many things, including editing, temporal searching, reviewing, making information accessible, and verifying facts, among others.
+
+
+\section{Problem Formulation}
+
+\subsection{Budgeted Evidence Representation}
+
+Consider a source video $V=\{x_1,\ldots,x_N\},a(t),m$ where $x_i$ is the visual frame, $a(t)$ is the audio sequence, and $m$ is the metadata containing information about duration, frame rate, and resolution. Using an editing request $q$ and representation budget $B$, Morphena produces the following task-conditioned representation
+\begin{equation}
+R=f(V,q;B).
+\label{eq:representation}
+\end{equation}
+
+Unlike conventional summaries, $R$ is an inspectable evidence package:
+\begin{equation}
+R=(I,G,A,P,H),
+\label{eq:package}
+\end{equation}
+where $I$ contains selected visual evidence, $G$ grounded textual and temporal information, $A$ local measurements, $P$ provenance, and $H$ persistent retrieval handles. It is clear then that the goal is to maintain task-relevant evidence while retaining traceability back to the source.
+
+The total representation cost is modeled as
+\begin{equation}
+\begin{aligned}
+C(R)={}&\alpha T_{\mathrm{vision}}(I)+\beta T_{\mathrm{text}}(G,A,P,H)\\
+&+\gamma K_{\mathrm{local}}(R)+\delta H_{\mathrm{review}}(R).
+\end{aligned}
+\label{eq:cost}
+\end{equation}
+where the terms capture multimodal input cost, textual/context cost, local preprocessing, and optional human review, respectively. This formulation treats representation allocation as a joint optimization of computational cost and inspectability rather than visual-token count alone.
+
+
+\subsection{Editorial Fidelity and Optimization}
+
+The ideal representation quality is the expected quality of an editing decision derived from $R$:
+\begin{equation}
+E(R;V,q)=
+\mathbb{E}*{d\sim\mathrm{Agent}(R,q)}
+\left[Q*{\mathrm{edit}}(d,V,q)\right],
+\end{equation}
+where $d$ is an edit plan and $Q_{\mathrm{edit}}$ measures task fulfillment, temporal accuracy, continuity, and relevance. Since direct evaluation is costly and task-dependent, we use the auditable editorial-fidelity proxy
+\begin{equation}
+\begin{aligned}
+F_{\mathrm{editorial}}(R)={}&w_sS_{\mathrm{salience}}+w_tS_{\mathrm{state}}+w_aS_{\mathrm{answer}}\\
+&+w_pS_{\mathrm{provenance}}+w_lS_{\mathrm{language}}.
+\end{aligned}
+\label{eq:fidelity}
+\end{equation}
+where $\sum_jw_j=1$ and $w_j\geq0$. The terms measure event salience, stable-state coverage, grounded question answering, source provenance, and task-relevant speech/audio coverage, respectively. We report event or required-state recall first and use $F_{\mathrm{editorial}}$ only as a composite evidence-adequacy proxy rather than a measure of artistic quality.
+
+Morphena formulates representation allocation as
+\begin{equation}
+\min_R C(R)
+\quad\text{s.t.}\quad
+F_{\mathrm{editorial}}(R)\geq\rho,
+\end{equation}
+or equivalently,
+\begin{equation}
+\max_R\left[F_{\mathrm{editorial}}(R)-\lambda C(R)\right],
+\qquad \lambda\geq0,
+\end{equation}
+yielding a cost--fidelity frontier. This motivates a dual-channel strategy: an inexpensive quantitative channel provides exhaustive coverage and candidate discovery, while a selective qualitative channel produces grounded multimodal evidence for high-value moments.
+
+\begin{algorithm}[t]
+\caption{Morphena Budgeted Evidence Construction}
+\label{alg:morphena}
+\begin{algorithmic}[1]
+\REQUIRE Video $V$, query $q$, budget $B$
+\STATE Extract exhaustive low-cost temporal, visual, structural, and audio signals
+\STATE Generate candidate frontier $\mathcal{C}$ from events, state probes, audio events, and coverage anchors
+\STATE Score candidates using salience, state coverage, and observability
+\STATE Select $\mathcal{C}^{*}\subseteq\mathcal{C}$ under budget $B$
+\STATE Apply qualitative multimodal inspection to $\mathcal{C}^{*}$
+\STATE Construct $R=(I,G,A,P,H)$ with grounded evidence and provenance
+\RETURN Evidence package $R$
+\end{algorithmic}
+\end{algorithm}
+
+
+\section{Morphena Framework}
+
+\subsection{Architecture Overview}
+
+The Morphena framework is a task-dependent evidential compaction mechanism that reduces lengthy videos into compact forms for further use by multimodal editing agents. Morphena creates the representation in Eq.~\ref{eq:representation} such that task-relevant visual, temporal, measurable, and provenance information is preserved. Rather than performing costly multimodal operations throughout the process, Morphena decomposes the task of extracting evidence into an exhaustive quantitative channel and a sparser qualitative channel.
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=1.0\linewidth]{figg2.png}
+    \caption{The dual-channel architecture. Cheap, exhaustive signals produce a candidate frontier; a budgeted selector decides where the more expensive qualitative channel is allowed to look.}
+    \label{fig:architecture}
+\end{figure*}
+
+As depicted in Fig.~\ref{fig:architecture}, Morphena consists of four steps: \textit{Quantitative Scan} $\rightarrow$ \textit{Candidate Frontier} $\rightarrow$ \textit{Budgeted Selector} $\rightarrow$ \textit{Qualitative Evidence}. The observed results become an evidence pack for the subsequent editing component. This architecture adopts a deliberate computation disparity: cheap signals are calculated intensively, while expensive visual-linguistic processing occurs only for valuable candidates.
+
+This architecture ensures that as much evidence as possible is retained while adhering to constraints on tokens and computation. Morphena, accordingly, considers video comprehension to be an adaptive compilation of the source into an evidence state.
+
+\subsection{Quantitative Evidence Channel}
+
+The quantitative channel scans the entire video extensively before costly semantic processing. At each time $t$, Morphena derives complementary indicators for changes, static-frame evidence, motion/scene structure, and audio event indicators, including both transitional and static visual states.
+
+A typical change measure is
+\begin{equation}
+s_t=0.55p_t+0.25l_t+0.15h_t+0.05a_t,
+\end{equation}
+where $p_t$, $l_t$, $h_t$, and $a_t$ are measures of pixel change, Laplacian variance, histogram variance, and audio-event activity. Static visual states are included as well since useful editing evidence may span multiple objects, subjects, compositions, and environments.
+
+The channel thus yields a \textit{frontier of candidates}, not a decision per se, allowing extensive cheap coverage and identification of those points in time at which costly analysis yields maximal marginal utility.
+
+\subsection{Candidate Selection and Budgeted Fusion}
+\label{sec:submodularity}
+
+Candidates from the candidate frontier are pruned using evidence budget $B$ by sorting candidates based on their value, time coverage, and complementarity, and filtering out any redundant information. The chosen candidates go forward to the qualitative phase, where a visual-language grounded analysis is performed on them. In other words, the quantitative signal tells us \textit{where} to look, whereas the qualitative signal tells us \textit{what} the regions of interest chosen by the selector contain. The selector maximizes editorial fidelity subject to $C(\mathcal{R})\leq B$, targeting maximum useful evidence per unit cost.
+
+The temporal coverage component is defined as
+\begin{equation}
+F(\mathcal{S})=\sum_t a_t\max_{s\in\mathcal{S}}
+\exp(-|t-s|/\tau),\qquad a_t\geq0.
+\end{equation}
+The objective is monotonic submodular, allowing the well-known $(1 - 1/e)$ greedy approach to apply to the cardinality constraint. Morphena uses lazy-greedy approach (CELF), in which candidates need to be re-scored only when they are on top of the heap. The guarantee is limited to the coverage metric, not overall quality, which is not completely observable and not assumed submodular.
+
+
+\subsection{Evidence Packaging and Agent Memory}
+
+Selected observations are organized into the structured evidence package defined in Eq.~\ref{eq:package}, where $I$ contains visual evidence, $G$ grounded textual and temporal descriptions, $A$ local measurements, $P$ provenance, and $H$ persistent retrieval handles.
+
+All this allows for maintaining both the temporal and the source information associated with each event, differentiating between direct observations and inferred descriptions and providing the ability to selectively locate sources. This way, the package can be viewed as a light agent memory system, letting downstream agents reason over the available evidence and extract more information without re-analyzing the whole video sequence again.
+
+
+\section{Experimental Setup}
+
+\subsection{Benchmark and Baselines}
+
+Morphena is assessed on four different internal benchmarks that correspond to different evidence allocation problems: \textit{event-needle} for short sub-second events, \textit{referred-state} for low volume persistent states not selected by change based methods, \textit{answerability} for assessing the answerability of generated evidence pack with respect to cited answers, and \textit{real-world} benchmark for evaluation on unannotated video clip. Table~\ref{tab:benchmarks} describes the origin of these benchmarks. Synthetic benchmarks contain pre-defined event timings and referred states, whereas real world video clip is an engineering evaluation benchmark.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Benchmark sources used in Section~V.}
+\label{tab:benchmarks}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lccc}
+\toprule
+Benchmark & Duration & Resolution/fps & Ground truth \\
+\midrule
+Event needles & 90 s & 1920$\times$1080, 10 & 12 sub-sec.\ events \\
+Referred states & 88 s & 1920$\times$1080, 10 & 16 states, 32 distractors \\
+Referred (long) & 352 s & 1920$\times$1080, 10 & 16 states, 32 distractors \\
+Answerability & 88 s & synthetic storyboard & 16 visual questions \\
+Real-world clip & 12.2 s & 1920$\times$1080, 50 & none (engineering) \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+Morphena is compared with representative context-construction strategies under the same evidence budget: uniform sampling, phase-swept uniform sampling, scene-boundary sampling, global top-change selection, and dense packaged sampling at multiple densities. Two additional baselines use Morphena's contact-sheet packaging to isolate selection quality from packaging effects. All methods receive identical downstream budgets and packaging formats where applicable, ensuring differences reflect selection quality rather than content volume.
+
+
+\subsection{Evaluation Metrics}
+
+The evidence representations are assessed through four criteria that are consistent with Eq.~\ref{eq:fidelity}. \textit{Event and state recall} tests whether both temporary events and stable referred states are represented in the given time tolerance. \textit{Answerability and citation accuracy} checks whether the package can yield an accurate visual answer and associated citations. \textit{Representation cost} is assessed using estimated token counts in Eq.~\ref{eq:cost} instead of the number of frames; each 1920$\times$1080 frame is charged 1{,}560 tokens. Finally, \textit{package integrity} assesses the package based on its coverage, evidence readiness, and state observability directly from the delivered package.
+
+
+Together, these metrics distinguish a method that merely selects visually salient frames from one that constructs a compact, temporally grounded, and independently verifiable evidence package.
+
+\section{Results and Discussion}
+\label{sec:results}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{figg3.png}
+    \caption{Representation cost vs.\ editorial fidelity proxy across both benchmark families. Up and to the left is better. Cost is shown on a log scale; fidelity is each benchmark's own weighted proxy, not human edit preference.}
+    \label{fig:frontier}
+\end{figure}
+Figure \ref{fig:frontier} illustrates the experimental cost--fidelity frontier in both benchmarks. In the case of event retrieval, Morphena reaches 0.941 fidelity with 3{,}615 tokens, whereas every-frame encoding yields 1{,}404{,}000 tokens with 1.000 fidelity. For the referred state retrieval task, Morphena produces 0.996 fidelity with only 164 tokens.
+
+\subsection{Event Retrieval Under Tight Budgets}
+The results for the retrieval of events for a 90-second synthetic source consisting of 12 events of sub-second duration are shown in Table~\ref{tab:event_retrieval}. Morphena retrieves all events (recall = 1.00) using 3,615 tokens. The global top-change baseline has identical recall when Morphena's packing is used but requires 49,920 tokens when raw frames are used, making it 13.8 times more expensive. At matched packaging, however, its fidelity is within 0.001 of Morphena's. Non-adaptive sampling performs poorly: 1~fps and fixed uniform-budget sampling achieve only 0.00--0.25 recall despite comparable or larger token budgets.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Event retrieval on a 12-event synthetic source. Utility is the editorial fidelity proxy (Eq.~\ref{eq:fidelity}).}
+\label{tab:event_retrieval}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lrrr}
+\toprule
+Method & Tokens & Recall & Utility \\
+\midrule
+Morphena (ours) & 3,615 & \textbf{1.00} & 0.941 \\
+Top-change, packaged & 3,615 & 1.00 & 0.940 \\
+Uniform, packaged & 3,615 & 0.25 & 0.400 \\
+Top-change, raw frames & 49,920 & 1.00 & 0.940 \\
+1~fps, raw frames & 140,400 & 0.00 & 0.200 \\
+Every frame, raw & 1,404,000 & 1.00 & 1.000 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+The comparison between the packaged and raw variants of the same top-change selector isolates where the advantage comes from: at matched frame counts, most of the token saving is due to contact-sheet packaging rather than candidate selection. Section~\ref{sec:referred_state} tests a setting where selection, not packaging, is decisive.
+
+\subsection{Referred-State Retrieval}
+\label{sec:referred_state}
+Beyond transient events, we evaluate recovery of persistent visual states that a query may reference without any accompanying large visual change. This benchmark deliberately includes full-frame flash distractors that a change-ranking selector is drawn to, while the 16 required states are quiet and phase-shifted away from regular sampling grids.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Referred-state retrieval (16 required quiet states, 32 flash distractors).}
+\label{tab:referred_state}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lrrr}
+\toprule
+Method & Tokens & Req. Recall & Utility \\
+\midrule
+Morphena (ours) & 164 & \textbf{1.00} & 0.996 \\
+Top-change, packaged & 569 & 0.00 & 0.004 \\
+Dense uniform 12$\times$, packaged & 6,641 & 0.88 & 0.876 \\
+Dense phase-sweep 12$\times$, packaged & 6,641 & 1.00 & 1.000 \\
+1~fps, raw frames & 137,280 & 0.38 & 0.381 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+The selector that wins on event retrieval fails here: given identical packaging, global top-change recovers none of the 16 required states, since the distractors are exactly what a change-ranking objective is built to find. The cheapest baseline that matches Morphena's recall is a phase-swept dense sampler at $6{,}641$ tokens, roughly $40\times$ the cost. On a longer variant of the same source (352~s, same package geometry and budget), Morphena's required-state recall is unchanged at 164 tokens, and the measured lift over the best matched-recall packaged baseline increases to $215\times$, consistent with cost scaling by evidence density rather than duration.
+
+\subsection{Package Integrity and Real-World Validation}
+The package’s usability is also validated apart from the selection of frames. Within the answerability benchmarking, the actual pixels of the contact-sheet are decoded to answer 16 visual-state questions with each answer having to cite an appropriate \texttt{id@timecode}. This results in 1.00 answer accuracy, citation integrity, and package-index integrity on 24 decoded keyframes resulting in a lift of $55.5\times$ over the best baseline package surpassing the pre-registered goal of $50\times$.
+
+In the case of a 12.2-second real-world video (1920$\times$1080 resolution, 50 fps), the chosen profile selects 61 keyframes with 100.0/100\% coverage, 99.4/100 evidence readiness, and 95.8/100 state observability, with a maximum temporal gap of 1.16~s. The package is estimated at 28{,}466 tokens, compared to 953{,}160 tokens in the per-frame encoding, representing a reduction of $33.5\times$. A forensic profile reaches 100.0/100 on all metrics at 150{,}502 tokens, showing that higher observability requires additional budget. Choice is also varied: change peaks make up 42.6\% of choices, while the rest is split among local peaks, audio peaks, scene starts, and coverage anchors.
+
+\subsection{Summary}
+Across all four benchmarks, Morphena's advantage is largest precisely when the two evaluated criteria diverge: a change-sensitive selector wins on transient events and loses on quiet referred states, and vice versa for uniform samplers. The measured frontier in Fig.~\ref{fig:frontier} reflects this — Morphena sits near the top-left on both benchmark families rather than trading off one against the other. These results are internal, controlled measurements against the listed baselines under each benchmark's own accounting rules and should not be read as a general superiority claim; Section~\ref{sec:limitations} states this boundary explicitly.
+
+\section{Limitations}
+\label{sec:limitations}
+
+Morphena uses hand-designed quantitative cues that may be effective in some but not all contexts of vision and audition. Budgeting selection lowers costly multimodal processing, but qualitative grounding is still expensive.
+
+The main problem is evaluation coverage. The synthetic benchmark data in Sec.~V-A is made using the same generation code as used for evaluation, while the real-world example has no annotations and serves only as an engineering test. No human evaluation comparing edits made by Morphena and baselines packages has been performed, hence there is little direct proof of benefits to editing. Thus, further evaluation needs to be done using more real-world held-out data, various domains, editing agents, and workflows.
+
+Lastly, the evidence budget is externally defined, while the future work should adapt it depending on the query difficulty, video content, and evidence importance.
+
+\section{Conclusion}
+We introduced Morphena, a budget-aware framework for compiling evidence for long-context video editing. Morphena conducts dense budget-friendly quantitative analysis to discover a candidate frontier, selects supplementary evidence under a given budget constraint, and uses qualitative grounding on critical segments. The resulting bundle comprises all types of evidence (temporal, visual, measurable, provenance) in one compact representation that can be used by editing agents.
+
+In the experiments, we observed that our framework allows for capturing short events at a significantly lower token cost than the raw and packaged baselines and can capture persistent visual states that are ignored by change-based selection, achieving token costs that are up to two orders of magnitude lower than those achieved by the best competitor. Furthermore, on realistic footage, Morphena achieves token costs an order of magnitude lower than the baselines while ensuring complete coverage of the measured evidence. These results imply that long-video understanding can take advantage of computation allocation for high-value evidence as opposed to uniform processing of the whole context. However, our evidence remains restricted to internal and controlled measurements; further validation through held-out datasets and human experiments is needed.
+
+
+\bibliographystyle{ieeetr}
+\bibliography{ref}
+
+\end{document}

@@ -1,0 +1,17 @@
+rid,decision,status,family,rule,section,confidence,conf_source,before,after,reason,gate_reasons,sentence_before,sentence_after
+8d98ded516f7,accept,applied,register,register:expand:don't,body,0.92,prior,don't,do not,academic writing spells out contractions,,"- In the terminal, run:
+  ```
+  mv ~/Downloads/DNWE_2.ipynb /home/saifarfi/Volumetric/Sapienaizerv2/
+  ```
+- You don't need the `.","- In the terminal, run:
+  ```
+  mv ~/Downloads/DNWE_2.ipynb /home/saifarfi/Volumetric/Sapienaizerv2/
+  ```
+- You do not need the `."
+00005debc603,accept,applied,register,register:expand:haven't,body,0.92,prior,haven't,have not,academic writing spells out contractions,,"Back in the notebook, set `RUN_INSTALL = False` if you haven't, then click **Run All** again.","Back in the notebook, set `RUN_INSTALL = False` if you have not, then click **Run All** again."
+0220d2162cd1,accept,applied,register,register:expand:don't,body,0.92,prior,don't,do not,academic writing spells out contractions,,"For each edit you don't want, change **accept** to **reject** in **decision** (column B).","For each edit you do not want, change **accept** to **reject** in **decision** (column B)."
+d30da0becc06,accept,applied,register,register:expand:don't,body,0.92,prior,Don't,Do not,academic writing spells out contractions,,"**
+   - Don't type `accept` on rows that were blank.","**
+   - Do not type `accept` on rows that were blank."
+02e337bae8f1,accept,applied,register,register:expand:don't,body,0.92,prior,Don't,Do not,academic writing spells out contractions,,"- Don't rerun the section 19 cell after editing the CSV, because that overwrites the CSV with a fresh one.","- Do not rerun the section 19 cell after editing the CSV, because that overwrites the CSV with a fresh one."
+675de6aefe72,accept,applied,register,register:expand:isn't,body,0.92,prior,isn't,is not,academic writing spells out contractions,,"- **""No module named …"":** the kernel isn't `.","- **""No module named …"":** the kernel is not `."

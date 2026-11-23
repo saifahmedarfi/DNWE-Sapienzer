@@ -1,0 +1,2 @@
+rid,decision,status,family,rule,section,confidence,conf_source,before,after,reason,gate_reasons,sentence_before,sentence_after
+0e987ebfa5da,accept,applied,merge,merge:and,body,0.75,prior,. The,", and the",two short sentences in a paragraph of uniform sentence lengths read better joined,,All four screenshot files also remain unchanged. The cooldown asset is currently stored at `mahram-cooldown.png` in the project root.,"All four screenshot files also remain unchanged, and the cooldown asset is currently stored at `mahram-cooldown.png` in the project root."

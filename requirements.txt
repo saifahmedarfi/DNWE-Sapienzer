@@ -1,0 +1,27 @@
+# DNWE 2.0 — exact versions the engine was verified with (2026-11-23, Python 3.13).
+# Determinism ("same input + same configuration = same output") depends on these versions:
+# a different tagger, lexicon or LanguageTool build can change which edits are proposed.
+# Install:  .venv/bin/pip install -r requirements.txt   (the notebook's section 2 does the same).
+# No neural-network or language-model packages: the notebook blocks them at import time (section 3).
+nltk==3.10.4
+pysbd==0.3.4
+lemminflect==0.2.3
+wordfreq==3.1.1
+textstat==0.7.13
+lexicalrichness==0.5.1
+language_tool_python==3.4.0
+python-docx==1.2.0
+pdfplumber==0.11.10
+sacrebleu==2.6.0
+psutil==7.2.2
+proselint==0.16.0
+abbreviations==0.2.5
+pandas==3.1.0
+numpy==2.5.4
+# notebook tooling (run / headless execution)
+ipykernel==7.4.0
+nbclient==0.11.0
+nbformat==5.11.1
+# Non-Python resources (downloaded and checksum-verified by section 2, recorded in resources/LOCK.json):
+#   Stanford parser 3.9.2 (PCFG model only) · PPDB 2.0 L (all) · LanguageTool 6.8 · NLTK data
+#   (wordnet, omw-1.4, averaged_perceptron_tagger_eng, cmudict) · Java 17+

@@ -1,0 +1,3 @@
+rid,decision,status,family,rule,section,confidence,conf_source,before,after,reason,gate_reasons,sentence_before,sentence_after
+1c683d6588ce,accept,applied,plain,plain:utilization->use,body,0.88,prior,utilization,use,'utilization' is an inflated form of 'use',,Backfill improves cluster utilization while respecting higher-priority scheduling commitments.,Backfill improves cluster use while respecting higher-priority scheduling commitments.
+3fe77bf6ab0d,accept,applied,plain,plain:subsequently->later,body,0.88,prior,subsequently,later,'subsequently' is an inflated form of 'later',,Researchers subsequently consume this infrastructure.,Researchers later consume this infrastructure.
