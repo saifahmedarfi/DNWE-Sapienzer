@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 210" width="100%" role="img" aria-label="Meaning gate protected content">
+<defs>
+  <filter id="g2"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <style>.chip{animation:cp 3s ease-in-out infinite;transform-box:fill-box;transform-origin:center}@keyframes cp{0%,100%{opacity:.75}50%{opacity:1}}</style>
+</defs>
+<rect width="1100" height="210" rx="20" fill="#0C1A18"/>
+<rect x="2" y="2" width="1096" height="206" rx="20" fill="none" stroke="#34D399" stroke-width="1.5" opacity=".4"/>
+<text x="550" y="44" text-anchor="middle" font-family="Inter,Arial" font-size="15" font-weight="700" letter-spacing="2" fill="#6EE7B7" filter="url(#g2)">🔒 PROTECTED CONTENT</text>
+<g font-family="Inter,Arial" font-size="13" font-weight="600" fill="#D1FAE5">
+<g class="chip"><rect x="60"  y="78" width="190" height="44" rx="12" fill="#12332E" stroke="#34D399"/><text x="155" y="105" text-anchor="middle">Negations</text></g>
+<g class="chip"><rect x="270" y="78" width="250" height="44" rx="12" fill="#12332E" stroke="#34D399"/><text x="395" y="105" text-anchor="middle">Hedges &amp; uncertainty</text></g>
+<g class="chip"><rect x="540" y="78" width="250" height="44" rx="12" fill="#12332E" stroke="#34D399"/><text x="665" y="105" text-anchor="middle">Numbers &amp; percentages</text></g>
+<g class="chip"><rect x="810" y="78" width="230" height="44" rx="12" fill="#12332E" stroke="#34D399"/><text x="925" y="105" text-anchor="middle">Citations</text></g>
+<g class="chip"><rect x="270" y="134" width="190" height="44" rx="12" fill="#12332E" stroke="#34D399"/><text x="365" y="161" text-anchor="middle">Connectives</text></g>
+<g class="chip"><rect x="480" y="134" width="350" height="44" rx="12" fill="#12332E" stroke="#34D399"/><text x="655" y="161" text-anchor="middle">Content words outside the footprint</text></g>
+</g>
+</svg>

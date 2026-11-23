@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 150" width="100%" role="img" aria-label="Human review loop">
+<defs>
+  <linearGradient id="loop" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#22D3EE"/><stop offset="50%" stop-color="#A78BFA"/><stop offset="100%" stop-color="#34D399"/></linearGradient>
+  <marker id="arw" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#A78BFA"/></marker>
+  <filter id="g3"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <style>.seg{stroke-dasharray:7 9;animation:fl 1.6s linear infinite}@keyframes fl{to{stroke-dashoffset:-32}}</style>
+</defs>
+<rect width="1160" height="150" rx="18" fill="#0B1020"/>
+<g font-family="Inter,Arial" font-size="12.5" font-weight="700" fill="#E2E8F0">
+<rect x="24"  y="52" width="168" height="46" rx="12" fill="#14233f" stroke="#22D3EE"/><text x="108" y="80" text-anchor="middle" fill="#67E8F9">GENERATE EDITS</text>
+<rect x="246" y="52" width="196" height="46" rx="12" fill="#1b1f3c" stroke="#818CF8"/><text x="344" y="80" text-anchor="middle" fill="#A5B4FC">REVIEW HTML / CSV</text>
+<rect x="496" y="52" width="196" height="46" rx="12" fill="#241b3a" stroke="#C084FC"/><text x="594" y="80" text-anchor="middle" fill="#D8B4FE">ACCEPT / REJECT</text>
+<rect x="746" y="52" width="176" height="46" rx="12" fill="#2a1d3f" stroke="#F472B6"/><text x="834" y="80" text-anchor="middle" fill="#F9A8D4">apply_decisions()</text>
+<rect x="976" y="52" width="160" height="46" rx="12" fill="#12332e" stroke="#34D399"/><text x="1056" y="80" text-anchor="middle" fill="#6EE7B7">RENDER DOC</text>
+</g>
+<g stroke="url(#loop)" stroke-width="3" fill="none" marker-end="url(#arw)">
+<path class="seg" d="M192 75 H244"/><path class="seg" d="M442 75 H494"/><path class="seg" d="M692 75 H744"/><path class="seg" d="M922 75 H974"/>
+</g>
+<path class="seg" d="M1056 102 V124 H108 V102" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arw)"/>
+<text x="582" y="140" text-anchor="middle" font-family="Inter,Arial" font-size="10.5" letter-spacing="2" fill="#64748B">set decision → reject, then re-render</text>
+</svg>

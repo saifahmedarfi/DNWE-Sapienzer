@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1560" width="100%" role="img" aria-label="DNWE 2.0 animated deterministic writing engine workflow">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#090D20"><animate attributeName="stop-color" values="#090D20;#0B1330;#140A2A;#090D20" dur="14s" repeatCount="indefinite"/></stop>
+    <stop offset="50%" stop-color="#11152D"/>
+    <stop offset="100%" stop-color="#071C2B"><animate attributeName="stop-color" values="#071C2B;#0A1030;#1A0A2A;#071C2B" dur="14s" repeatCount="indefinite"/></stop>
+  </linearGradient>
+  <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#22D3EE"/><stop offset="100%" stop-color="#38BDF8"/></linearGradient>
+  <linearGradient id="purple" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#A78BFA"/><stop offset="100%" stop-color="#818CF8"/></linearGradient>
+  <linearGradient id="pink" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#F472B6"/><stop offset="100%" stop-color="#C084FC"/></linearGradient>
+  <linearGradient id="green" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#34D399"/><stop offset="100%" stop-color="#A3E635"/></linearGradient>
+  <linearGradient id="orange" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#FBBF24"/><stop offset="100%" stop-color="#FB923C"/></linearGradient>
+  <filter id="glow"><feGaussianBlur stdDeviation="5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="soft"><feGaussianBlur stdDeviation="18"/></filter>
+  <style>
+    text { font-family: Inter, Arial, sans-serif; }
+    .title { fill:#F8FAFC; font-size:31px; font-weight:800; letter-spacing:2px; }
+    .subtitle { fill:#94A3B8; font-size:14px; letter-spacing:2px; }
+    .node-title { fill:#F8FAFC; font-size:19px; font-weight:700; }
+    .node-sub { fill:#CBD5E1; font-size:12px; }
+    .line { fill:none; stroke-width:3; stroke-dasharray:9 12; animation: flow 2.2s linear infinite; }
+    .pulse { animation: pulse 3s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
+    .brd { animation: brd 3.4s ease-in-out infinite; }
+    @keyframes flow { to { stroke-dashoffset:-42; } }
+    @keyframes pulse { 0%,100% { opacity:.6; } 50% { opacity:1; } }
+    @keyframes brd { 0%,100% { stroke-opacity:.45; } 50% { stroke-opacity:1; } }
+  </style>
+</defs>
+
+<rect width="1200" height="1560" rx="28" fill="url(#bg)"/>
+<circle cx="100" cy="300" r="150" fill="#06B6D4" opacity=".08" filter="url(#soft)"><animate attributeName="opacity" values=".04;.12;.04" dur="8s" repeatCount="indefinite"/></circle>
+<circle cx="1080" cy="760" r="180" fill="#A855F7" opacity=".08" filter="url(#soft)"><animate attributeName="opacity" values=".12;.04;.12" dur="10s" repeatCount="indefinite"/></circle>
+<circle cx="600" cy="1300" r="180" fill="#10B981" opacity=".07" filter="url(#soft)"><animate attributeName="opacity" values=".04;.11;.04" dur="9s" repeatCount="indefinite"/></circle>
+
+<text x="600" y="66" text-anchor="middle" class="title" filter="url(#glow)">PIPELINE</text>
+<text x="600" y="95" text-anchor="middle" class="subtitle">OFFLINE&#160;LINGUISTIC&#160;RECONSTRUCTION</text>
+
+<!-- 01 Input -->
+<rect x="360" y="135" width="480" height="80" rx="16" fill="#102A43" stroke="#22D3EE" stroke-width="2" class="brd"/>
+<text x="600" y="167" text-anchor="middle" fill="#67E8F9" font-size="12" font-weight="700" letter-spacing="2">01 · DOCUMENT INPUT</text>
+<text x="600" y="191" text-anchor="middle" class="node-title">DOCX · PDF · TXT · Markdown · LaTeX</text>
+<path d="M600 215 V252" class="line" stroke="#22D3EE"/>
+
+<!-- 02 Processor -->
+<rect x="360" y="252" width="480" height="82" rx="16" fill="#18213D" stroke="#38BDF8" stroke-width="2" class="brd"/>
+<text x="600" y="284" text-anchor="middle" fill="#7DD3FC" font-size="12" font-weight="700" letter-spacing="2">02 · DOCUMENT PROCESSOR</text>
+<text x="600" y="309" text-anchor="middle" class="node-title">Structure · Sections · Paragraphs · Metadata</text>
+<path d="M600 334 V371" class="line" stroke="#38BDF8"/>
+
+<!-- 03 Profiling -->
+<rect x="270" y="371" width="660" height="112" rx="18" fill="#211B43" stroke="#A78BFA" stroke-width="2" class="brd"/>
+<text x="600" y="403" text-anchor="middle" fill="#C4B5FD" font-size="12" font-weight="700" letter-spacing="2">03 · LINGUISTIC &amp; BEHAVIORAL PROFILING</text>
+<text x="600" y="432" text-anchor="middle" class="node-title">Sentence Patterns · Vocabulary · Syntax · Discourse</text>
+<text x="600" y="458" text-anchor="middle" class="node-sub">Repetition · Connective Density · Readability · Style Markers</text>
+<path d="M600 483 V518" class="line" stroke="#A78BFA"/>
+
+<!-- 04 split -->
+<path d="M600 518 H300 V548 M600 518 H900 V548" fill="none" stroke="#C084FC" stroke-width="2" opacity=".8"/>
+<rect x="75" y="548" width="450" height="112" rx="16" fill="#241B3A" stroke="#C084FC" stroke-width="2" class="brd"/>
+<text x="300" y="579" text-anchor="middle" fill="#D8B4FE" font-size="12" font-weight="700">04A · LEXICAL ANALYSIS</text>
+<text x="300" y="607" text-anchor="middle" class="node-title">Vocabulary &amp; Word Selection</text>
+<text x="300" y="632" text-anchor="middle" class="node-sub">Frequency · Context · Word Sense · Terminology</text>
+<rect x="675" y="548" width="450" height="112" rx="16" fill="#1C2340" stroke="#818CF8" stroke-width="2" class="brd"/>
+<text x="900" y="579" text-anchor="middle" fill="#A5B4FC" font-size="12" font-weight="700">04B · SYNTACTIC ANALYSIS</text>
+<text x="900" y="607" text-anchor="middle" class="node-title">Sentence &amp; Clause Structure</text>
+<text x="900" y="632" text-anchor="middle" class="node-sub">Openers · Voice · Length · Complexity · Flow</text>
+<path d="M300 660 V693 H600 V718 M900 660 V693 H600" fill="none" stroke="#C084FC" stroke-width="2" stroke-dasharray="6 8" class="line"/>
+
+<!-- 05 Planner -->
+<rect x="300" y="718" width="600" height="92" rx="18" fill="#302047" stroke="#F472B6" stroke-width="2" class="brd"/>
+<text x="600" y="751" text-anchor="middle" fill="#F9A8D4" font-size="12" font-weight="700" letter-spacing="2">05 · TRANSFORMATION PLANNER</text>
+<text x="600" y="780" text-anchor="middle" class="node-title">Mode · Intensity · Rule Selection · Confidence</text>
+<path d="M600 810 V848" class="line" stroke="#F472B6"/>
+
+<!-- 06 Transform -->
+<rect x="210" y="848" width="780" height="130" rx="18" fill="#29203C" stroke="#FB923C" stroke-width="2" class="brd"/>
+<text x="600" y="880" text-anchor="middle" fill="#FDBA74" font-size="12" font-weight="700" letter-spacing="2">06 · DETERMINISTIC RECONSTRUCTION</text>
+<g class="pulse">
+<rect x="250" y="903" width="160" height="45" rx="9" fill="#4A2841"/><text x="330" y="931" text-anchor="middle" fill="#FBCFE8" font-size="13" font-weight="600">Lexical</text>
+<rect x="430" y="903" width="160" height="45" rx="9" fill="#41305C"/><text x="510" y="931" text-anchor="middle" fill="#DDD6FE" font-size="13" font-weight="600">Syntactic</text>
+<rect x="610" y="903" width="160" height="45" rx="9" fill="#3D315B"/><text x="690" y="931" text-anchor="middle" fill="#C7D2FE" font-size="13" font-weight="600">Discourse</text>
+<rect x="790" y="903" width="160" height="45" rx="9" fill="#49304A"/><text x="870" y="931" text-anchor="middle" fill="#F5D0FE" font-size="13" font-weight="600">Style</text>
+</g>
+<path d="M600 978 V1013" class="line" stroke="#FB923C"/>
+
+<!-- 07 Gate -->
+<rect x="220" y="1013" width="760" height="126" rx="18" fill="#123A37" stroke="#34D399" stroke-width="2" class="brd"/>
+<text x="600" y="1046" text-anchor="middle" fill="#6EE7B7" font-size="12" font-weight="700" letter-spacing="2">07 · MEANING &amp; INTEGRITY GATE</text>
+<text x="600" y="1076" text-anchor="middle" class="node-title">Protected Content · Declared Edit Footprint</text>
+<text x="600" y="1105" text-anchor="middle" class="node-sub">Validate · Accept · Reject · Preserve Original</text>
+<path d="M600 1139 V1173" class="line" stroke="#34D399"/>
+
+<!-- 08 Eval -->
+<rect x="300" y="1173" width="600" height="90" rx="18" fill="#143A34" stroke="#A3E635" stroke-width="2" class="brd"/>
+<text x="600" y="1206" text-anchor="middle" fill="#BEF264" font-size="12" font-weight="700" letter-spacing="2">08 · QUALITY EVALUATION</text>
+<text x="600" y="1236" text-anchor="middle" class="node-title">Integrity · Style · Quality · Determinism</text>
+<path d="M600 1263 V1298" class="line" stroke="#A3E635"/>
+
+<!-- 09 Output -->
+<rect x="360" y="1298" width="480" height="92" rx="18" fill="#123B42" stroke="#22D3EE" stroke-width="2" class="brd"/>
+<text x="600" y="1331" text-anchor="middle" fill="#67E8F9" font-size="12" font-weight="700" letter-spacing="2">09 · FINAL OUTPUT</text>
+<text x="600" y="1361" text-anchor="middle" class="node-title">Edited Document · Review · Edit Log</text>
+
+<text x="600" y="1448" text-anchor="middle" fill="#64748B" font-size="11" letter-spacing="2">NO LLM · NO NEURAL NETWORK · NO CLOUD INFERENCE</text>
+
+<!-- particles -->
+<circle r="5" fill="#67E8F9" filter="url(#glow)"><animateMotion dur="5s" repeatCount="indefinite" path="M600 215 V518"/></circle>
+<circle r="5" fill="#F0ABFC" filter="url(#glow)"><animateMotion dur="7s" repeatCount="indefinite" path="M600 518 V810"/></circle>
+<circle r="4" fill="#FDBA74" filter="url(#glow)"><animateMotion dur="4.5s" repeatCount="indefinite" path="M600 848 V1013"/></circle>
+<circle r="5" fill="#6EE7B7" filter="url(#glow)"><animateMotion dur="6s" repeatCount="indefinite" path="M600 1013 V1390"/></circle>
+</svg>

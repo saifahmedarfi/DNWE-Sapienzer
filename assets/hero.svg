@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 240" width="100%" role="img" aria-label="DNWE 2.0 — Deterministic Natural Writing Engine">
+<defs>
+  <linearGradient id="heroBg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#0A0E24">
+      <animate attributeName="stop-color" values="#0A0E24;#0B1830;#160A2E;#0A0E24" dur="12s" repeatCount="indefinite"/>
+    </stop>
+    <stop offset="100%" stop-color="#071C2B">
+      <animate attributeName="stop-color" values="#071C2B;#0A1230;#1A0A2A;#071C2B" dur="12s" repeatCount="indefinite"/>
+    </stop>
+  </linearGradient>
+  <linearGradient id="heroText" x1="0" y1="0" x2="1" y2="0">
+    <stop stop-color="#22D3EE"/><stop offset="50%" stop-color="#A78BFA"/><stop offset="100%" stop-color="#F472B6"/>
+  </linearGradient>
+  <filter id="hGlow"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="hSoft"><feGaussianBlur stdDeviation="22"/></filter>
+</defs>
+<rect width="1200" height="240" rx="24" fill="url(#heroBg)"/>
+<circle cx="160" cy="80" r="120" fill="#06B6D4" opacity=".10" filter="url(#hSoft)"><animate attributeName="opacity" values=".06;.16;.06" dur="7s" repeatCount="indefinite"/></circle>
+<circle cx="1040" cy="170" r="140" fill="#A855F7" opacity=".10" filter="url(#hSoft)"><animate attributeName="opacity" values=".16;.06;.16" dur="9s" repeatCount="indefinite"/></circle>
+<text x="600" y="110" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="62" font-weight="800" letter-spacing="4" fill="url(#heroText)" filter="url(#hGlow)">DNWE&#160;2.0</text>
+<text x="600" y="150" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="16" letter-spacing="7" fill="#94A3B8">DETERMINISTIC&#160;·&#160;NATURAL&#160;·&#160;WRITING&#160;·&#160;ENGINE</text>
+<g font-family="Inter,Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="2">
+  <text x="600" y="192" text-anchor="middle" fill="#67E8F9">OFFLINE&#160;&#160;·&#160;&#160;DETERMINISTIC&#160;&#160;·&#160;&#160;MEANING-PRESERVING&#160;&#160;·&#160;&#160;NO&#160;AI&#160;MODELS</text>
+</g>
+<rect x="2" y="2" width="1196" height="236" rx="24" fill="none" stroke="#22D3EE" stroke-width="1.5" opacity=".35"><animate attributeName="opacity" values=".15;.5;.15" dur="4s" repeatCount="indefinite"/></rect>
+</svg>
