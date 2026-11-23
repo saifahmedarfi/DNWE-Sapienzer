@@ -407,6 +407,33 @@ For an individual research paper, use **Section 21** of `DNWE_2.ipynb`. The engi
 
 ---
 
+## 🌐 09 — Local Web App
+
+Prefer a browser to the notebook? The same engine runs behind a local web page.
+
+```bash
+.venv/bin/python server.py      # opens http://127.0.0.1:8765
+```
+
+```text
+┌─ 1 ─ server.py loads Sections 1–13 of DNWE_2.ipynb (≈ 20–30 s, once per start)
+├─ 2 ─ Paste text, or drop a .docx · .md · .txt · .pdf · .tex file
+├─ 3 ─ Pick MODE and INTENSITY, then click Rewrite
+└─ 4 ─ Rewritten text · word-level diff · every edit with its reason · style profile
+```
+
+| Piece | Role |
+|:--|:--|
+| `server.py` | Standard-library HTTP server on `127.0.0.1`. It runs the notebook's engine cells, so `DNWE_2.ipynb` stays the only copy of the engine. |
+| `web/index.html` | Self-contained page (no CDN, works offline): input, options, results, copy and download. |
+
+> [!TIP]
+> Restart the server after you change the notebook. `--port 9000` picks another port; `--no-browser` skips opening the page.
+
+The server answers only on `127.0.0.1` / `localhost`, refuses requests from other web pages, and runs with the notebook's offline and AI-free guards.
+
+---
+
 <div align="center">
 
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 170" width="100%" role="img" aria-label="DNWE 2.0 identity">

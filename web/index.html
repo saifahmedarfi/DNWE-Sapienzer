@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DNWE · Writing Engine</title>
+<meta name="color-scheme" content="light dark">
+<style>
+  :root {
+    --bg: #f6f5f2; --surface: #ffffff; --surface-2: #f0eee9; --line: #dedad2;
+    --text: #1d1c1a; --muted: #67635b; --accent: #2f5d50; --accent-ink: #ffffff;
+    --ins-bg: #dcefe3; --ins-ink: #134a2c; --del-bg: #f7dedb; --del-ink: #7a1f17;
+    --warn: #8a5a00; --ok: #2f6b3f; --bad: #9b2c22; --focus: #1f6feb;
+    --radius: 10px; --shadow: 0 1px 2px rgb(0 0 0 / .06), 0 4px 16px rgb(0 0 0 / .05);
+    --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", sans-serif;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #151514; --surface: #1d1d1b; --surface-2: #262623; --line: #393833;
+      --text: #ecebe6; --muted: #a29f96; --accent: #7fc3ac; --accent-ink: #0f1f1a;
+      --ins-bg: #1e3a2a; --ins-ink: #b8eccd; --del-bg: #45211d; --del-ink: #ffc9c2;
+      --warn: #e0b45c; --ok: #8fd19e; --bad: #ff9a8f; --focus: #79b8ff;
+      --shadow: none;
+    }
+  }
+  * { box-sizing: border-box; }
+  /* classes below set `display`, which would otherwise override the hidden attribute */
+  .btn[hidden], .drop[hidden], details[hidden] { display: none; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.55 var(--sans); }
+  :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .wrap { max-width: 1320px; margin: 0 auto; padding: 20px 16px 48px; }
+
+  header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+  .brand h1 { margin: 0; font: 600 22px/1.2 var(--serif); letter-spacing: .2px; }
+  .brand p { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
+  .status { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border: 1px solid var(--line);
+            border-radius: 999px; background: var(--surface); font-size: 13px; }
+  .status .dot { inline-size: 9px; block-size: 9px; border-radius: 50%; background: var(--warn); flex: none; }
+  .status[data-state="ready"] .dot { background: var(--ok); }
+  .status[data-state="error"] .dot { background: var(--bad); }
+  .status[data-state="loading"] .dot { animation: pulse 1.2s ease-in-out infinite; }
+  @keyframes pulse { 50% { opacity: .3; } }
+
+  .grid { display: grid; gap: 18px; grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 980px) { .grid { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: start; } }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+  .card-body { padding: 16px; }
+
+  /* ---- input form ---- */
+  form { display: grid; gap: 16px; }
+  .field { display: grid; gap: 6px; }
+  label.lead, legend { font-weight: 600; font-size: 14px; }
+  .hint { color: var(--muted); font-size: 12.5px; }
+  textarea { inline-size: 100%; min-block-size: 280px; resize: vertical; padding: 12px; border: 1px solid var(--line);
+             border-radius: 8px; background: var(--surface); color: var(--text); font: 15px/1.6 var(--serif); }
+  textarea:disabled { opacity: .55; }
+  .drop { position: relative; display: grid; gap: 4px; place-items: center; text-align: center; padding: 14px;
+          border: 1.5px dashed var(--line); border-radius: 8px; background: var(--surface-2); color: var(--muted); font-size: 13px; }
+  .drop[data-over] { border-color: var(--accent); color: var(--text); }
+  .drop input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .drop input[type=file]:focus-visible + .drop-text { outline: 3px solid var(--focus); outline-offset: 4px; border-radius: 4px; }
+  .chip { display: none; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 10px;
+          border: 1px solid var(--line); border-radius: 8px; background: var(--surface-2); font-size: 13px; }
+  .chip[data-show] { display: flex; }
+  .chip strong { overflow-wrap: anywhere; }
+  fieldset { margin: 0; padding: 0; border: 0; display: grid; gap: 8px; min-inline-size: 0; }
+  .options { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+  .options.pairs { grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }   /* 4 modes: 2 x 2, never 3 + 1 */
+  .opt { position: relative; display: grid; gap: 2px; padding: 9px 11px 9px 34px; border: 1px solid var(--line);
+         border-radius: 8px; cursor: pointer; background: var(--surface); }
+  .opt input { position: absolute; inset-inline-start: 11px; inset-block-start: 12px; margin: 0; accent-color: var(--accent); }
+  .opt:has(input:checked) { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 9%, var(--surface)); }
+  .opt .name { font-weight: 600; font-size: 13.5px; }
+  .opt .desc { color: var(--muted); font-size: 12px; line-height: 1.35; }
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-block-size: 40px; padding: 0 18px;
+         border-radius: 8px; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink);
+         font: 600 14px var(--sans); cursor: pointer; }
+  .btn:disabled { opacity: .55; cursor: progress; }
+  .btn.ghost { background: transparent; color: var(--text); border-color: var(--line); font-weight: 500; min-block-size: 34px; padding: 0 12px; }
+  .spinner { inline-size: 14px; block-size: 14px; border: 2px solid currentColor; border-inline-end-color: transparent;
+             border-radius: 50%; animation: spin .8s linear infinite; display: none; }
+  .btn[aria-busy="true"] .spinner { display: inline-block; }
+  @keyframes spin { to { transform: rotate(1turn); } }
+
+  .alert { display: none; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--bad); color: var(--bad);
+           background: color-mix(in srgb, var(--bad) 8%, var(--surface)); font-size: 13.5px; }
+  .alert[data-show] { display: block; }
+
+  /* ---- output ---- */
+  .summary { display: flex; flex-wrap: wrap; gap: 8px 16px; padding: 14px 16px; border-bottom: 1px solid var(--line); font-size: 13.5px; color: var(--muted); }
+  .summary b { color: var(--text); }
+  .empty { padding: 48px 16px; text-align: center; color: var(--muted); }
+  [role="tablist"] { display: flex; overflow-x: auto; scrollbar-width: none; scroll-snap-type: inline proximity;
+                     scroll-padding-inline: 8px; border-bottom: 1px solid var(--line); padding: 0 8px; }
+  [role="tablist"]::-webkit-scrollbar { display: none; }
+  [role="tab"] { position: relative; flex: none; scroll-snap-align: start; padding: 12px 14px; border: 0; background: none;
+                 color: var(--muted); font: 500 14px var(--sans); cursor: pointer; }
+  [role="tab"][aria-selected="true"] { color: var(--accent); }
+  [role="tab"][aria-selected="true"]::after { content: ""; position: absolute; inset: auto 8px 0; border-block-end: 3px solid var(--accent); }
+  [role="tab"] .count { font-size: 12px; color: var(--muted); }
+  .panel-inner { padding: 16px; }
+  .toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; }
+  .copy { position: relative; display: inline-flex; }
+  .tip { position: absolute; inset-block-end: calc(100% + 6px); inset-inline-start: 50%; translate: -50% 0; padding: 3px 8px;
+         border-radius: 6px; background: var(--text); color: var(--bg); font-size: 12px; white-space: nowrap; opacity: 0; transition: opacity .15s; pointer-events: none; }
+  .tip:not(:empty) { opacity: 1; }
+  .prose { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font: 16px/1.7 var(--serif); }
+  .prose.code { font: 13px/1.6 var(--mono); }
+  .diff del { background: var(--del-bg); color: var(--del-ink); text-decoration: line-through; text-decoration-thickness: 1px; border-radius: 3px; }
+  .diff ins { background: var(--ins-bg); color: var(--ins-ink); text-decoration: none; border-radius: 3px; }
+  .legend { display: flex; gap: 14px; font-size: 12.5px; color: var(--muted); margin-bottom: 10px; }
+
+  .edits { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .edit { border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; display: grid; gap: 6px; }
+  .edit .top { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: baseline; font-size: 12.5px; color: var(--muted); }
+  .tag { display: inline-block; padding: 1px 8px; border-radius: 999px; background: var(--surface-2); color: var(--text); font-weight: 600; font-size: 12px; }
+  .edit .change { font: 15px/1.5 var(--serif); overflow-wrap: anywhere; }
+  .edit .why { font-size: 13px; color: var(--muted); }
+  details { margin-top: 14px; }
+  summary { cursor: pointer; font-weight: 600; font-size: 14px; }
+
+  table { inline-size: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th, td { text-align: start; padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 12.5px; }
+  td.num { font-variant-numeric: tabular-nums; }
+  .state-ok::before { content: "✓ "; } .state-ok { color: var(--ok); }
+  .state-out::before { content: "▲ "; } .state-out { color: var(--warn); font-weight: 600; }
+  .table-scroll { overflow-x: auto; }
+  .note { font-size: 12.5px; color: var(--muted); margin-top: 12px; }
+  footer { margin-top: 22px; color: var(--muted); font-size: 12.5px; text-align: center; }
+  @media (prefers-reduced-motion: reduce) { .status .dot, .spinner { animation: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <h1>DNWE · Deterministic Natural Writing Engine</h1>
+      <p>Runs on this computer. No AI models, no internet, same input → same output.</p>
+    </div>
+    <div class="status" id="status" data-state="loading" role="status">
+      <span class="dot" aria-hidden="true"></span><span id="status-text">Connecting to the engine…</span>
+    </div>
+  </header>
+
+  <div class="grid">
+    <!-- ================= input ================= -->
+    <section class="card" aria-labelledby="in-title">
+      <div class="card-body">
+        <h2 id="in-title" class="sr-only" style="position:absolute;inline-size:1px;block-size:1px;overflow:hidden;clip-path:inset(50%)">Input</h2>
+        <form id="run" action="/api/humanize" method="post" novalidate>
+          <div class="field">
+            <label class="lead" for="text">Text to rewrite</label>
+            <textarea id="text" name="text" spellcheck="true" aria-describedby="text-hint"
+                      placeholder="Paste a draft here…"></textarea>
+            <span class="hint" id="text-hint"><span id="wc">0 words</span>. Paragraphs are separated by a blank line; a short line on its own (e.g. “Conclusion”) is read as a heading.</span>
+          </div>
+
+          <div class="field">
+            <span class="lead" id="file-label">…or a document</span>
+            <div class="drop" id="drop">
+              <input type="file" id="file" name="file" accept=".txt,.md,.markdown,.docx,.pdf,.tex" aria-labelledby="file-label file-hint">
+              <span class="drop-text">Drop a file here or <u>browse</u></span>
+              <span class="hint" id="file-hint">Word (.docx), Markdown, text, PDF (text layer) or a single .tex file. Formatting, citations, maths and numbers are kept.</span>
+            </div>
+            <div class="chip" id="chip">
+              <span>Using <strong id="chip-name"></strong> <span class="hint" id="chip-size"></span></span>
+              <button type="button" class="btn ghost" id="chip-clear">Remove file</button>
+            </div>
+          </div>
+
+          <fieldset>
+            <legend>Writing mode</legend>
+            <div class="options pairs">
+              <label class="opt"><input type="radio" name="mode" value="academic" checked><span class="name">Academic</span><span class="desc">Formal register, spells out contractions, keeps semicolons.</span></label>
+              <label class="opt"><input type="radio" name="mode" value="technical"><span class="name">Technical</span><span class="desc">Keeps terms of art; no merges, passives or open swaps.</span></label>
+              <label class="opt"><input type="radio" name="mode" value="general"><span class="name">General</span><span class="desc">Plain language, informal word choices allowed.</span></label>
+              <label class="opt"><input type="radio" name="mode" value="conversational"><span class="name">Conversational</span><span class="desc">Relaxed tone with contractions.</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Intensity</legend>
+            <div class="options">
+              <label class="opt"><input type="radio" name="intensity" value="conservative"><span class="name">Conservative</span><span class="desc">Fixes and stock phrasing only.</span></label>
+              <label class="opt"><input type="radio" name="intensity" value="balanced" checked><span class="name">Balanced</span><span class="desc">Also transitions, openers and sentence rhythm.</span></label>
+              <label class="opt"><input type="radio" name="intensity" value="extensive"><span class="name">Extensive</span><span class="desc">Also open vocabulary variation, stronger targets.</span></label>
+            </div>
+          </fieldset>
+
+          <div class="alert" id="error" role="alert"></div>
+          <div class="actions">
+            <button type="submit" class="btn" id="go"><span class="spinner" aria-hidden="true"></span><span id="go-text">Rewrite</span></button>
+            <span class="hint">Tip: <kbd>Ctrl</kbd>+<kbd>Enter</kbd> in the text box.</span>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ================= output ================= -->
+    <section class="card" aria-labelledby="out-title" id="output" aria-busy="false">
+      <h2 id="out-title" style="position:absolute;inline-size:1px;block-size:1px;overflow:hidden;clip-path:inset(50%)">Result</h2>
+      <div class="summary" id="summary" role="status" aria-live="polite"><span>Your rewritten text will appear here.</span></div>
+      <div id="result" hidden>
+        <div role="tablist" aria-label="Result views" id="tabs">
+          <button type="button" role="tab" id="tab-text" aria-selected="true" tabindex="0">Rewritten</button>
+          <button type="button" role="tab" id="tab-diff" aria-selected="false" tabindex="-1">Changes</button>
+          <button type="button" role="tab" id="tab-edits" aria-selected="false" tabindex="-1">Edits <span class="count" id="edits-count"></span></button>
+          <button type="button" role="tab" id="tab-style" aria-selected="false" tabindex="-1">Style profile</button>
+        </div>
+
+        <div role="tabpanel" id="panel-text" aria-labelledby="tab-text" tabindex="0">
+          <div class="panel-inner">
+            <div class="toolbar">
+              <span class="copy">
+                <button type="button" class="btn ghost" id="copy-btn" command="--copy" commandfor="out-text">Copy text</button>
+                <span class="tip" role="status"></span>
+              </span>
+              <a class="btn ghost" id="download" hidden>Download</a>
+            </div>
+            <pre class="prose" id="out-text"></pre>
+          </div>
+        </div>
+
+        <div role="tabpanel" id="panel-diff" aria-labelledby="tab-diff" hidden="until-found">
+          <div class="panel-inner">
+            <div class="legend"><span><del style="background:var(--del-bg);color:var(--del-ink)">removed</del></span><span><ins style="background:var(--ins-bg);color:var(--ins-ink);text-decoration:none">added</ins></span></div>
+            <pre class="prose diff" id="out-diff"></pre>
+          </div>
+        </div>
+
+        <div role="tabpanel" id="panel-edits" aria-labelledby="tab-edits" hidden="until-found">
+          <div class="panel-inner">
+            <ul class="edits" id="applied"></ul>
+            <details id="rejected-wrap"><summary id="rejected-title">Proposed but not applied</summary><ul class="edits" id="rejected" style="margin-top:10px"></ul></details>
+            <details id="advice-wrap"><summary id="advice-title">Advice (never applied automatically)</summary><ul class="edits" id="advice" style="margin-top:10px"></ul></details>
+          </div>
+        </div>
+
+        <div role="tabpanel" id="panel-style" aria-labelledby="tab-style" hidden="until-found">
+          <div class="panel-inner">
+            <div class="table-scroll">
+              <table>
+                <thead><tr><th scope="col">Marker</th><th scope="col">Before</th><th scope="col">After</th><th scope="col">Target</th><th scope="col">After vs target</th></tr></thead>
+                <tbody id="style-rows"></tbody>
+              </table>
+            </div>
+            <h3 style="font-size:14px;margin:16px 0 6px">What the engine decided to change</h3>
+            <ul id="plan" style="margin:0;padding-inline-start:20px;font-size:13.5px"></ul>
+            <p class="note">These markers describe writing style (sentence variety, stock phrasing, connective density). They are not an AI-detection or authorship score.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <footer>DNWE 2.0 · engine loaded from <code>DNWE_2.ipynb</code> by <code>server.py</code> on 127.0.0.1</footer>
+</div>
+
+<script>
+// Same origin when served by server.py; when this file is opened from disk, talk to the default port.
+const API = new URLSearchParams(location.search).get("api")
+  || (location.protocol === "file:" ? "http://127.0.0.1:8765" : "");
+const $ = (id) => document.getElementById(id);
+const MAX_FILE = 20 * 2 ** 20;
+let chosenFile = null;
+
+// ---------- engine status ----------
+async function poll() {
+  const s = $("status"), t = $("status-text");
+  try {
+    const r = await fetch(`${API}/api/health`, { cache: "no-store" });
+    const h = await r.json();
+    if (h.ready) { s.dataset.state = "ready"; t.textContent = "Engine ready"; return; }
+    if (h.error) { s.dataset.state = "error"; t.textContent = "Engine failed to load — see the server window"; return; }
+    s.dataset.state = "loading"; t.textContent = `Engine loading… ${h.loading_seconds}s`;
+  } catch {
+    s.dataset.state = "error"; t.textContent = "Server not reachable — start it with: python server.py";
+  }
+  setTimeout(poll, 1500);
+}
+poll();
+
+// ---------- input ----------
+const textEl = $("text");
+const countWords = () => { const n = (textEl.value.match(/\S+/g) || []).length; $("wc").textContent = `${n} word${n === 1 ? "" : "s"}`; };
+textEl.addEventListener("input", countWords);
+textEl.addEventListener("keydown", (e) => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) $("run").requestSubmit(); });
+
+function setFile(file) {
+  if (file && file.size > MAX_FILE) { showError(`That file is ${(file.size / 2 ** 20).toFixed(1)} MB; the limit is 20 MB.`); return; }
+  chosenFile = file || null;
+  $("chip").toggleAttribute("data-show", !!chosenFile);
+  $("drop").hidden = !!chosenFile;
+  textEl.disabled = !!chosenFile;
+  if (chosenFile) {
+    $("chip-name").textContent = chosenFile.name;
+    $("chip-size").textContent = `· ${(chosenFile.size / 1024).toFixed(0)} KB · the text box is ignored`;
+  } else { $("file").value = ""; }
+}
+$("file").addEventListener("change", (e) => setFile(e.target.files[0]));
+$("chip-clear").addEventListener("click", () => { setFile(null); $("file").focus(); });
+const drop = $("drop");
+["dragenter", "dragover"].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.dataset.over = ""; }));
+["dragleave", "drop"].forEach((ev) => drop.addEventListener(ev, () => drop.removeAttribute("data-over")));
+drop.addEventListener("drop", (e) => { e.preventDefault(); if (e.dataTransfer.files[0]) setFile(e.dataTransfer.files[0]); });
+
+const readBase64 = (file) => new Promise((ok, fail) => {
+  const fr = new FileReader();
+  fr.onload = () => ok(String(fr.result).split(",", 2)[1] || "");
+  fr.onerror = () => fail(fr.error);
+  fr.readAsDataURL(file);
+});
+
+function showError(msg) { const a = $("error"); a.textContent = msg; a.toggleAttribute("data-show", !!msg); }
+
+// ---------- submit ----------
+$("run").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  showError("");
+  const form = new FormData(e.target);
+  const body = { mode: form.get("mode"), intensity: form.get("intensity") };
+  if (chosenFile) body.file = { name: chosenFile.name, data: await readBase64(chosenFile) };
+  else if (textEl.value.trim()) body.text = textEl.value;
+  else { showError("Paste some text or choose a file first."); textEl.focus(); return; }
+
+  const go = $("go");
+  go.disabled = true; go.setAttribute("aria-busy", "true"); $("go-text").textContent = "Rewriting…";
+  $("output").setAttribute("aria-busy", "true");
+  try {
+    const r = await fetch(`${API}/api/humanize`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    const data = await r.json().catch(() => ({ error: `server answered ${r.status}` }));
+    if (!r.ok) throw new Error(data.error || `server answered ${r.status}`);
+    render(data);
+  } catch (err) {
+    showError(err instanceof TypeError ? "Could not reach the server. Is server.py running?" : err.message);
+  } finally {
+    go.disabled = false; go.removeAttribute("aria-busy"); $("go-text").textContent = "Rewrite";
+    $("output").setAttribute("aria-busy", "false");
+  }
+});
+
+// ---------- render ----------
+const el = (tag, props = {}, ...kids) => { const n = Object.assign(document.createElement(tag), props); n.append(...kids); return n; };
+const LABEL = { para_len_cv_median: "Sentence-length variation (median per paragraph)", additive_per_100s: "Additive openers per 100 sentences",
+  opener_repeat_rate: "Repeated sentence openers (share of pairs)", stock_per_1k: "Stock phrasing per 1,000 words",
+  dash_per_1k: "Dashes per 1,000 words", hedge_stacks_per_1k: "Stacked hedges per 1,000 words" };
+
+function editItem(x, withGate) {
+  const change = el("div", { className: "change diff" },
+    el("del", {}, x.before.trim() || "∅"), " → ", el("ins", {}, x.after.trim() || "(removed)"));
+  const top = el("div", { className: "top" }, el("span", { className: "tag" }, x.family),
+    el("span", {}, x.section), x.confidence ? el("span", {}, `confidence ${x.confidence.toFixed(2)} (${x.confidence_source})`) : "");
+  const why = el("div", { className: "why" }, x.reason + (withGate && x.gate ? ` — blocked: ${x.gate}` : withGate ? ` — ${x.status}` : ""));
+  return el("li", { className: "edit" }, top, change, why);
+}
+
+function render(d) {
+  $("result").hidden = false;
+  const c = d.counts;
+  $("summary").replaceChildren(
+    el("span", {}, el("b", {}, String(c.applied)), " edits applied"),
+    el("span", {}, el("b", {}, String(c["rejected-gate"] + c["below-threshold"] + c.overlap + c["refused-docx"])), " not applied"),
+    el("span", {}, el("b", {}, String(d.words)), " words"),
+    el("span", {}, el("b", {}, `${d.seconds}s`)),
+    el("span", {}, `${d.mode} · ${d.intensity}`),
+    el("span", {}, d.integrity.ok ? "integrity ✓" : `integrity ✗ ${d.integrity.problems.join("; ")}`));
+
+  const code = d.format === "latex";
+  $("out-text").className = "prose" + (code ? " code" : "");
+  $("out-diff").className = "prose diff" + (code ? " code" : "");
+  $("out-text").textContent = d.output_text;
+  $("out-diff").replaceChildren(...d.diff.map(([op, t]) => op === "eq" ? document.createTextNode(t) : el(op, {}, t)));
+
+  const dl = $("download");
+  if (dl.href) URL.revokeObjectURL(dl.href);
+  if (d.download) {
+    const bytes = Uint8Array.from(atob(d.download.data), (ch) => ch.charCodeAt(0));
+    dl.href = URL.createObjectURL(new Blob([bytes], { type: d.download.mime }));
+    dl.download = d.download.name; dl.textContent = `Download ${d.download.name}`; dl.hidden = false;
+  } else { dl.removeAttribute("href"); dl.hidden = true; }
+
+  const applied = d.edits.filter((x) => x.status === "applied");
+  const other = d.edits.filter((x) => x.status !== "applied" && x.status !== "advice");
+  const advice = d.edits.filter((x) => x.status === "advice");
+  $("edits-count").textContent = `(${applied.length})`;
+  $("applied").replaceChildren(...(applied.length ? applied.map((x) => editItem(x, false)) : [el("li", { className: "hint" }, "No edit was needed: the text already meets the targets for this mode and intensity.")]));
+  $("rejected").replaceChildren(...other.map((x) => editItem(x, true)));
+  $("rejected-title").textContent = `Proposed but not applied (${other.length})`;
+  $("rejected-wrap").hidden = !other.length;
+  $("advice").replaceChildren(...advice.map((x) => el("li", { className: "edit" }, el("div", { className: "top" }, el("span", { className: "tag" }, x.rule)), el("div", { className: "why" }, `${x.reason} — “${x.sentence_before.slice(0, 160)}…”`))));
+  $("advice-title").textContent = `Advice, never applied automatically (${advice.length})`;
+  $("advice-wrap").hidden = !advice.length;
+
+  $("style-rows").replaceChildren(...d.style.markers.map((m) => el("tr", {},
+    el("th", { scope: "row", style: "font-weight:500;color:var(--text)" }, LABEL[m.name] || m.name),
+    el("td", { className: "num" }, String(m.before)), el("td", { className: "num" }, String(m.after)),
+    el("td", { className: "num" }, m.target),
+    el("td", { className: m.ok_after ? "state-ok" : "state-out" }, m.ok_after ? "within" : "outside"))));
+  $("plan").replaceChildren(...(d.style.plan.length ? d.style.plan : ["Every marker was already within target, so no reconstruction was planned."]).map((n) => el("li", {}, n)));
+  selectTab($("tab-text"), false);
+}
+
+// ---------- tabs (ARIA tabs pattern; selection follows focus) ----------
+const tabs = [...document.querySelectorAll('[role="tab"]')];
+function selectTab(tab, focus = true) {
+  for (const t of tabs) {
+    const on = t === tab;
+    t.setAttribute("aria-selected", String(on));
+    t.tabIndex = on ? 0 : -1;
+    const panel = $(t.id.replace("tab-", "panel-"));
+    if (on) { panel.removeAttribute("hidden"); panel.tabIndex = 0; } else { panel.setAttribute("hidden", "until-found"); panel.removeAttribute("tabindex"); }
+  }
+  if (focus) tab.focus();
+  tab.scrollIntoView({ block: "nearest", inline: "nearest" });
+}
+tabs.forEach((t) => t.addEventListener("click", () => selectTab(t)));
+$("tabs").addEventListener("keydown", (e) => {
+  const i = tabs.indexOf(document.activeElement);
+  if (i < 0) return;
+  const next = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[e.key];
+  if (next === undefined) return;
+  e.preventDefault();
+  selectTab(tabs[(next + tabs.length) % tabs.length]);
+});
+// find-in-page can reveal a hidden="until-found" panel: select its tab too
+document.querySelectorAll('[role="tabpanel"]').forEach((p) =>
+  p.addEventListener("beforematch", () => selectTab($(p.id.replace("panel-", "tab-")), false)));
+
+// ---------- copy (Invoker Commands, with a click fallback) ----------
+const timers = new WeakMap();
+function report(button, ok) {
+  const tip = button.nextElementSibling;
+  clearTimeout(timers.get(button));
+  tip.textContent = "";
+  requestAnimationFrame(() => (tip.textContent = ok ? "Copied" : "Copy failed"));
+  timers.set(button, setTimeout(() => (tip.textContent = ""), 2000));
+}
+async function copy(button, target) {
+  const text = target.innerText.trim();
+  if (!text) return;
+  try { await navigator.clipboard.writeText(text); report(button, true); } catch { report(button, false); }
+}
+if ("CommandEvent" in window) {
+  document.addEventListener("command", (e) => { if (e.command === "--copy") copy(e.source, e.target); }, true);
+} else {
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest('button[command="--copy"]');
+    const t = b && document.getElementById(b.getAttribute("commandfor"));
+    if (t) copy(b, t);
+  });
+}
+</script>
+</body>
+</html>
