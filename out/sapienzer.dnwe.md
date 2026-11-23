@@ -1,0 +1,37 @@
+Everything below happens on your computer. Work through the parts in order.
+
+## Part 1 — One-time setup (about 10 minutes)
+
+**1. Open a terminal** (Ctrl+Alt+T) and install Java and curl: ``` sudo apt update sudo apt install -y default-jre-headless curl java -version ``` The last line must show version 17 or higher.
+
+**2. Install `uv`**, which provides a Python version the notebook was tested on. Your system Python is 3.14, which I didn't test. ``` curl -LsSf https://astral.sh/uv/install.sh | sh ``` Close the terminal and open a new one.
+
+**3. Create the project environment:** ``` cd /home/saifarfi/Volumetric/Sapienaizerv2 uv venv --seed -p 3.13 .venv source .venv/bin/activate pip install jupyterlab ipykernel mkdir -p corpus ``` Keep `--seed` in that command: it installs `pip` inside the environment, which the notebook's install cell needs.
+
+**4. Get the notebook into the folder.** - In this chat, click the download button on the **DNWE_2.ipynb** card. It saves to `~/Downloads`. - In the terminal, run: ``` mv ~/Downloads/DNWE_2.ipynb /home/saifarfi/Volumetric/Sapienaizerv2/ ``` - You do not need the `.executed` copy or the HTML sample to run anything.
+
+**5. Put your papers in `corpus/`** using this layout: ``` Sapienaizerv2/ ├── DNWE_2.ipynb └── corpus/ ├── my_draft.docx            ← Word, Markdown, TXT, PDF go directly here ├── notes.md └── my_latex_paper/          ← each LaTeX project in its own folder ├── main.tex └── sections/... ```
+
+## Part 2 — First run (the first time takes 15–30 minutes, mostly downloads)
+
+**In VS Code:** 1. Click **File → Open Folder…**, choose `Sapienaizerv2`, then click **Open**. 2. In the Explorer on the left, click **DNWE_2.ipynb**. 3. Click **Select Kernel** in the top-right corner. Then click **Python Environments…** and choose **.venv (Python 3.13)**. If VS Code asks to install the Jupyter or Python extensions, click **Install**. 4. Click **Run All** in the toolbar at the top of the notebook.
+
+**Or in JupyterLab:** run `source .venv/bin/activate && jupyter lab DNWE_2.ipynb` in the terminal. In the browser tab that opens, click **Run → Run All Cells**.
+
+**What you should see:** - Section 2 shows download progress. - Section 14 prints one line per paper, each ending in `integrity OK`. - Section 15 prints `31/31 tests passed`. - Section 17 prints `Wrote … dev and … test items`.
+
+**After the first successful run**, scroll to section 2 and change `RUN_INSTALL = True` to `RUN_INSTALL = False`. Press **Ctrl+S**.
+
+## Part 3 — Label the dev set (30–60 minutes, the main manual task)
+
+1. In a file manager, open `Sapienaizerv2/out/` and double-click **dev_set.csv**. It opens in LibreOffice Calc. 2. In the **Text Import** dialog: - Set **Character set** to **Unicode (UTF-8)**. - Tick only **Comma** under *Separator Options*. - Set **String delimiter** to `"`. - Click **OK**. 3. Compare **sentence_before** (column F) with **sentence_after** (column G). In **label** (column H), type exactly one word: - `correct`: the edit is good. - `wrong`: it reads worse or is ungrammatical. - `meaning`: it changed what you meant. 4. Press **Ctrl+S**. When asked about the format, click **Use Text CSV Format!** 5. Repeat steps 1–4 for **test_set.csv**. 6. Back in the notebook, set `RUN_INSTALL = False` if you have not, then click **Run All** again. - Section 18 prints each rule family's precision as **ENABLED** or **disabled**. - Section 14 reruns your papers using the measured confidences. - Your labels are kept even when section 17 runs again.
+
+## Part 4 — Review the edits for each paper
+
+1. In `out/`, double-click **yourpaper.dnwe.review.html**. It opens in your browser and shows every edit with deletions in red, insertions in green, and the reason for each. 2. If you agree with everything, the edited file is already done: - Word: `out/yourpaper.dnwe.docx` - LaTeX: `out/yourpaper.dnwe_latex/` - Other formats: `out/yourpaper.dnwe.md` or `.txt`
+
+## Part 5 — Undo individual edits (only if you disagree with some)
+
+1. In the notebook, scroll to section 19 and set the path, for example: ``` MY_PAPER = CORPUS / "my_draft.docx" ``` For LaTeX, use `CORPUS / "my_latex_paper" / "main.tex"`. 2. Click inside that cell and press **Shift+Enter**. 3. Open `out/my_draft.dnwe.edits.csv` with the same import settings as Part 3. For each edit you do not want, change **accept** to **reject** in **decision** (column B). Save with **Use Text CSV Format!** - Do not type `accept` on rows that were blank. Those edits never passed the checks. 4. In the notebook, hover below the section 19 cell and click **+ Code**. Paste this line, then press **Shift+Enter**: ``` print(apply_decisions(MY_PAPER, recs, csv_path)) ``` It writes `out/my_draft.dnwe.reviewed.docx` with only your accepted edits. - Do not rerun the section 19 cell after editing the CSV, because that overwrites the CSV with a fresh one.
+
+## If something fails - **Section 1 fails on Java:** repeat step 1, then click **Restart** in the notebook toolbar and **Run All** again. - **Section 2 says "retrying in 20s":** the parser download is rate-limited. Leave it; it retries on its own. - **Section 14 says "Put your papers in…":** `corpus/` is empty or the files are inside an extra subfolder. Check the layout in Part 1 step 5. - **"No module named …":** the kernel is not `.venv`. Click **Select Kernel** again and choose `.venv`.

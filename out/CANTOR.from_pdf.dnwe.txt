@@ -1,0 +1,139 @@
+CANTOR
+
+Causal Audio-Language Network for Theory-Grounded Oral-Vocal Reasoning
+
+Pattern Recognition and Neural Network
+
+CSE465.4
+
+CSE465.4
+
+PREPARED FOR
+
+Dr. Md Adnan Arefeen (AFE)
+
+Assistant Professor Department of Electrical & Computer Engineering North South University
+
+E-mail: adnan.arefeen@northsouth.edu
+
+PREPARED BY
+
+Saif Ahmed
+
+2231902642
+
+saif.ahmed03@northsouth.edu ECE(CSE)
+
+18-08-2026
+
+Abstract
+
+CANTOR is a causal audio-language framework designed to move singing assessment from simple error detection toward theory-grounded and explainable diagnosis. This report presents the evolution of the project from its initial proposal through data harmonization, model selection, and the final acoustic-reasoning pipeline. Eight heterogeneous singing corpora are harmonized into a common representation hosted on Kaggle, preserving source provenance and distinguishing original annotations from derived features.
+
+This document outlines the systematic integration of a Temporal Convolutional Neural Network (CNN) head atop a foundational HuBERT encoder for acoustic feature extraction, and the subsequent instruction-tuning of Llama-3 for interpretable vocal reasoning. Exploratory Data Analysis (EDA) on the CANTOR_v2_Reasoned_Dataset.csv validates the modality coverage and schema integrity necessary for causal diagnostics.
+
+Keywords: Singing Voice Assessment; Audio-Language Models; Explainable AI; Multimodal Learning; Dataset Harmonization; HuBERT; Convolutional Neural Networks.
+
+1 Project Proposal and Roadmap
+
+The core motivation behind CANTOR was to address the primary limitation in modern Singing Voice Assessment (SVA): current systems merely evaluate if a pitch or timing event was correct, but fail to explain why the error occurred or how to fix it.
+
+Our plan was to construct an end-to-end pipeline capable of extracting acoustic features, framing them within a musical context, and passing them to an advanced language model for theory-grounded oral-vocal reasoning. To achieve this, the project workflow was collaboratively structured into three distinct phases (model surveying, acoustic training, and feature extraction) managed alongside project teammates Riaz bhai and Khalil bhai.
+
+The defined roadmap included:
+
+1. Data Aggregation: Harmonize highly fragmented, heterogeneous singing datasets into a unified tabular substrate.
+
+2. Acoustic Pipeline Definition: Utilize a foundational model to convert raw audio waveforms into quantifiable vocal technique embeddings.
+
+3. Diagnostic Reasoning: Fine-tune a Large Language Model (LLM) to map acoustic embeddings to human-readable, actionable singing coaching.
+
+2 Update 1: Reasoning Model Survey and Fine-Tuning
+
+A critical challenge in the CANTOR architecture was selecting the appropriate reasoning backbone. The system required a model capable of interpreting multi-dimensional acoustic evidence (e.g., F trajectories,
+
+0
+
+dynamic phonation, vibrato presence) and translating it into natural language coaching.
+
+We systematically surveyed and fine-tuned several models on a subset of annotated vocal diagnostics. Through iterative testing, Llama-3-3B-Instruct emerged as the optimal choice. It provided the best balance between parameter efficiency and deep contextual understanding of music theory. By formatting our harmonized dataset into structured prompts, we fine-tuned Llama-3 to act as an expert vocal coach, ensuring that its generated advice was directly grounded in the preceding acoustic evidence rather than hallucinated assumptions.
+
+3 Update 2: Dataset Gathering and Integration
+
+To build a robust substrate, we gathered eight separate singing corpora. Each corpus provides specialized annotations, contributing a unique modality to the final harmonized dataset hosted on Kaggle (saifarfi/cantor-dataset).
+
+• Cantoria (10 samples): Contributes continuous fundamental frequency (F ) tracks and vocal
+
+0
+
+stems.
+
+• Jamendo (Lyric Alignment): Contributes word and syllable temporal synchronization.
+
+• GTSinger: Contributes vocal technique annotations, phonemes, and MusicXML data.
+
+• MDB Melody: Contributes melody contours and continuous F estimates.
+
+0
+
+• OpenSinger: Contributes phoneme alignments and singer timbre data.
+
+• Schubert Winterreise: Contributes score-based and expressive musical structure.
+
+• Annotated VocalSet: Contributes specific technique classifications (e.g., belt, vibrato, straight, trill).
+
+• Opencpop: Contributes detailed MIDI pitch mappings and note boundaries.
+
+Cantoria Jamendo Lyrics GTSinger (Continuous F 0 ) (Temporal Sync) (Technique & XML)
+
+Opencpop Kaggle Repository MDB Melody (MIDI Pitch) (saifarfi/cantor-dataset) (Melody Contours)
+
+VocalSet Schubert OpenSinger (Belt, Vibrato, etc.) (Score Structure) (Timbre & Phonemes)
+
+Figure 1: Dataset contribution architecture illustrating how the 8 distinct corpora map to the central unified Kaggle repository.
+
+4 Update 3: Exploratory Data Analysis (CANTOR_v2)
+
+Following data harmonization, an Exploratory Data Analysis (EDA) was performed on CANTOR_v2_Reasoned_Dataset.csv. This stage involved filtering valid samples, label encoding, and stabilizing the dataset through binary grouping (e.g., Dynamic vs. Static Phonation) to handle the inherent sparsity of merging 8 different datasets. Data augmentation techniques (such as oversampling) were applied using pandas and scikit-learn to ensure robust training stability.
+
+Raw Audio & Deterministic CANTOR_v2_Reasoned Annotations Matching (405 Sparse Features)
+
+Analysis-Ready Label Encoding & Substrate Augmentation
+
+Figure 2: Dull-tone representation of the Stage 1 to V2 dataset processing architecture.
+
+5 Final Architecture and Acoustic Pipeline
+
+The final component of the project is the Acoustic Frontend (acoustic_pipeline.ipynb). To map raw waveforms to diagnostic embeddings, we utilized PyTorch, HuggingFace Transformers, Librosa, and Torchaudio running on Google Colab T4 GPU instances.
+
+We deployed facebook/hubert-base-ls960 as the foundational encoder, using its strong self-supervised audio representations. The lower feature extraction layers were frozen, while the top two transformer layers were unfrozen for domain adaptation. On top of the HuBERT embeddings, we integrated a custom 1D Temporal CNN Head consisting of:
+
+• nn.Conv1d (kernel size 3)
+
+• BatchNorm1d
+
+• ReLU activation and Dropout (0.3/0.2)
+
+• AdaptiveAvgPool1d and Linear output layers
+
+Raw Singing Technique Logits / Llama-3 Audio (16kHz) Embeddings Reasoning Engine
+
+HuBERT Encoder Conv1d → BatchNorm AdaptiveAvgPool1d Explainable (Top 2 Layers Unfrozen) → ReLU → Dropout → Linear Layer Diagnosis
+
+Figure 3: Complete CANTOR end-to-end architecture, spanning from the HuBERT acoustic frontend to the Temporal CNN head, passing embeddings to the Llama-3 instruction-tuned reasoning engine.
+
+6 Llama-3 Reasoning Sample
+
+To demonstrate the success of the fine-tuned Llama-3 model in interpreting the acoustic inputs, below is a snippet from CANTOR_Diagnostics.json. It shows how the model maps a numerical confidence score and structural data into an actionable coaching response:
+
+{
+
+"audio_id": "VocalSet_f1_arpeggios_belt", "acoustic_evidence": { "f0_voiced_fraction": 0.89, "predicted_technique": "Belt", "confidence_score": 0.94
+
+},
+
+"diagnostic_reasoning": "The singer exhibits a high voiced fraction (0.89) with strong energy markers consistent with the ’Belt’ technique. However, the slight pitch instability near the phrase offset indicates sub-optimal breath support.", "coaching_recommendation": "Focus on maintaining consistent subglottic pressure through the end of the phrase. Practice staccato onset exercises to stabilize the abdominal engagement before transitioning back to sustained belts."
+
+}
+
+This output confirms that the framework successfully achieves its goal: delivering theory-grounded, explainable vocal diagnosis.

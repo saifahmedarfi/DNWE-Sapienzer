@@ -27,7 +27,7 @@
   }
   * { box-sizing: border-box; }
   /* classes below set `display`, which would otherwise override the hidden attribute */
-  .btn[hidden], .drop[hidden], details[hidden] { display: none; }
+  .btn[hidden], .drop[hidden], details[hidden], .downloads[hidden] { display: none; }
   html { -webkit-text-size-adjust: 100%; }
   body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.55 var(--sans); }
   :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
@@ -57,6 +57,10 @@
   textarea { inline-size: 100%; min-block-size: 280px; resize: vertical; padding: 12px; border: 1px solid var(--line);
              border-radius: 8px; background: var(--surface); color: var(--text); font: 15px/1.6 var(--serif); }
   textarea:disabled { opacity: .55; }
+  input[type=text] { inline-size: 100%; min-block-size: 40px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 8px;
+                     background: var(--surface); color: var(--text); font: 14px var(--sans); }
+  .downloads { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .downloads .label { color: var(--muted); font-size: 13px; }
   .drop { position: relative; display: grid; gap: 4px; place-items: center; text-align: center; padding: 14px;
           border: 1.5px dashed var(--line); border-radius: 8px; background: var(--surface-2); color: var(--muted); font-size: 13px; }
   .drop[data-over] { border-color: var(--accent); color: var(--text); }
@@ -192,6 +196,13 @@
             </div>
           </fieldset>
 
+          <div class="field">
+            <label class="lead" for="freeze">Freeze words <span class="hint">(optional)</span></label>
+            <input type="text" id="freeze" name="freeze" autocomplete="off" spellcheck="false" aria-describedby="freeze-hint"
+                   placeholder="e.g. leverage, graph neural network, Morphena">
+            <span class="hint" id="freeze-hint">Comma-separated words or phrases that must come out exactly as they went in.</span>
+          </div>
+
           <div class="alert" id="error" role="alert"></div>
           <div class="actions">
             <button type="submit" class="btn" id="go"><span class="spinner" aria-hidden="true"></span><span id="go-text">Rewrite</span></button>
@@ -220,7 +231,9 @@
                 <button type="button" class="btn ghost" id="copy-btn" command="--copy" commandfor="out-text">Copy text</button>
                 <span class="tip" role="status"></span>
               </span>
-              <a class="btn ghost" id="download" hidden>Download</a>
+              <div class="downloads" id="downloads" role="group" aria-label="Download the humanized document" hidden>
+                <span class="label">Download:</span>
+              </div>
             </div>
             <pre class="prose" id="out-text"></pre>
           </div>
@@ -324,7 +337,7 @@ $("run").addEventListener("submit", async (e) => {
   e.preventDefault();
   showError("");
   const form = new FormData(e.target);
-  const body = { mode: form.get("mode"), intensity: form.get("intensity") };
+  const body = { mode: form.get("mode"), intensity: form.get("intensity"), freeze: form.get("freeze") || "" };
   if (chosenFile) body.file = { name: chosenFile.name, data: await readBase64(chosenFile) };
   else if (textEl.value.trim()) body.text = textEl.value;
   else { showError("Paste some text or choose a file first."); textEl.focus(); return; }
@@ -366,24 +379,26 @@ function render(d) {
   $("summary").replaceChildren(
     el("span", {}, el("b", {}, String(c.applied)), " edits applied"),
     el("span", {}, el("b", {}, String(c["rejected-gate"] + c["below-threshold"] + c.overlap + c["refused-docx"])), " not applied"),
-    el("span", {}, el("b", {}, String(d.words)), " words"),
+    el("span", {}, el("b", {}, `${d.input_words} → ${d.output_words}`), " words"),
     el("span", {}, el("b", {}, `${d.seconds}s`)),
     el("span", {}, `${d.mode} · ${d.intensity}`),
     el("span", {}, d.integrity.ok ? "integrity ✓" : `integrity ✗ ${d.integrity.problems.join("; ")}`));
 
-  const code = d.format === "latex";
-  $("out-text").className = "prose" + (code ? " code" : "");
-  $("out-diff").className = "prose diff" + (code ? " code" : "");
+  $("out-text").className = "prose";
+  $("out-diff").className = "prose diff";
   $("out-text").textContent = d.output_text;
   $("out-diff").replaceChildren(...d.diff.map(([op, t]) => op === "eq" ? document.createTextNode(t) : el(op, {}, t)));
 
-  const dl = $("download");
-  if (dl.href) URL.revokeObjectURL(dl.href);
-  if (d.download) {
-    const bytes = Uint8Array.from(atob(d.download.data), (ch) => ch.charCodeAt(0));
-    dl.href = URL.createObjectURL(new Blob([bytes], { type: d.download.mime }));
-    dl.download = d.download.name; dl.textContent = `Download ${d.download.name}`; dl.hidden = false;
-  } else { dl.removeAttribute("href"); dl.hidden = true; }
+  const group = $("downloads");
+  group.querySelectorAll("a").forEach((a) => { URL.revokeObjectURL(a.href); a.remove(); });
+  const NAMES = { pdf: "PDF", docx: "Word", tex: "LaTeX", md: "Markdown", txt: "Text" };
+  for (const f of d.downloads || []) {
+    const bytes = Uint8Array.from(atob(f.data), (ch) => ch.charCodeAt(0));
+    const a = el("a", { className: "btn ghost", href: URL.createObjectURL(new Blob([bytes], { type: f.mime })),
+                        download: f.name, title: f.name }, `${NAMES[f.format] || f.format} (.${f.format})`);
+    group.append(a);
+  }
+  group.hidden = !(d.downloads || []).length;
 
   const applied = d.edits.filter((x) => x.status === "applied");
   const other = d.edits.filter((x) => x.status !== "applied" && x.status !== "advice");

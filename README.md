@@ -215,28 +215,33 @@ For an individual research paper, use **Section 21** of `DNWE_2.ipynb`. The engi
 
 ## 🌐 09 — Local Web App
 
-Prefer a browser to the notebook? The same engine runs behind a local web page.
+Prefer a browser to the notebook? The same engine runs behind a local web page, like an online humanizer, but entirely on your machine.
 
 ```bash
+cd /home/saifarfi/Volumetric/Sapienaizerv2
 .venv/bin/python server.py      # opens http://127.0.0.1:8765
 ```
 
 ```text
-┌─ 1 ─ server.py loads Sections 1–13 of DNWE_2.ipynb (≈ 20–30 s, once per start)
-├─ 2 ─ Paste text, or drop a .docx · .md · .txt · .pdf · .tex file
-├─ 3 ─ Pick MODE and INTENSITY, then click Rewrite
-└─ 4 ─ Rewritten text · word-level diff · every edit with its reason · style profile
+┌─ 1 ─ server.py loads Sections 1–13 of DNWE_2.ipynb (≈ 10–30 s, once per start)
+├─ 2 ─ Paste text, or drop a .pdf · .docx · .md · .txt · .tex file
+├─ 3 ─ Pick MODE and INTENSITY, optionally FREEZE words, then click Rewrite
+├─ 4 ─ Rewritten text · word-level diff · every edit with its reason · style profile
+└─ 5 ─ Download the humanized document as .pdf · .md · .txt (+ .docx / .tex for those inputs)
 ```
 
 | Piece | Role |
 |:--|:--|
 | `server.py` | Standard-library HTTP server on `127.0.0.1`. It runs the notebook's engine cells, so `DNWE_2.ipynb` stays the only copy of the engine. |
-| `web/index.html` | Self-contained page (no CDN, works offline): input, options, results, copy and download. |
+| `web/index.html` | Self-contained page (no CDN, works offline): input, options, freeze words, results, copy and downloads. |
+| `samples/ai_style_sample.pdf` | Synthetic machine-style PDF for a quick test of every humanizer family. |
+
+**PDF input.** The reader works on word positions: tables stay tables, two-column papers are read in order, running headers / page numbers are dropped, headings and bullets are kept. The humanized PDF is a freshly typeset document (bundled DejaVu fonts) — no tool can rewrite a PDF's original layout in place.
 
 > [!TIP]
-> Restart the server after you change the notebook. `--port 9000` picks another port; `--no-browser` skips opening the page.
+> Restart the server after you change the notebook (`Ctrl+C`, then run it again). `--port 9000` picks another port; `--no-browser` skips opening the page. With VS Code **Live Server**, open `http://127.0.0.1:5500/web/index.html` while `server.py` runs.
 
-The server answers only on `127.0.0.1` / `localhost`, refuses requests from other web pages, and runs with the notebook's offline and AI-free guards.
+The server answers only on `127.0.0.1` / `localhost`, refuses requests from other web pages, runs with the notebook's offline and AI-free guards, and shuts its LanguageTool process down with it (`Ctrl+C`, closing the terminal, or `kill`).
 
 ---
 

@@ -10,7 +10,7 @@ reaches the web app on the next restart. The notebook's offline and AI-free guar
 are active inside this process too: it cannot open remote connections or load any neural model.
 Standard library only; it listens on 127.0.0.1 and refuses other hosts and origins.
 """
-import argparse, base64, difflib, io, json, os, re, sys, tempfile, threading, time, traceback, types, webbrowser
+import argparse, base64, difflib, io, json, os, re, signal, sys, tempfile, threading, time, traceback, types, webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -20,8 +20,6 @@ PAGE = ROOT / "web" / "index.html"
 LAST_ENGINE_CELL = "#@title 13 "            # the orchestrator; everything the engine needs is above it
 MAX_BODY = 30 * 2**20                        # base64 of a ~20 MB document
 ACCEPTED = (".txt", ".md", ".markdown", ".docx", ".pdf", ".tex")
-MIME = {".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        ".md": "text/markdown", ".txt": "text/plain", ".tex": "application/x-tex"}
 
 LOCAL_ORIGIN = re.compile(r"https?://(127\.0\.0\.1|localhost|\[::1\])(:\d{1,5})?")
 STATE = {"engine": None, "error": None, "loading_since": time.time(), "ready_at": None}
@@ -93,31 +91,31 @@ def humanize(req):
             path.write_text(text, encoding="utf-8")
         else:
             raise ValueError("paste some text or choose a file")
+        freeze = req.get("freeze") or []
+        if isinstance(freeze, str):
+            freeze = [t for t in re.split(r"[,;\n]+", freeze)]
+        freeze = [t.strip() for t in freeze if str(t).strip()][:200]
         t0 = time.perf_counter()
         with ENGINE_LOCK:
-            doc, recs, _, rep = E.process(path, mode, intensity, write=False)
+            doc, recs, _, rep = E.process(path, mode, intensity, write=False, freeze=freeze)
             rendered, refused = E.render_document(doc, rep["new_masked"])
+            original, _ = E.render_document(doc, {})
+            exports = E.export_all(doc, rendered)
+            before = E.elements_to_text(E.doc_elements(doc, original))
         seconds = time.perf_counter() - t0
-        view = lambda b, masked: E.display(E.unmask(masked, b.spans), b)
-        download = None
-        if doc.fmt == "docx":
-            before = "\n\n".join(view(b, b.masked) for b in doc.blocks)
-            after = "\n\n".join(view(b, rep["new_masked"].get(b.bid, b.masked)) for b in doc.blocks)
-            buf = io.BytesIO(); rendered.save(buf)
-            download = {"name": f"{Path(upload['name']).stem}.dnwe.docx", "mime": MIME[".docx"],
-                        "data": base64.b64encode(buf.getvalue()).decode()}
-        else:
-            key = next(iter(doc.sources)) if doc.fmt != "latex" else doc.files_order[0]
-            before, after = doc.sources[key], rendered[key]
-            if upload:
-                ext = ".md" if doc.fmt.endswith("markdown") else Path(upload["name"]).suffix.lower()
-                download = {"name": f"{Path(upload['name']).stem}.dnwe{ext}", "mime": MIME.get(ext, "text/plain"),
-                            "data": base64.b64encode(after.encode("utf-8")).decode()}
+        after = exports["txt"].decode("utf-8")
+        stem = Path(upload["name"]).stem if upload else "humanized_text"
+        order = [k for k in ("pdf", "docx", "tex", "md", "txt") if k in exports]
+        if upload and Path(upload["name"]).suffix.lower() in (".md", ".markdown"):
+            order = ["md"] + [k for k in order if k != "md"]
+        downloads = [{"format": k, "name": f"{stem}.dnwe.{k}", "mime": E.EXPORT_MIME[k],
+                      "data": base64.b64encode(exports[k]).decode()} for k in order]
     sc = rep["style_check"]
     return {
         "mode": mode, "intensity": intensity, "format": doc.fmt, "seconds": round(seconds, 2),
         "words": rep["profile"].words, "integrity": rep["integrity"],
-        "output_text": after, "diff": word_diff(before, after), "download": download,
+        "output_text": after, "diff": word_diff(before, after), "downloads": downloads,
+        "freeze": freeze, "input_words": len(before.split()), "output_words": len(after.split()),
         "counts": {s: sum(r.status == s for r in recs) for s in
                    ("applied", "rejected-gate", "below-threshold", "overlap", "advice", "refused-docx")},
         "edits": [{"id": r.rid, "status": r.status, "family": r.family, "rule": r.rule, "section": r.section,
@@ -231,6 +229,13 @@ def main():
     print(f"DNWE server on {url}  (engine loading from {NOTEBOOK.name}; Ctrl+C to stop)", flush=True)
     if not args.no_browser:
         threading.Timer(0.5, lambda: webbrowser.open(url)).start()
+    # closing the terminal (SIGHUP) or `kill` (SIGTERM) must stop LanguageTool too, exactly like Ctrl+C;
+    # by default those signals end Python at once and leave a ~1 GB Java process running
+    def _stop(signum, frame):
+        raise KeyboardInterrupt
+    for sig in (signal.SIGTERM, getattr(signal, "SIGHUP", None)):
+        if sig is not None:
+            signal.signal(sig, _stop)
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:

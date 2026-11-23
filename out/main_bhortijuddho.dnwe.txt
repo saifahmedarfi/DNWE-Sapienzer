@@ -1,0 +1,134 @@
+BhortiJuddho: A Unified Admission Platform with\\
+AI-Assisted Counseling for Higher Education in Bangladesh
+
+Abstract
+
+BhortiJuddho is a web-based admission prototype for Bangladesh that allows applicants to maintain one profile, academic record, and document repository for reuse across university applications. The platform combines a React single-page application with Supabase authentication, PostgreSQL, object storage, institution-specific eligibility rules, and an AI-assisted counselor with a deterministic fallback for supported calculations. Row-level security enforces student ownership and university-scoped administrative access. Developer-run prototype benchmarks reported 18 minutes to complete five applications, a 2.1% data-entry error rate, 92 ms profile retrieval, and no unauthorized disclosure in 50 access-control attempts. These aggregate results indicate the feasibility of master-data reuse, but the absence of participant-level records, load-test traces, and a labeled AI-answer dataset prevents broader claims about usability, scalability, or counseling accuracy. The paper therefore presents the architecture, requirements, security model, benchmark evidence, and limitations as a basis for a larger field evaluation with Bangladeshi universities.
+
+abstract
+
+IEEEkeywords
+university admission, common application, Bangladesh, row-level security, eligibility checking, AI-assisted counseling
+IEEEkeywords
+
+Introduction
+
+Bangladesh combines coordinated and institution-specific admission processes. For the 2025–2026 cycle, the General, Science, and Technology (GST) process coordinated admission activity for 19 public universities [gst]; other institutions retain their own application portals, requirements, and tests, as illustrated by BRAC University's separate online process [bracapply]. This coexistence requires applicants targeting institutions outside one cluster to repeat profile, grade, and document entry.
+
+BhortiJuddho roughly means “admission battle” in Bangla. The prototype addresses that burden through a reusable master profile and a common application workspace. Its contributions are: (1) a master-data model that reuses personal, academic, and document records; (2) configurable eligibility rules for SSC/HSC and O/A-Level applicants; (3) profile-grounded AI counseling with a rule-based fallback; and (4) database-level access control evaluated through prototype efficiency, latency, error, and authorization checks. Section II compares related systems; Sections III and IV present requirements and design; Sections V–VII report the available evidence, discuss limitations, and identify future work.
+
+Related Work
+
+Centralized admission can alter applicant composition and allocation outcomes [candelaria], while earlier e-governance and multi-agent systems demonstrate workflow consolidation and rule-based processing [muralidhara, auddy]. Machine-learning studies extend admission decision support [assiri]; educational-AI and chatbot research motivates interactive guidance but also requires domain-specific validation [ahmad, baviskar].
+
+Comparison of Admission Platforms
+
+Table tab:systems positions BhortiJuddho against operational platforms. Common App reuses common responses across more than 1,100 institutions [commonapp]; UCAS supports up to five undergraduate choices [ucas]; JoSAA performs centralized seat allocation for Indian technical institutes [josaa]; and GST coordinates a subset of Bangladeshi public universities [gst]. The gap addressed here is a Bangladesh-focused profile-reuse layer spanning institution-specific applications, dual-curriculum eligibility, tracking, and counseling. BhortiJuddho remains a prototype rather than a deployed replacement for these systems.
+
+Requirements and Methodology
+
+Requirements were derived from a review of admission workflows and public portal documentation, not from a formal student survey. The scope includes profile creation, academic records, document upload, program discovery, eligibility checking, application submission and tracking, counseling, PDF export, and university administration. Table tab:req links representative requirements to the available verification evidence.
+
+Requirements, Use Cases, and Verification
+
+The implementation was evaluated using the aggregate project log available for this paper. It records completion time, field errors, profile latency, and authorization outcomes, but does not retain participant counts, trial-level distributions, test location, database region, or workload traces. Consequently, the evaluation reports prototype observations and mathematically implied baselines, not a controlled user study or load test. Authentication uses email/password sessions and optional OAuth login; the resulting access token supplies the database authorization context. This avoids the earlier, imprecise description of authentication as “JWT-based OAuth.”
+
+System Design and Implementation
+
+Figure fig:architecture shows the headless architecture. The React client calls Supabase services over HTTPS; PostgreSQL stores relational data and object storage holds documents. This separation simplifies deployment, but reliability remains dependent on the hosted provider. The project repository is available online [repository].
+
+System architecture of BhortiJuddho. Authorization is enforced at the data layer rather than only in the client.
+
+Master Data and Eligibility
+
+As Fig. fig:master-data illustrates, applications reference one student-owned master record instead of copying it. University-specific fields remain attached to the corresponding application. Program discovery is a conventional filter over tuition, location, and intake; eligibility is evaluated separately against configurable program rules.
+
+Master-data reuse: one verified profile supplies multiple university applications while institution-specific answers remain separate.
+
+Table tab:grades documents the normalization policy used for rule comparison. Local GPA is represented on its native five-point scale. O/A-Level letters use the published BRAC University scale as one institution-specific configuration [bracgrades]; the platform does not treat it as a national equivalence standard. For a rule with minimum score $m$, the eligibility ratio is $r=s/m$; all mandatory rules must satisfy $r1$. Special subject, portfolio, or test requirements remain explicit Boolean predicates.
+
+Configurable Grade Normalization Example
+
+AI Counselor and Privacy
+
+The counselor uses profile-grounded prompting, not retrieval-augmented generation: selected grades and preferences are inserted into the request sent to the configured Gemini service. The implementation record identifies the service as “Gemini Pro” but does not preserve a model identifier or API version; this limits reproducibility. As Fig. fig:ai-flow shows, timeout, rate-limit, or API errors trigger regex-based rules for supported GPA calculations and financial-constraint queries. Unsupported requests receive a message directing the applicant to official university information. Because profile data can leave the platform, production deployment requires explicit consent, data minimization, retention controls, and a verified model configuration.
+
+AI counselor decision flow. The fallback covers only declared rule types and does not silently invent an answer.
+
+Figure fig:counselor-ui shows the implemented conversational interface. Its presence demonstrates the interaction path only; answer quality is evaluated separately.
+
+AI-assisted counselor interface. Production use requires validated answers, explicit consent, and data minimization.
+
+Security, Roles, and Workflow
+
+PostgreSQL row-level security filters visible and modifiable rows by policy [postgresql]. Student policies match auth.uid() to record ownership; university-admin policies also require the application's university identifier to belong to the administrator. Platform administrators manage global reference data through privileged server-side operations. Supabase notes that denied reads commonly return no rows rather than a 403 response [supabase]; the evaluation therefore records disclosure outcomes, not assumed HTTP codes.
+
+Role and Permission Summary
+
+Figure fig:erd makes the ownership boundaries explicit: a student owns reusable records and applications; each application targets one program; each program belongs to one university; and a university administrator is scoped to one university. Figure fig:operations summarizes both the tracked status lifecycle and the authenticated request path.
+
+Core entity relationships. Foreign keys connect applications to both the applicant and the selected program.
+
+The request path validates input in the service layer, attaches the session token, and relies on database policy for final authorization.
+
+Operational flow: application status transitions (top) and authenticated requests with database-enforced row-level security (bottom).
+
+Evaluation
+
+Efficiency and Response Time
+
+The aggregate benchmark reports 18 minutes for five applications and a 60% reduction, implying a 45-minute baseline; a 2.1% error rate and 75% reduction imply an 8.4% baseline. These derived values are visualized in Fig. fig:performance. They should not be interpreted as population estimates because raw trials and participant characteristics are unavailable. Profile retrieval was reported as 92 ms, with neither percentile latency nor test region retained. No concurrent-user load test was recorded, so scalability is not claimed.
+
+Reported prototype outcomes and baselines implied by the original percentage reductions. Scales are separated to avoid comparing unlike units.
+
+Security and AI Evaluation
+
+Table tab:security documents the five authorization classes represented in the 50-attempt aggregate. The per-class attempt distribution was not retained. The observed result was no unauthorized row disclosure or unauthorized update; denied reads returned empty results where row policies filtered all records.
+
+Authorization Test Coverage
+
+No labeled question set or expert answer key was preserved for the counselor. Accordingly, this paper does not report AI accuracy, hallucination rate, or fallback coverage as measured outcomes. A preregistered follow-up should sample eligibility, GPA, deadline, fee, program, and general-advice questions; score factual correctness against official notices; and report accuracy and latency separately for AI, rule fallback, and unanswered paths.
+
+Planned AI Counselor Evaluation Protocol
+
+Revised Prototype Performance Summary
+
+Validity of the Evidence
+
+The aggregate measurements support only a feasibility assessment. Construct validity is limited because “completion time” and “data-entry error” were not accompanied by operational definitions or trial-level records. The inferred baselines in Table tab:performance are algebraically consistent with the reported percentage improvements, but they are not independently observed values. A follow-up study should timestamp each task, define an error as a submitted field that differs from a verified source record, and publish anonymized per-participant results.
+
+Internal validity is also limited by the absence of counterbalancing, repeated trials, and environment metadata. Familiarity with the prototype, network conditions, browser caching, or differences between comparison portals could account for part of the observed timing gap. Response-time experiments should therefore fix the client location and database region, report median and 95th-percentile latency, clear caches between prescribed runs, and repeat each operation under controlled concurrency.
+
+External validity remains untested because the prototype has not been used in a live admission cycle. The authorization checks cover important cross-tenant cases, but not injection, credential theft, denial-of-service, storage-policy errors, or administrative misuse. Likewise, the counselor protocol in Table tab:ai-eval must be executed against dated official notices before any claim of factual accuracy or applicant benefit is made.
+
+Results and Discussion
+
+The available evidence is consistent with the expected advantage of master-data reuse: the fixed cost of completing a profile is paid once, so additional applications require fewer repeated fields. The authorization tests support the intended isolation model, but do not constitute penetration testing. Figure fig:student-dashboard shows how the implemented student view consolidates progress and document status; it demonstrates implementation coverage, not usability.
+
+Student dashboard. The summary cards expose application progress and document completeness in one view.
+
+The hosted backend reduces implementation effort while introducing provider, region, cost, and availability dependencies. National-scale adoption would require peak-load testing, shared data standards, payment integration, governance, and agreement from universities that currently control their own portals. Figure fig:admin-dashboard illustrates the institution-scoped management view. No anxiety reduction, satisfaction, or administrative-efficiency claim is made without a field study.
+
+University administration dashboard. The view groups institution-owned programs, applicants, and status controls.
+
+Adoption Implications
+
+A shared admission layer changes institutional responsibilities as well as software architecture. Universities would need to agree on a minimum common data schema, ownership of applicant records, retention periods, correction procedures, and service-level expectations during peak submission windows. Institution-specific essays, portfolios, tests, and quotas should remain configurable rather than being forced into one national rule set. This preserves local autonomy while allowing common identity, profile, document, and tracking services.
+
+Operational deployment also requires a governance model for onboarding universities and publishing authoritative program data. Each institution should designate administrators who can update deadlines and eligibility rules, while platform operators maintain audit logs and versioned policy changes. Applicants should be shown the source and effective date of consequential guidance. These controls are particularly important for AI-assisted responses: the counselor should support navigation and calculation, but official university notices must remain the final authority for deadlines, fees, and eligibility decisions.
+
+Operational Safeguards
+
+A production service should preserve an immutable audit trail for profile changes, application submissions, status transitions, administrative edits, and document access. High-impact operations should record the actor, institution, timestamp, affected record, and policy version. Role changes and bulk exports require additional approval, while repeated authorization failures should trigger review without exposing applicant data in diagnostic logs.
+
+The counselor should display when an answer was generated, identify the institutional source used for factual claims, and offer a direct escalation path when confidence or source freshness is inadequate. Applicants should be able to withhold optional profile fields from external AI processing without losing access to core application functions. A documented incident-response process should cover erroneous guidance, compromised accounts, incorrect university rules, and service outages during deadline periods.
+
+Limitations
+
+The prototype has not been deployed with real universities or evaluated through a controlled applicant study. Aggregate benchmark records omit sample size and distributions; load, usability, and AI-accuracy tests remain outstanding. Documents are verified manually, notifications are absent, payments are simulated, university data is static, and the interface is English-only. Grade rules may not cover equivalency and international cases. Profile-grounded AI requests may expose personal data to an external service and can produce incorrect advice. Finally, the platform depends on university participation and acceptance of a shared application workflow.
+
+Conclusion and Future Work
+
+BhortiJuddho demonstrates a six-component prototype for reusable admission data, configurable eligibility, application tracking, AI-assisted guidance, and database-level isolation. Aggregate benchmarks suggest lower repeated-entry effort and successful blocking of the tested cross-tenant requests, but the current evidence is insufficient for claims of national scalability, improved usability, or counselor accuracy.
+
+Priority work is automated document verification, partnerships with universities, a larger controlled evaluation, Bangla support, and a versioned admission knowledge base. Subsequent work should add payment and notification services, publish load-test traces, evaluate AI answers with expert-labeled questions, obtain informed consent for external processing, and test the platform during a real admission cycle.
