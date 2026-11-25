@@ -1,0 +1,3638 @@
+{
+ "tests_total": 1176,
+ "status_counts": {
+  "ok": 912,
+  "not-applicable": 72,
+  "error": 192
+ },
+ "tests_by_group_status": {
+  "workspace/ok": 288,
+  "generated/ok": 516,
+  "generated/not-applicable": 48,
+  "generated/error": 60,
+  "unsupported/error": 132,
+  "unsupported/ok": 108,
+  "unsupported/not-applicable": 24
+ },
+ "by_intensity": {
+  "balanced": {
+   "n": 240,
+   "pct_words_changed_mean": 9.79,
+   "pct_words_changed_median": 7.81,
+   "pct_sentences_changed_mean": 57.34,
+   "engine_seconds_mean": 1.58,
+   "applied_total": 17262,
+   "rejected_gate_total": 1047,
+   "below_threshold_total": 24,
+   "unchanged_tests": 6
+  },
+  "conservative": {
+   "n": 240,
+   "pct_words_changed_mean": 4.92,
+   "pct_words_changed_median": 1.42,
+   "pct_sentences_changed_mean": 19.18,
+   "engine_seconds_mean": 1.34,
+   "applied_total": 3346,
+   "rejected_gate_total": 934,
+   "below_threshold_total": 12,
+   "unchanged_tests": 82
+  },
+  "extensive": {
+   "n": 240,
+   "pct_words_changed_mean": 9.96,
+   "pct_words_changed_median": 7.81,
+   "pct_sentences_changed_mean": 58.29,
+   "engine_seconds_mean": 1.62,
+   "applied_total": 16975,
+   "rejected_gate_total": 1055,
+   "below_threshold_total": 15,
+   "unchanged_tests": 6
+  }
+ },
+ "by_mode": {
+  "academic": {
+   "n": 180,
+   "pct_words_changed_mean": 8.12,
+   "pct_words_changed_median": 5.56,
+   "pct_sentences_changed_mean": 44.89,
+   "engine_seconds_mean": 1.89,
+   "applied_total": 9404,
+   "rejected_gate_total": 756,
+   "below_threshold_total": 11,
+   "unchanged_tests": 28
+  },
+  "conversational": {
+   "n": 180,
+   "pct_words_changed_mean": 9.2,
+   "pct_words_changed_median": 6.52,
+   "pct_sentences_changed_mean": 49.21,
+   "engine_seconds_mean": 1.39,
+   "applied_total": 10977,
+   "rejected_gate_total": 778,
+   "below_threshold_total": 18,
+   "unchanged_tests": 8
+  },
+  "general": {
+   "n": 180,
+   "pct_words_changed_mean": 8.07,
+   "pct_words_changed_median": 5.56,
+   "pct_sentences_changed_mean": 44.4,
+   "engine_seconds_mean": 1.39,
+   "applied_total": 9184,
+   "rejected_gate_total": 756,
+   "below_threshold_total": 18,
+   "unchanged_tests": 30
+  },
+  "technical": {
+   "n": 180,
+   "pct_words_changed_mean": 7.5,
+   "pct_words_changed_median": 5.15,
+   "pct_sentences_changed_mean": 41.23,
+   "engine_seconds_mean": 1.39,
+   "applied_total": 8018,
+   "rejected_gate_total": 746,
+   "below_threshold_total": 4,
+   "unchanged_tests": 28
+  }
+ },
+ "by_method": {
+  "file": {
+   "n": 360,
+   "pct_words_changed_mean": 8.26,
+   "pct_words_changed_median": 5.56,
+   "pct_sentences_changed_mean": 46.51,
+   "engine_seconds_mean": 1.59,
+   "applied_total": 18940,
+   "rejected_gate_total": 1523,
+   "below_threshold_total": 27,
+   "unchanged_tests": 47
+  },
+  "text": {
+   "n": 360,
+   "pct_words_changed_mean": 8.18,
+   "pct_words_changed_median": 5.56,
+   "pct_sentences_changed_mean": 43.36,
+   "engine_seconds_mean": 1.44,
+   "applied_total": 18643,
+   "rejected_gate_total": 1513,
+   "below_threshold_total": 24,
+   "unchanged_tests": 47
+  }
+ },
+ "by_type": {
+  ".docx": {
+   "n": 48,
+   "pct_words_changed_mean": 6.33,
+   "pct_words_changed_median": 6.34,
+   "pct_sentences_changed_mean": 39.21,
+   "engine_seconds_mean": 2.32,
+   "applied_total": 1719,
+   "rejected_gate_total": 26,
+   "below_threshold_total": 0,
+   "unchanged_tests": 6
+  },
+  ".md": {
+   "n": 144,
+   "pct_words_changed_mean": 4.92,
+   "pct_words_changed_median": 4.74,
+   "pct_sentences_changed_mean": 33.54,
+   "engine_seconds_mean": 0.63,
+   "applied_total": 785,
+   "rejected_gate_total": 30,
+   "below_threshold_total": 0,
+   "unchanged_tests": 30
+  },
+  ".pdf": {
+   "n": 120,
+   "pct_words_changed_mean": 7.25,
+   "pct_words_changed_median": 3.76,
+   "pct_sentences_changed_mean": 40.13,
+   "engine_seconds_mean": 2.33,
+   "applied_total": 4503,
+   "rejected_gate_total": 150,
+   "below_threshold_total": 16,
+   "unchanged_tests": 12
+  },
+  ".tex": {
+   "n": 96,
+   "pct_words_changed_mean": 6.33,
+   "pct_words_changed_median": 4.49,
+   "pct_sentences_changed_mean": 42.6,
+   "engine_seconds_mean": 2.84,
+   "applied_total": 5558,
+   "rejected_gate_total": 54,
+   "below_threshold_total": 27,
+   "unchanged_tests": 6
+  },
+  ".txt": {
+   "n": 312,
+   "pct_words_changed_mean": 10.99,
+   "pct_words_changed_median": 8.17,
+   "pct_sentences_changed_mean": 53.64,
+   "engine_seconds_mean": 1.08,
+   "applied_total": 25018,
+   "rejected_gate_total": 2776,
+   "below_threshold_total": 8,
+   "unchanged_tests": 40
+  }
+ },
+ "by_mode_intensity": {
+  "academic/balanced": {
+   "n": 60,
+   "pct_words_changed_mean": 9.76,
+   "pct_words_changed_median": 8.07,
+   "pct_sentences_changed_mean": 58.3,
+   "engine_seconds_mean": 2.12,
+   "applied_total": 4376,
+   "rejected_gate_total": 261,
+   "below_threshold_total": 3,
+   "unchanged_tests": 2
+  },
+  "academic/conservative": {
+   "n": 60,
+   "pct_words_changed_mean": 4.66,
+   "pct_words_changed_median": 0.57,
+   "pct_sentences_changed_mean": 17.17,
+   "engine_seconds_mean": 1.34,
+   "applied_total": 706,
+   "rejected_gate_total": 232,
+   "below_threshold_total": 3,
+   "unchanged_tests": 24
+  },
+  "academic/extensive": {
+   "n": 60,
+   "pct_words_changed_mean": 9.94,
+   "pct_words_changed_median": 8.07,
+   "pct_sentences_changed_mean": 59.19,
+   "engine_seconds_mean": 2.22,
+   "applied_total": 4322,
+   "rejected_gate_total": 263,
+   "below_threshold_total": 5,
+   "unchanged_tests": 2
+  },
+  "conversational/balanced": {
+   "n": 60,
+   "pct_words_changed_mean": 10.86,
+   "pct_words_changed_median": 8.17,
+   "pct_sentences_changed_mean": 60.61,
+   "engine_seconds_mean": 1.41,
+   "applied_total": 4901,
+   "rejected_gate_total": 269,
+   "below_threshold_total": 10,
+   "unchanged_tests": 0
+  },
+  "conversational/conservative": {
+   "n": 60,
+   "pct_words_changed_mean": 5.71,
+   "pct_words_changed_median": 3.35,
+   "pct_sentences_changed_mean": 25.44,
+   "engine_seconds_mean": 1.34,
+   "applied_total": 1240,
+   "rejected_gate_total": 238,
+   "below_threshold_total": 3,
+   "unchanged_tests": 8
+  },
+  "conversational/extensive": {
+   "n": 60,
+   "pct_words_changed_mean": 11.02,
+   "pct_words_changed_median": 8.54,
+   "pct_sentences_changed_mean": 61.59,
+   "engine_seconds_mean": 1.43,
+   "applied_total": 4836,
+   "rejected_gate_total": 271,
+   "below_threshold_total": 5,
+   "unchanged_tests": 0
+  },
+  "general/balanced": {
+   "n": 60,
+   "pct_words_changed_mean": 9.7,
+   "pct_words_changed_median": 8.07,
+   "pct_sentences_changed_mean": 57.61,
+   "engine_seconds_mean": 1.41,
+   "applied_total": 4278,
+   "rejected_gate_total": 261,
+   "below_threshold_total": 10,
+   "unchanged_tests": 2
+  },
+  "general/conservative": {
+   "n": 60,
+   "pct_words_changed_mean": 4.63,
+   "pct_words_changed_median": 0.29,
+   "pct_sentences_changed_mean": 16.93,
+   "engine_seconds_mean": 1.33,
+   "applied_total": 694,
+   "rejected_gate_total": 232,
+   "below_threshold_total": 3,
+   "unchanged_tests": 26
+  },
+  "general/extensive": {
+   "n": 60,
+   "pct_words_changed_mean": 9.87,
+   "pct_words_changed_median": 8.07,
+   "pct_sentences_changed_mean": 58.67,
+   "engine_seconds_mean": 1.42,
+   "applied_total": 4212,
+   "rejected_gate_total": 263,
+   "below_threshold_total": 5,
+   "unchanged_tests": 2
+  },
+  "technical/balanced": {
+   "n": 60,
+   "pct_words_changed_mean": 8.85,
+   "pct_words_changed_median": 6.46,
+   "pct_sentences_changed_mean": 52.84,
+   "engine_seconds_mean": 1.38,
+   "applied_total": 3707,
+   "rejected_gate_total": 256,
+   "below_threshold_total": 1,
+   "unchanged_tests": 2
+  },
+  "technical/conservative": {
+   "n": 60,
+   "pct_words_changed_mean": 4.66,
+   "pct_words_changed_median": 0.57,
+   "pct_sentences_changed_mean": 17.17,
+   "engine_seconds_mean": 1.36,
+   "applied_total": 706,
+   "rejected_gate_total": 232,
+   "below_threshold_total": 3,
+   "unchanged_tests": 24
+  },
+  "technical/extensive": {
+   "n": 60,
+   "pct_words_changed_mean": 8.99,
+   "pct_words_changed_median": 6.46,
+   "pct_sentences_changed_mean": 53.69,
+   "engine_seconds_mean": 1.42,
+   "applied_total": 3605,
+   "rejected_gate_total": 258,
+   "below_threshold_total": 0,
+   "unchanged_tests": 2
+  }
+ },
+ "by_input_academic_balanced_file": {
+  "DNWE_2.0_-_Offline_Deterministic_Rebuild_Plan.pdf": {
+   "words": 2654,
+   "pct_words_changed": 1.19,
+   "sent": "24/96",
+   "pct_sent": 25.0,
+   "seconds": 5.72
+  },
+  "README.md": {
+   "words": 1081,
+   "pct_words_changed": 0.88,
+   "sent": "8/28",
+   "pct_sent": 28.57,
+   "seconds": 3.96
+  },
+  "corpus__CANTOR.pdf": {
+   "words": 1013,
+   "pct_words_changed": 3.55,
+   "sent": "23/55",
+   "pct_sent": 41.82,
+   "seconds": 2.05
+  },
+  "corpus__CONVERSION.md": {
+   "words": 335,
+   "pct_words_changed": 3.71,
+   "sent": "9/24",
+   "pct_sent": 37.5,
+   "seconds": 0.42
+  },
+  "corpus__HPC.docx": {
+   "words": 2934,
+   "pct_words_changed": 4.85,
+   "sent": "87/231",
+   "pct_sent": 37.66,
+   "seconds": 4.43
+  },
+  "corpus__llmqqm9.pdf": {
+   "words": 4356,
+   "pct_words_changed": 3.78,
+   "sent": "92/166",
+   "pct_sent": 55.42,
+   "seconds": 4.56
+  },
+  "corpus__main_bhortijuddho__main_bhortijuddho.tex": {
+   "words": 2156,
+   "pct_words_changed": 4.49,
+   "sent": "59/107",
+   "pct_sent": 55.14,
+   "seconds": 2.35
+  },
+  "corpus__main_celeba__main_celeba.tex": {
+   "words": 2869,
+   "pct_words_changed": 4.25,
+   "sent": "61/85",
+   "pct_sent": 71.76,
+   "seconds": 3.45
+  },
+  "corpus__main_morphena__main_morphena.tex": {
+   "words": 3469,
+   "pct_words_changed": 6.35,
+   "sent": "108/148",
+   "pct_sent": 72.97,
+   "seconds": 3.53
+  },
+  "corpus__sapienzer.txt": {
+   "words": 846,
+   "pct_words_changed": 1.44,
+   "sent": "11/85",
+   "pct_sent": 12.94,
+   "seconds": 0.79
+  },
+  "samples__README.md": {
+   "words": 76,
+   "pct_words_changed": 0.0,
+   "sent": "0/3",
+   "pct_sent": 0.0,
+   "seconds": 1.16
+  },
+  "samples__ai_style_sample.pdf": {
+   "words": 248,
+   "pct_words_changed": 20.48,
+   "sent": "21/23",
+   "pct_sent": 91.3,
+   "seconds": 0.36
+  },
+  "ai_academic.txt": {
+   "words": 251,
+   "pct_words_changed": 20.95,
+   "sent": "16/16",
+   "pct_sent": 100.0,
+   "seconds": 2.49
+  },
+  "ai_conversational.txt": {
+   "words": 137,
+   "pct_words_changed": 9.49,
+   "sent": "5/9",
+   "pct_sent": 55.56,
+   "seconds": 1.12
+  },
+  "ai_general.txt": {
+   "words": 168,
+   "pct_words_changed": 19.64,
+   "sent": "8/12",
+   "pct_sent": 66.67,
+   "seconds": 1.32
+  },
+  "ai_technical.md": {
+   "words": 173,
+   "pct_words_changed": 11.11,
+   "sent": "7/9",
+   "pct_sent": 77.78,
+   "seconds": 2.42
+  },
+  "binary_garbage.txt": {
+   "words": 169,
+   "pct_words_changed": 0.0,
+   "sent": "0/0",
+   "pct_sent": 0.0,
+   "seconds": 0.25
+  },
+  "british_spelling.txt": {
+   "words": 60,
+   "pct_words_changed": 8.2,
+   "sent": "3/4",
+   "pct_sent": 75.0,
+   "seconds": 0.16
+  },
+  "crlf_line_endings.txt": {
+   "words": 168,
+   "pct_words_changed": 19.64,
+   "sent": "8/12",
+   "pct_sent": 66.67,
+   "seconds": 0.22
+  },
+  "empty.txt": {
+   "words": 0,
+   "pct_words_changed": 0.0,
+   "sent": "0/0",
+   "pct_sent": 0.0,
+   "seconds": 0.13
+  },
+  "generated_multipage.pdf": {
+   "words": 549,
+   "pct_words_changed": 15.25,
+   "sent": "27/35",
+   "pct_sent": 77.14,
+   "seconds": 1.87
+  },
+  "human_academic.txt": {
+   "words": 123,
+   "pct_words_changed": 8.94,
+   "sent": "4/7",
+   "pct_sent": 57.14,
+   "seconds": 0.2
+  },
+  "large_15k_words.txt": {
+   "words": 15151,
+   "pct_words_changed": 13.79,
+   "sent": "741/975",
+   "pct_sent": 76.0,
+   "seconds": 11.81
+  },
+  "latin1_encoded.txt": {
+   "words": 62,
+   "pct_words_changed": 7.81,
+   "sent": "3/4",
+   "pct_sent": 75.0,
+   "seconds": 0.18
+  },
+  "lists_tables_frontmatter.md": {
+   "words": 116,
+   "pct_words_changed": 10.26,
+   "sent": "5/8",
+   "pct_sent": 62.5,
+   "seconds": 0.36
+  },
+  "long_sentence.txt": {
+   "words": 117,
+   "pct_words_changed": 3.42,
+   "sent": "1/1",
+   "pct_sent": 100.0,
+   "seconds": 0.19
+  },
+  "negation_hedge.txt": {
+   "words": 86,
+   "pct_words_changed": 3.49,
+   "sent": "2/6",
+   "pct_sent": 33.33,
+   "seconds": 0.36
+  },
+  "non_english_mixed.txt": {
+   "words": 60,
+   "pct_words_changed": 7.69,
+   "sent": "2/3",
+   "pct_sent": 66.67,
+   "seconds": 1.35
+  },
+  "one_sentence.txt": {
+   "words": 11,
+   "pct_words_changed": 45.45,
+   "sent": "1/1",
+   "pct_sent": 100.0,
+   "seconds": 0.15
+  },
+  "one_word.txt": {
+   "words": 1,
+   "pct_words_changed": 0.0,
+   "sent": "0/0",
+   "pct_sent": 0.0,
+   "seconds": 0.12
+  },
+  "protected_content.md": {
+   "words": 109,
+   "pct_words_changed": 8.89,
+   "sent": "3/6",
+   "pct_sent": 50.0,
+   "seconds": 0.96
+  },
+  "standalone.tex": {
+   "words": 119,
+   "pct_words_changed": 18.33,
+   "sent": "5/8",
+   "pct_sent": 62.5,
+   "seconds": 1.57
+  },
+  "structured.docx": {
+   "words": 107,
+   "pct_words_changed": 11.11,
+   "sent": "6/7",
+   "pct_sent": 85.71,
+   "seconds": 0.31
+  },
+  "unicode_mixed.txt": {
+   "words": 58,
+   "pct_words_changed": 5.56,
+   "sent": "2/3",
+   "pct_sent": 66.67,
+   "seconds": 0.21
+  },
+  "whitespace_only.txt": {
+   "words": 0,
+   "pct_words_changed": 0.0,
+   "sent": "0/0",
+   "pct_sent": 0.0,
+   "seconds": 0.12
+  }
+ },
+ "integrity_fail": [],
+ "pdf_invalid": [
+  [
+   "main-db40879422",
+   "empty.txt",
+   "1 pages"
+  ],
+  [
+   "main-f78039251b",
+   "empty.txt",
+   "1 pages"
+  ],
+  [
+   "main-37199d9e26",
+   "empty.txt",
+   "1 pages"
+  ],
+  [
+   "main-4a0604e278",
+   "empty.txt",
+   "1 pages"
+  ],
+  [
+   "main-5395786f08",
+   "empty.txt",
+   "1 pages"
+  ],
+  [
+   "main-213dee5656",
+   "empty.txt",
+   "1 pages"
+  ],
+  [
+   "main-e9991b0a66",
+   "empty.txt",
+   "1 pages"
+  ],
+  [
+   "main-2bb0b3f832",
+   "empty.txt",
+   "1 pages"
+  ],
+  [
+   "main-e1ce59b63c",
+   "empty.txt",
+   "1 pages"
+  ],
+  [
+   "main-9b2feac757",
+   "empty.txt",
+   "1 pages"
+  ],
+  [
+   "main-6f497e91a2",
+   "empty.txt",
+   "1 pages"
+  ],
+  [
+   "main-96a97376e0",
+   "empty.txt",
+   "1 pages"
+  ],
+  [
+   "main-60ae9f49bb",
+   "whitespace_only.txt",
+   "1 pages"
+  ],
+  [
+   "main-db0cdd72e5",
+   "whitespace_only.txt",
+   "1 pages"
+  ],
+  [
+   "main-273eb30f64",
+   "whitespace_only.txt",
+   "1 pages"
+  ],
+  [
+   "main-bddeb61da6",
+   "whitespace_only.txt",
+   "1 pages"
+  ],
+  [
+   "main-edd37cb99e",
+   "whitespace_only.txt",
+   "1 pages"
+  ],
+  [
+   "main-f4a6574e23",
+   "whitespace_only.txt",
+   "1 pages"
+  ],
+  [
+   "main-aff6e151db",
+   "whitespace_only.txt",
+   "1 pages"
+  ],
+  [
+   "main-f74bcdf303",
+   "whitespace_only.txt",
+   "1 pages"
+  ],
+  [
+   "main-3b34e0c5cc",
+   "whitespace_only.txt",
+   "1 pages"
+  ],
+  [
+   "main-e1a2822605",
+   "whitespace_only.txt",
+   "1 pages"
+  ],
+  [
+   "main-4fb1b33bcd",
+   "whitespace_only.txt",
+   "1 pages"
+  ],
+  [
+   "main-c945c3334d",
+   "whitespace_only.txt",
+   "1 pages"
+  ]
+ ],
+ "numbers_changed": [
+  [
+   "main-6f3ee6795c",
+   "backups__DNWE_2.ipynb",
+   "text",
+   "academic",
+   "conservative",
+   [
+    "1",
+    "1"
+   ],
+   []
+  ],
+  [
+   "main-3e27e4ccdf",
+   "backups__DNWE_2.ipynb",
+   "text",
+   "academic",
+   "balanced",
+   [
+    "1",
+    "1"
+   ],
+   []
+  ],
+  [
+   "main-db72a5abb6",
+   "backups__DNWE_2.ipynb",
+   "text",
+   "academic",
+   "extensive",
+   [
+    "1",
+    "1"
+   ],
+   []
+  ],
+  [
+   "main-bcdebe0410",
+   "backups__DNWE_2.ipynb",
+   "text",
+   "technical",
+   "conservative",
+   [
+    "1",
+    "1"
+   ],
+   []
+  ],
+  [
+   "main-38619049ac",
+   "backups__DNWE_2.ipynb",
+   "text",
+   "technical",
+   "balanced",
+   [
+    "1",
+    "1"
+   ],
+   []
+  ],
+  [
+   "main-c2be031cda",
+   "backups__DNWE_2.ipynb",
+   "text",
+   "technical",
+   "extensive",
+   [
+    "1",
+    "1"
+   ],
+   []
+  ],
+  [
+   "main-65da517e5b",
+   "backups__DNWE_2.ipynb",
+   "text",
+   "general",
+   "conservative",
+   [
+    "1",
+    "1"
+   ],
+   []
+  ],
+  [
+   "main-2f1fa37b10",
+   "backups__DNWE_2.ipynb",
+   "text",
+   "general",
+   "balanced",
+   [
+    "1",
+    "1"
+   ],
+   []
+  ],
+  [
+   "main-673053804c",
+   "backups__DNWE_2.ipynb",
+   "text",
+   "general",
+   "extensive",
+   [
+    "1",
+    "1"
+   ],
+   []
+  ],
+  [
+   "main-a68a074715",
+   "backups__DNWE_2.ipynb",
+   "text",
+   "conversational",
+   "conservative",
+   [
+    "1",
+    "1"
+   ],
+   []
+  ],
+  [
+   "main-82071f4e0a",
+   "backups__DNWE_2.ipynb",
+   "text",
+   "conversational",
+   "balanced",
+   [
+    "1",
+    "1"
+   ],
+   []
+  ],
+  [
+   "main-95cfccbc75",
+   "backups__DNWE_2.ipynb",
+   "text",
+   "conversational",
+   "extensive",
+   [
+    "1",
+    "1"
+   ],
+   []
+  ]
+ ],
+ "citations_changed": [],
+ "urls_changed": [],
+ "negation_changed": [
+  [
+   "main-6f3ee6795c",
+   "backups__DNWE_2.ipynb",
+   "academic",
+   "conservative",
+   330,
+   329
+  ],
+  [
+   "main-3e27e4ccdf",
+   "backups__DNWE_2.ipynb",
+   "academic",
+   "balanced",
+   330,
+   329
+  ],
+  [
+   "main-db72a5abb6",
+   "backups__DNWE_2.ipynb",
+   "academic",
+   "extensive",
+   330,
+   329
+  ],
+  [
+   "main-bcdebe0410",
+   "backups__DNWE_2.ipynb",
+   "technical",
+   "conservative",
+   330,
+   329
+  ],
+  [
+   "main-38619049ac",
+   "backups__DNWE_2.ipynb",
+   "technical",
+   "balanced",
+   330,
+   329
+  ],
+  [
+   "main-c2be031cda",
+   "backups__DNWE_2.ipynb",
+   "technical",
+   "extensive",
+   330,
+   329
+  ],
+  [
+   "main-65da517e5b",
+   "backups__DNWE_2.ipynb",
+   "general",
+   "conservative",
+   330,
+   329
+  ],
+  [
+   "main-2f1fa37b10",
+   "backups__DNWE_2.ipynb",
+   "general",
+   "balanced",
+   330,
+   329
+  ],
+  [
+   "main-673053804c",
+   "backups__DNWE_2.ipynb",
+   "general",
+   "extensive",
+   330,
+   329
+  ],
+  [
+   "main-a68a074715",
+   "backups__DNWE_2.ipynb",
+   "conversational",
+   "conservative",
+   330,
+   329
+  ],
+  [
+   "main-82071f4e0a",
+   "backups__DNWE_2.ipynb",
+   "conversational",
+   "balanced",
+   330,
+   329
+  ],
+  [
+   "main-95cfccbc75",
+   "backups__DNWE_2.ipynb",
+   "conversational",
+   "extensive",
+   330,
+   329
+  ],
+  [
+   "main-326003c23d",
+   "sample_review_arxiv_R2.html",
+   "academic",
+   "conservative",
+   6,
+   7
+  ],
+  [
+   "main-5f0b9fd938",
+   "sample_review_arxiv_R2.html",
+   "academic",
+   "balanced",
+   6,
+   7
+  ],
+  [
+   "main-5c84aed635",
+   "sample_review_arxiv_R2.html",
+   "academic",
+   "extensive",
+   6,
+   7
+  ],
+  [
+   "main-10bdbc4fa4",
+   "sample_review_arxiv_R2.html",
+   "technical",
+   "conservative",
+   6,
+   7
+  ],
+  [
+   "main-f50ead3fc6",
+   "sample_review_arxiv_R2.html",
+   "technical",
+   "balanced",
+   6,
+   7
+  ],
+  [
+   "main-63e7e66945",
+   "sample_review_arxiv_R2.html",
+   "technical",
+   "extensive",
+   6,
+   7
+  ],
+  [
+   "main-bc98bd9a92",
+   "sample_review_arxiv_R2.html",
+   "general",
+   "conservative",
+   6,
+   7
+  ],
+  [
+   "main-65e015f938",
+   "sample_review_arxiv_R2.html",
+   "general",
+   "balanced",
+   6,
+   7
+  ],
+  [
+   "main-3e525903ae",
+   "sample_review_arxiv_R2.html",
+   "general",
+   "extensive",
+   6,
+   7
+  ],
+  [
+   "main-ad1f5232dc",
+   "sample_review_arxiv_R2.html",
+   "conversational",
+   "conservative",
+   6,
+   7
+  ],
+  [
+   "main-fcfd1a8ab6",
+   "sample_review_arxiv_R2.html",
+   "conversational",
+   "balanced",
+   6,
+   7
+  ],
+  [
+   "main-d3fa5f16b3",
+   "sample_review_arxiv_R2.html",
+   "conversational",
+   "extensive",
+   6,
+   7
+  ]
+ ],
+ "hedge_changed": {
+  "corpus__llmqqm9.pdf": 16,
+  "corpus__main_celeba__main_celeba.tex": 8,
+  "corpus__main_morphena__main_morphena.tex": 16,
+  "samples__ai_style_sample.pdf": 24,
+  "ai_academic.txt": 24,
+  "generated_multipage.pdf": 24,
+  "large_15k_words.txt": 24,
+  "lists_tables_frontmatter.md": 24,
+  "standalone.tex": 24,
+  "backups__DNWE_2.ipynb": 9
+ },
+ "paragraphs_changed": [],
+ "structure_fail": [],
+ "protected_fail": [
+  [
+   "main-7de16145d6",
+   "binary_garbage.txt",
+   "academic",
+   "conservative",
+   "{\"inline_math\": {\"lost\": [\"$V\\ufffd\\ufffdL\\ufffd1\\ufffd\\u0002\\ufffd\\u0014\\u000ec\\ufffd\\u0004\\ufffd\\u0214\\ufffdCR\\u013e7\\u0014\\ufffd\\ufffd\\ufffd\\ufffd}2_\\u026e\\ufffd9=\\u0539\\ufffdw\\ufffd\\ufffdI\\ufffd\\ufffd\\ufffd.C\\u001f\\u078fj\\ufffd\\ufffdb\\ufffd\\ufffd\\u000f\\ufffd_\\ufffda\\ufffde\\u00ad\\u0000:\\u0000\\u0001\\ufffd\\ufffd\\ufffd\\r!\\ufffdw\\ufffd[\\ufffd\\ufffd\\u05c9\\ufffd\\ufffd{\\ufffd\\ufffdMg@R\\u0012\\ufffd\\uff"
+  ],
+  [
+   "main-20585ba34b",
+   "binary_garbage.txt",
+   "academic",
+   "balanced",
+   "{\"inline_math\": {\"lost\": [\"$V\\ufffd\\ufffdL\\ufffd1\\ufffd\\u0002\\ufffd\\u0014\\u000ec\\ufffd\\u0004\\ufffd\\u0214\\ufffdCR\\u013e7\\u0014\\ufffd\\ufffd\\ufffd\\ufffd}2_\\u026e\\ufffd9=\\u0539\\ufffdw\\ufffd\\ufffdI\\ufffd\\ufffd\\ufffd.C\\u001f\\u078fj\\ufffd\\ufffdb\\ufffd\\ufffd\\u000f\\ufffd_\\ufffda\\ufffde\\u00ad\\u0000:\\u0000\\u0001\\ufffd\\ufffd\\ufffd\\r!\\ufffdw\\ufffd[\\ufffd\\ufffd\\u05c9\\ufffd\\ufffd{\\ufffd\\ufffdMg@R\\u0012\\ufffd\\uff"
+  ],
+  [
+   "main-97157ed2ee",
+   "binary_garbage.txt",
+   "academic",
+   "extensive",
+   "{\"inline_math\": {\"lost\": [\"$V\\ufffd\\ufffdL\\ufffd1\\ufffd\\u0002\\ufffd\\u0014\\u000ec\\ufffd\\u0004\\ufffd\\u0214\\ufffdCR\\u013e7\\u0014\\ufffd\\ufffd\\ufffd\\ufffd}2_\\u026e\\ufffd9=\\u0539\\ufffdw\\ufffd\\ufffdI\\ufffd\\ufffd\\ufffd.C\\u001f\\u078fj\\ufffd\\ufffdb\\ufffd\\ufffd\\u000f\\ufffd_\\ufffda\\ufffde\\u00ad\\u0000:\\u0000\\u0001\\ufffd\\ufffd\\ufffd\\r!\\ufffdw\\ufffd[\\ufffd\\ufffd\\u05c9\\ufffd\\ufffd{\\ufffd\\ufffdMg@R\\u0012\\ufffd\\uff"
+  ],
+  [
+   "main-382965b3fc",
+   "binary_garbage.txt",
+   "technical",
+   "conservative",
+   "{\"inline_math\": {\"lost\": [\"$V\\ufffd\\ufffdL\\ufffd1\\ufffd\\u0002\\ufffd\\u0014\\u000ec\\ufffd\\u0004\\ufffd\\u0214\\ufffdCR\\u013e7\\u0014\\ufffd\\ufffd\\ufffd\\ufffd}2_\\u026e\\ufffd9=\\u0539\\ufffdw\\ufffd\\ufffdI\\ufffd\\ufffd\\ufffd.C\\u001f\\u078fj\\ufffd\\ufffdb\\ufffd\\ufffd\\u000f\\ufffd_\\ufffda\\ufffde\\u00ad\\u0000:\\u0000\\u0001\\ufffd\\ufffd\\ufffd\\r!\\ufffdw\\ufffd[\\ufffd\\ufffd\\u05c9\\ufffd\\ufffd{\\ufffd\\ufffdMg@R\\u0012\\ufffd\\uff"
+  ],
+  [
+   "main-72f30d8c4d",
+   "binary_garbage.txt",
+   "technical",
+   "balanced",
+   "{\"inline_math\": {\"lost\": [\"$V\\ufffd\\ufffdL\\ufffd1\\ufffd\\u0002\\ufffd\\u0014\\u000ec\\ufffd\\u0004\\ufffd\\u0214\\ufffdCR\\u013e7\\u0014\\ufffd\\ufffd\\ufffd\\ufffd}2_\\u026e\\ufffd9=\\u0539\\ufffdw\\ufffd\\ufffdI\\ufffd\\ufffd\\ufffd.C\\u001f\\u078fj\\ufffd\\ufffdb\\ufffd\\ufffd\\u000f\\ufffd_\\ufffda\\ufffde\\u00ad\\u0000:\\u0000\\u0001\\ufffd\\ufffd\\ufffd\\r!\\ufffdw\\ufffd[\\ufffd\\ufffd\\u05c9\\ufffd\\ufffd{\\ufffd\\ufffdMg@R\\u0012\\ufffd\\uff"
+  ],
+  [
+   "main-9286474bbb",
+   "binary_garbage.txt",
+   "technical",
+   "extensive",
+   "{\"inline_math\": {\"lost\": [\"$V\\ufffd\\ufffdL\\ufffd1\\ufffd\\u0002\\ufffd\\u0014\\u000ec\\ufffd\\u0004\\ufffd\\u0214\\ufffdCR\\u013e7\\u0014\\ufffd\\ufffd\\ufffd\\ufffd}2_\\u026e\\ufffd9=\\u0539\\ufffdw\\ufffd\\ufffdI\\ufffd\\ufffd\\ufffd.C\\u001f\\u078fj\\ufffd\\ufffdb\\ufffd\\ufffd\\u000f\\ufffd_\\ufffda\\ufffde\\u00ad\\u0000:\\u0000\\u0001\\ufffd\\ufffd\\ufffd\\r!\\ufffdw\\ufffd[\\ufffd\\ufffd\\u05c9\\ufffd\\ufffd{\\ufffd\\ufffdMg@R\\u0012\\ufffd\\uff"
+  ],
+  [
+   "main-dbf5af8540",
+   "binary_garbage.txt",
+   "general",
+   "conservative",
+   "{\"inline_math\": {\"lost\": [\"$V\\ufffd\\ufffdL\\ufffd1\\ufffd\\u0002\\ufffd\\u0014\\u000ec\\ufffd\\u0004\\ufffd\\u0214\\ufffdCR\\u013e7\\u0014\\ufffd\\ufffd\\ufffd\\ufffd}2_\\u026e\\ufffd9=\\u0539\\ufffdw\\ufffd\\ufffdI\\ufffd\\ufffd\\ufffd.C\\u001f\\u078fj\\ufffd\\ufffdb\\ufffd\\ufffd\\u000f\\ufffd_\\ufffda\\ufffde\\u00ad\\u0000:\\u0000\\u0001\\ufffd\\ufffd\\ufffd\\r!\\ufffdw\\ufffd[\\ufffd\\ufffd\\u05c9\\ufffd\\ufffd{\\ufffd\\ufffdMg@R\\u0012\\ufffd\\uff"
+  ],
+  [
+   "main-dfdd38411e",
+   "binary_garbage.txt",
+   "general",
+   "balanced",
+   "{\"inline_math\": {\"lost\": [\"$V\\ufffd\\ufffdL\\ufffd1\\ufffd\\u0002\\ufffd\\u0014\\u000ec\\ufffd\\u0004\\ufffd\\u0214\\ufffdCR\\u013e7\\u0014\\ufffd\\ufffd\\ufffd\\ufffd}2_\\u026e\\ufffd9=\\u0539\\ufffdw\\ufffd\\ufffdI\\ufffd\\ufffd\\ufffd.C\\u001f\\u078fj\\ufffd\\ufffdb\\ufffd\\ufffd\\u000f\\ufffd_\\ufffda\\ufffde\\u00ad\\u0000:\\u0000\\u0001\\ufffd\\ufffd\\ufffd\\r!\\ufffdw\\ufffd[\\ufffd\\ufffd\\u05c9\\ufffd\\ufffd{\\ufffd\\ufffdMg@R\\u0012\\ufffd\\uff"
+  ],
+  [
+   "main-e7e91ae5ea",
+   "binary_garbage.txt",
+   "general",
+   "extensive",
+   "{\"inline_math\": {\"lost\": [\"$V\\ufffd\\ufffdL\\ufffd1\\ufffd\\u0002\\ufffd\\u0014\\u000ec\\ufffd\\u0004\\ufffd\\u0214\\ufffdCR\\u013e7\\u0014\\ufffd\\ufffd\\ufffd\\ufffd}2_\\u026e\\ufffd9=\\u0539\\ufffdw\\ufffd\\ufffdI\\ufffd\\ufffd\\ufffd.C\\u001f\\u078fj\\ufffd\\ufffdb\\ufffd\\ufffd\\u000f\\ufffd_\\ufffda\\ufffde\\u00ad\\u0000:\\u0000\\u0001\\ufffd\\ufffd\\ufffd\\r!\\ufffdw\\ufffd[\\ufffd\\ufffd\\u05c9\\ufffd\\ufffd{\\ufffd\\ufffdMg@R\\u0012\\ufffd\\uff"
+  ],
+  [
+   "main-77ae03ccdd",
+   "binary_garbage.txt",
+   "conversational",
+   "conservative",
+   "{\"inline_math\": {\"lost\": [\"$V\\ufffd\\ufffdL\\ufffd1\\ufffd\\u0002\\ufffd\\u0014\\u000ec\\ufffd\\u0004\\ufffd\\u0214\\ufffdCR\\u013e7\\u0014\\ufffd\\ufffd\\ufffd\\ufffd}2_\\u026e\\ufffd9=\\u0539\\ufffdw\\ufffd\\ufffdI\\ufffd\\ufffd\\ufffd.C\\u001f\\u078fj\\ufffd\\ufffdb\\ufffd\\ufffd\\u000f\\ufffd_\\ufffda\\ufffde\\u00ad\\u0000:\\u0000\\u0001\\ufffd\\ufffd\\ufffd\\r!\\ufffdw\\ufffd[\\ufffd\\ufffd\\u05c9\\ufffd\\ufffd{\\ufffd\\ufffdMg@R\\u0012\\ufffd\\uff"
+  ],
+  [
+   "main-0dc6b06ecd",
+   "binary_garbage.txt",
+   "conversational",
+   "balanced",
+   "{\"inline_math\": {\"lost\": [\"$V\\ufffd\\ufffdL\\ufffd1\\ufffd\\u0002\\ufffd\\u0014\\u000ec\\ufffd\\u0004\\ufffd\\u0214\\ufffdCR\\u013e7\\u0014\\ufffd\\ufffd\\ufffd\\ufffd}2_\\u026e\\ufffd9=\\u0539\\ufffdw\\ufffd\\ufffdI\\ufffd\\ufffd\\ufffd.C\\u001f\\u078fj\\ufffd\\ufffdb\\ufffd\\ufffd\\u000f\\ufffd_\\ufffda\\ufffde\\u00ad\\u0000:\\u0000\\u0001\\ufffd\\ufffd\\ufffd\\r!\\ufffdw\\ufffd[\\ufffd\\ufffd\\u05c9\\ufffd\\ufffd{\\ufffd\\ufffdMg@R\\u0012\\ufffd\\uff"
+  ],
+  [
+   "main-63414090d3",
+   "binary_garbage.txt",
+   "conversational",
+   "extensive",
+   "{\"inline_math\": {\"lost\": [\"$V\\ufffd\\ufffdL\\ufffd1\\ufffd\\u0002\\ufffd\\u0014\\u000ec\\ufffd\\u0004\\ufffd\\u0214\\ufffdCR\\u013e7\\u0014\\ufffd\\ufffd\\ufffd\\ufffd}2_\\u026e\\ufffd9=\\u0539\\ufffdw\\ufffd\\ufffdI\\ufffd\\ufffd\\ufffd.C\\u001f\\u078fj\\ufffd\\ufffdb\\ufffd\\ufffd\\u000f\\ufffd_\\ufffda\\ufffde\\u00ad\\u0000:\\u0000\\u0001\\ufffd\\ufffd\\ufffd\\r!\\ufffdw\\ufffd[\\ufffd\\ufffd\\u05c9\\ufffd\\ufffd{\\ufffd\\ufffdMg@R\\u0012\\ufffd\\uff"
+  ]
+ ],
+ "errors": [
+  [
+   "main-d8ed77c492",
+   "corrupt.docx",
+   "file",
+   "academic",
+   "conservative",
+   500,
+   "BadZipFile: File is not a zip file"
+  ],
+  [
+   "main-3821227f6d",
+   "corrupt.docx",
+   "file",
+   "academic",
+   "balanced",
+   500,
+   "BadZipFile: File is not a zip file"
+  ],
+  [
+   "main-5697c1b4c9",
+   "corrupt.docx",
+   "file",
+   "academic",
+   "extensive",
+   500,
+   "BadZipFile: File is not a zip file"
+  ],
+  [
+   "main-d5114349db",
+   "corrupt.docx",
+   "file",
+   "technical",
+   "conservative",
+   500,
+   "BadZipFile: File is not a zip file"
+  ],
+  [
+   "main-403d8f6877",
+   "corrupt.docx",
+   "file",
+   "technical",
+   "balanced",
+   500,
+   "BadZipFile: File is not a zip file"
+  ],
+  [
+   "main-fb811f4ba8",
+   "corrupt.docx",
+   "file",
+   "technical",
+   "extensive",
+   500,
+   "BadZipFile: File is not a zip file"
+  ],
+  [
+   "main-b8de21abcc",
+   "corrupt.docx",
+   "file",
+   "general",
+   "conservative",
+   500,
+   "BadZipFile: File is not a zip file"
+  ],
+  [
+   "main-99fdf9372d",
+   "corrupt.docx",
+   "file",
+   "general",
+   "balanced",
+   500,
+   "BadZipFile: File is not a zip file"
+  ],
+  [
+   "main-902848f81c",
+   "corrupt.docx",
+   "file",
+   "general",
+   "extensive",
+   500,
+   "BadZipFile: File is not a zip file"
+  ],
+  [
+   "main-6826866bd4",
+   "corrupt.docx",
+   "file",
+   "conversational",
+   "conservative",
+   500,
+   "BadZipFile: File is not a zip file"
+  ],
+  [
+   "main-8bcc5d0ed8",
+   "corrupt.docx",
+   "file",
+   "conversational",
+   "balanced",
+   500,
+   "BadZipFile: File is not a zip file"
+  ],
+  [
+   "main-25e39f0c95",
+   "corrupt.docx",
+   "file",
+   "conversational",
+   "extensive",
+   500,
+   "BadZipFile: File is not a zip file"
+  ],
+  [
+   "main-83dd49f2a0",
+   "corrupt.pdf",
+   "file",
+   "academic",
+   "conservative",
+   500,
+   "PdfminerException: No /Root object! - Is this really a PDF?"
+  ],
+  [
+   "main-af53d6a8fd",
+   "corrupt.pdf",
+   "file",
+   "academic",
+   "balanced",
+   500,
+   "PdfminerException: No /Root object! - Is this really a PDF?"
+  ],
+  [
+   "main-1819d013ee",
+   "corrupt.pdf",
+   "file",
+   "academic",
+   "extensive",
+   500,
+   "PdfminerException: No /Root object! - Is this really a PDF?"
+  ],
+  [
+   "main-5199d413d9",
+   "corrupt.pdf",
+   "file",
+   "technical",
+   "conservative",
+   500,
+   "PdfminerException: No /Root object! - Is this really a PDF?"
+  ],
+  [
+   "main-4c3f62c074",
+   "corrupt.pdf",
+   "file",
+   "technical",
+   "balanced",
+   500,
+   "PdfminerException: No /Root object! - Is this really a PDF?"
+  ],
+  [
+   "main-045d5a1051",
+   "corrupt.pdf",
+   "file",
+   "technical",
+   "extensive",
+   500,
+   "PdfminerException: No /Root object! - Is this really a PDF?"
+  ],
+  [
+   "main-4f9d730787",
+   "corrupt.pdf",
+   "file",
+   "general",
+   "conservative",
+   500,
+   "PdfminerException: No /Root object! - Is this really a PDF?"
+  ],
+  [
+   "main-51fcb877ab",
+   "corrupt.pdf",
+   "file",
+   "general",
+   "balanced",
+   500,
+   "PdfminerException: No /Root object! - Is this really a PDF?"
+  ],
+  [
+   "main-1653a3c979",
+   "corrupt.pdf",
+   "file",
+   "general",
+   "extensive",
+   500,
+   "PdfminerException: No /Root object! - Is this really a PDF?"
+  ],
+  [
+   "main-361d9103c4",
+   "corrupt.pdf",
+   "file",
+   "conversational",
+   "conservative",
+   500,
+   "PdfminerException: No /Root object! - Is this really a PDF?"
+  ],
+  [
+   "main-f5664193d0",
+   "corrupt.pdf",
+   "file",
+   "conversational",
+   "balanced",
+   500,
+   "PdfminerException: No /Root object! - Is this really a PDF?"
+  ],
+  [
+   "main-ce6a3212a1",
+   "corrupt.pdf",
+   "file",
+   "conversational",
+   "extensive",
+   500,
+   "PdfminerException: No /Root object! - Is this really a PDF?"
+  ],
+  [
+   "main-20ff667117",
+   "empty.txt",
+   "text",
+   "academic",
+   "conservative",
+   400,
+   "paste some text or choose a file"
+  ],
+  [
+   "main-1381f3bb06",
+   "empty.txt",
+   "text",
+   "academic",
+   "balanced",
+   400,
+   "paste some text or choose a file"
+  ],
+  [
+   "main-d9816cf03c",
+   "empty.txt",
+   "text",
+   "academic",
+   "extensive",
+   400,
+   "paste some text or choose a file"
+  ],
+  [
+   "main-fb680ea065",
+   "empty.txt",
+   "text",
+   "technical",
+   "conservative",
+   400,
+   "paste some text or choose a file"
+  ],
+  [
+   "main-7ed1155d33",
+   "empty.txt",
+   "text",
+   "technical",
+   "balanced",
+   400,
+   "paste some text or choose a file"
+  ],
+  [
+   "main-47434a7b10",
+   "empty.txt",
+   "text",
+   "technical",
+   "extensive",
+   400,
+   "paste some text or choose a file"
+  ],
+  [
+   "main-babadfe77b",
+   "empty.txt",
+   "text",
+   "general",
+   "conservative",
+   400,
+   "paste some text or choose a file"
+  ],
+  [
+   "main-4525ee8d81",
+   "empty.txt",
+   "text",
+   "general",
+   "balanced",
+   400,
+   "paste some text or choose a file"
+  ],
+  [
+   "main-47299ac237",
+   "empty.txt",
+   "text",
+   "general",
+   "extensive",
+   400,
+   "paste some text or choose a file"
+  ],
+  [
+   "main-34ac578ca6",
+   "empty.txt",
+   "text",
+   "conversational",
+   "conservative",
+   400,
+   "paste some text or choose a file"
+  ],
+  [
+   "main-d6088ec431",
+   "empty.txt",
+   "text",
+   "conversational",
+   "balanced",
+   400,
+   "paste some text or choose a file"
+  ],
+  [
+   "main-a134187178",
+   "empty.txt",
+   "text",
+   "conversational",
+   "extensive",
+   400,
+   "paste some text or choose a file"
+  ],
+  [
+   "main-8cbf03a345",
+   "image_only_no_text_layer.pdf",
+   "file",
+   "academic",
+   "conservative",
+   400,
+   "PDF has no text layer (scanned?) \u2014 OCR is out of scope."
+  ],
+  [
+   "main-462562b90b",
+   "image_only_no_text_layer.pdf",
+   "file",
+   "academic",
+   "balanced",
+   400,
+   "PDF has no text layer (scanned?) \u2014 OCR is out of scope."
+  ],
+  [
+   "main-13c2af0f16",
+   "image_only_no_text_layer.pdf",
+   "file",
+   "academic",
+   "extensive",
+   400,
+   "PDF has no text layer (scanned?) \u2014 OCR is out of scope."
+  ],
+  [
+   "main-0652d0ea7c",
+   "image_only_no_text_layer.pdf",
+   "file",
+   "technical",
+   "conservative",
+   400,
+   "PDF has no text layer (scanned?) \u2014 OCR is out of scope."
+  ],
+  [
+   "main-0b7f7636bc",
+   "image_only_no_text_layer.pdf",
+   "file",
+   "technical",
+   "balanced",
+   400,
+   "PDF has no text layer (scanned?) \u2014 OCR is out of scope."
+  ],
+  [
+   "main-29fe361f3a",
+   "image_only_no_text_layer.pdf",
+   "file",
+   "technical",
+   "extensive",
+   400,
+   "PDF has no text layer (scanned?) \u2014 OCR is out of scope."
+  ],
+  [
+   "main-ff2b38b0e4",
+   "image_only_no_text_layer.pdf",
+   "file",
+   "general",
+   "conservative",
+   400,
+   "PDF has no text layer (scanned?) \u2014 OCR is out of scope."
+  ],
+  [
+   "main-db9034d91f",
+   "image_only_no_text_layer.pdf",
+   "file",
+   "general",
+   "balanced",
+   400,
+   "PDF has no text layer (scanned?) \u2014 OCR is out of scope."
+  ],
+  [
+   "main-d75370692d",
+   "image_only_no_text_layer.pdf",
+   "file",
+   "general",
+   "extensive",
+   400,
+   "PDF has no text layer (scanned?) \u2014 OCR is out of scope."
+  ],
+  [
+   "main-12a4b956e2",
+   "image_only_no_text_layer.pdf",
+   "file",
+   "conversational",
+   "conservative",
+   400,
+   "PDF has no text layer (scanned?) \u2014 OCR is out of scope."
+  ],
+  [
+   "main-666f551ae0",
+   "image_only_no_text_layer.pdf",
+   "file",
+   "conversational",
+   "balanced",
+   400,
+   "PDF has no text layer (scanned?) \u2014 OCR is out of scope."
+  ],
+  [
+   "main-87ffbf2d69",
+   "image_only_no_text_layer.pdf",
+   "file",
+   "conversational",
+   "extensive",
+   400,
+   "PDF has no text layer (scanned?) \u2014 OCR is out of scope."
+  ],
+  [
+   "main-6d91f775fd",
+   "whitespace_only.txt",
+   "text",
+   "academic",
+   "conservative",
+   400,
+   "paste some text or choose a file"
+  ],
+  [
+   "main-3a5b57d7ad",
+   "whitespace_only.txt",
+   "text",
+   "academic",
+   "balanced",
+   400,
+   "paste some text or choose a file"
+  ],
+  [
+   "main-15d41b70e9",
+   "whitespace_only.txt",
+   "text",
+   "academic",
+   "extensive",
+   400,
+   "paste some text or choose a file"
+  ],
+  [
+   "main-96662cc3ae",
+   "whitespace_only.txt",
+   "text",
+   "technical",
+   "conservative",
+   400,
+   "paste some text or choose a file"
+  ],
+  [
+   "main-c2e99fcd13",
+   "whitespace_only.txt",
+   "text",
+   "technical",
+   "balanced",
+   400,
+   "paste some text or choose a file"
+  ],
+  [
+   "main-04f8d0b99e",
+   "whitespace_only.txt",
+   "text",
+   "technical",
+   "extensive",
+   400,
+   "paste some text or choose a file"
+  ],
+  [
+   "main-e9ca878d33",
+   "whitespace_only.txt",
+   "text",
+   "general",
+   "conservative",
+   400,
+   "paste some text or choose a file"
+  ],
+  [
+   "main-d7a99f372f",
+   "whitespace_only.txt",
+   "text",
+   "general",
+   "balanced",
+   400,
+   "paste some text or choose a file"
+  ],
+  [
+   "main-5b015fc7ef",
+   "whitespace_only.txt",
+   "text",
+   "general",
+   "extensive",
+   400,
+   "paste some text or choose a file"
+  ],
+  [
+   "main-6fa61fa5e2",
+   "whitespace_only.txt",
+   "text",
+   "conversational",
+   "conservative",
+   400,
+   "paste some text or choose a file"
+  ],
+  [
+   "main-68baa1877f",
+   "whitespace_only.txt",
+   "text",
+   "conversational",
+   "balanced",
+   400,
+   "paste some text or choose a file"
+  ],
+  [
+   "main-5814e80bd7",
+   "whitespace_only.txt",
+   "text",
+   "conversational",
+   "extensive",
+   400,
+   "paste some text or choose a file"
+  ],
+  [
+   "main-81b8e9459f",
+   "backups__DNWE_2.ipynb",
+   "file",
+   "academic",
+   "conservative",
+   400,
+   "unsupported file type '.ipynb'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-736a52989c",
+   "backups__DNWE_2.ipynb",
+   "file",
+   "academic",
+   "balanced",
+   400,
+   "unsupported file type '.ipynb'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-7adcf6e2e5",
+   "backups__DNWE_2.ipynb",
+   "file",
+   "academic",
+   "extensive",
+   400,
+   "unsupported file type '.ipynb'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-d580d28ee0",
+   "backups__DNWE_2.ipynb",
+   "file",
+   "technical",
+   "conservative",
+   400,
+   "unsupported file type '.ipynb'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-9ff676b97a",
+   "backups__DNWE_2.ipynb",
+   "file",
+   "technical",
+   "balanced",
+   400,
+   "unsupported file type '.ipynb'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-da68ad98ea",
+   "backups__DNWE_2.ipynb",
+   "file",
+   "technical",
+   "extensive",
+   400,
+   "unsupported file type '.ipynb'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-479067143d",
+   "backups__DNWE_2.ipynb",
+   "file",
+   "general",
+   "conservative",
+   400,
+   "unsupported file type '.ipynb'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-9321c85e5c",
+   "backups__DNWE_2.ipynb",
+   "file",
+   "general",
+   "balanced",
+   400,
+   "unsupported file type '.ipynb'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-d9ef9b7399",
+   "backups__DNWE_2.ipynb",
+   "file",
+   "general",
+   "extensive",
+   400,
+   "unsupported file type '.ipynb'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-c57af2a94c",
+   "backups__DNWE_2.ipynb",
+   "file",
+   "conversational",
+   "conservative",
+   400,
+   "unsupported file type '.ipynb'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-2332de6bc5",
+   "backups__DNWE_2.ipynb",
+   "file",
+   "conversational",
+   "balanced",
+   400,
+   "unsupported file type '.ipynb'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-1a8c95aca4",
+   "backups__DNWE_2.ipynb",
+   "file",
+   "conversational",
+   "extensive",
+   400,
+   "unsupported file type '.ipynb'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-151f87b787",
+   "backups__family_precision.json",
+   "file",
+   "academic",
+   "conservative",
+   400,
+   "unsupported file type '.json'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-e7d694f161",
+   "backups__family_precision.json",
+   "file",
+   "academic",
+   "balanced",
+   400,
+   "unsupported file type '.json'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-e49afe7857",
+   "backups__family_precision.json",
+   "file",
+   "academic",
+   "extensive",
+   400,
+   "unsupported file type '.json'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-f1a73f5f90",
+   "backups__family_precision.json",
+   "file",
+   "technical",
+   "conservative",
+   400,
+   "unsupported file type '.json'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-4aad47d40b",
+   "backups__family_precision.json",
+   "file",
+   "technical",
+   "balanced",
+   400,
+   "unsupported file type '.json'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-071658bc2a",
+   "backups__family_precision.json",
+   "file",
+   "technical",
+   "extensive",
+   400,
+   "unsupported file type '.json'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-9abc66abc6",
+   "backups__family_precision.json",
+   "file",
+   "general",
+   "conservative",
+   400,
+   "unsupported file type '.json'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-245329a6c0",
+   "backups__family_precision.json",
+   "file",
+   "general",
+   "balanced",
+   400,
+   "unsupported file type '.json'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-c89092195d",
+   "backups__family_precision.json",
+   "file",
+   "general",
+   "extensive",
+   400,
+   "unsupported file type '.json'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-59e4ed043c",
+   "backups__family_precision.json",
+   "file",
+   "conversational",
+   "conservative",
+   400,
+   "unsupported file type '.json'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-070a36d2be",
+   "backups__family_precision.json",
+   "file",
+   "conversational",
+   "balanced",
+   400,
+   "unsupported file type '.json'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-346426ee58",
+   "backups__family_precision.json",
+   "file",
+   "conversational",
+   "extensive",
+   400,
+   "unsupported file type '.json'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-1f76c66574",
+   "document.odt",
+   "file",
+   "academic",
+   "conservative",
+   400,
+   "unsupported file type '.odt'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-87bd023be3",
+   "document.odt",
+   "file",
+   "academic",
+   "balanced",
+   400,
+   "unsupported file type '.odt'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-a23907d19c",
+   "document.odt",
+   "file",
+   "academic",
+   "extensive",
+   400,
+   "unsupported file type '.odt'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-92e97995ea",
+   "document.odt",
+   "file",
+   "technical",
+   "conservative",
+   400,
+   "unsupported file type '.odt'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-4ec78b3293",
+   "document.odt",
+   "file",
+   "technical",
+   "balanced",
+   400,
+   "unsupported file type '.odt'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-873dd4c621",
+   "document.odt",
+   "file",
+   "technical",
+   "extensive",
+   400,
+   "unsupported file type '.odt'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-483f194cd6",
+   "document.odt",
+   "file",
+   "general",
+   "conservative",
+   400,
+   "unsupported file type '.odt'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-bad2a4a1b2",
+   "document.odt",
+   "file",
+   "general",
+   "balanced",
+   400,
+   "unsupported file type '.odt'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-47732805b2",
+   "document.odt",
+   "file",
+   "general",
+   "extensive",
+   400,
+   "unsupported file type '.odt'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-e142d0941f",
+   "document.odt",
+   "file",
+   "conversational",
+   "conservative",
+   400,
+   "unsupported file type '.odt'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-4fec2d2ef7",
+   "document.odt",
+   "file",
+   "conversational",
+   "balanced",
+   400,
+   "unsupported file type '.odt'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-12eebee066",
+   "document.odt",
+   "file",
+   "conversational",
+   "extensive",
+   400,
+   "unsupported file type '.odt'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-6aa0e69a8d",
+   "hero.svg",
+   "file",
+   "academic",
+   "conservative",
+   400,
+   "unsupported file type '.svg'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-9c3e9ee0b6",
+   "hero.svg",
+   "file",
+   "academic",
+   "balanced",
+   400,
+   "unsupported file type '.svg'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-0c045ff07b",
+   "hero.svg",
+   "file",
+   "academic",
+   "extensive",
+   400,
+   "unsupported file type '.svg'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-cd811b01d7",
+   "hero.svg",
+   "file",
+   "technical",
+   "conservative",
+   400,
+   "unsupported file type '.svg'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-15a7fac30e",
+   "hero.svg",
+   "file",
+   "technical",
+   "balanced",
+   400,
+   "unsupported file type '.svg'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-94b68e58fa",
+   "hero.svg",
+   "file",
+   "technical",
+   "extensive",
+   400,
+   "unsupported file type '.svg'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-ecdaf7ad34",
+   "hero.svg",
+   "file",
+   "general",
+   "conservative",
+   400,
+   "unsupported file type '.svg'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-0df0c2ec67",
+   "hero.svg",
+   "file",
+   "general",
+   "balanced",
+   400,
+   "unsupported file type '.svg'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-da19a3cd3b",
+   "hero.svg",
+   "file",
+   "general",
+   "extensive",
+   400,
+   "unsupported file type '.svg'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-3b7eb05441",
+   "hero.svg",
+   "file",
+   "conversational",
+   "conservative",
+   400,
+   "unsupported file type '.svg'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-88455fe9e0",
+   "hero.svg",
+   "file",
+   "conversational",
+   "balanced",
+   400,
+   "unsupported file type '.svg'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-64387dedf3",
+   "hero.svg",
+   "file",
+   "conversational",
+   "extensive",
+   400,
+   "unsupported file type '.svg'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-f6e837440b",
+   "letter.rtf",
+   "file",
+   "academic",
+   "conservative",
+   400,
+   "unsupported file type '.rtf'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-939e4e9e07",
+   "letter.rtf",
+   "file",
+   "academic",
+   "balanced",
+   400,
+   "unsupported file type '.rtf'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-2597f6627e",
+   "letter.rtf",
+   "file",
+   "academic",
+   "extensive",
+   400,
+   "unsupported file type '.rtf'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-7ae28d0642",
+   "letter.rtf",
+   "file",
+   "technical",
+   "conservative",
+   400,
+   "unsupported file type '.rtf'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-643769c6dd",
+   "letter.rtf",
+   "file",
+   "technical",
+   "balanced",
+   400,
+   "unsupported file type '.rtf'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-3cdeed342f",
+   "letter.rtf",
+   "file",
+   "technical",
+   "extensive",
+   400,
+   "unsupported file type '.rtf'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-5750315ed4",
+   "letter.rtf",
+   "file",
+   "general",
+   "conservative",
+   400,
+   "unsupported file type '.rtf'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-a21f811830",
+   "letter.rtf",
+   "file",
+   "general",
+   "balanced",
+   400,
+   "unsupported file type '.rtf'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-f90ffa92d4",
+   "letter.rtf",
+   "file",
+   "general",
+   "extensive",
+   400,
+   "unsupported file type '.rtf'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-5d719c0e3f",
+   "letter.rtf",
+   "file",
+   "conversational",
+   "conservative",
+   400,
+   "unsupported file type '.rtf'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-df7f7a4f18",
+   "letter.rtf",
+   "file",
+   "conversational",
+   "balanced",
+   400,
+   "unsupported file type '.rtf'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-5ed9b645e6",
+   "letter.rtf",
+   "file",
+   "conversational",
+   "extensive",
+   400,
+   "unsupported file type '.rtf'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-a6400a5906",
+   "notes.rst",
+   "file",
+   "academic",
+   "conservative",
+   400,
+   "unsupported file type '.rst'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-47ce5b1385",
+   "notes.rst",
+   "file",
+   "academic",
+   "balanced",
+   400,
+   "unsupported file type '.rst'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-e88adaf4de",
+   "notes.rst",
+   "file",
+   "academic",
+   "extensive",
+   400,
+   "unsupported file type '.rst'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-32ac343474",
+   "notes.rst",
+   "file",
+   "technical",
+   "conservative",
+   400,
+   "unsupported file type '.rst'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-a2a89ab9ca",
+   "notes.rst",
+   "file",
+   "technical",
+   "balanced",
+   400,
+   "unsupported file type '.rst'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-81b558b09f",
+   "notes.rst",
+   "file",
+   "technical",
+   "extensive",
+   400,
+   "unsupported file type '.rst'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-fe97a15cd0",
+   "notes.rst",
+   "file",
+   "general",
+   "conservative",
+   400,
+   "unsupported file type '.rst'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-782a54710e",
+   "notes.rst",
+   "file",
+   "general",
+   "balanced",
+   400,
+   "unsupported file type '.rst'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-a09d12eba0",
+   "notes.rst",
+   "file",
+   "general",
+   "extensive",
+   400,
+   "unsupported file type '.rst'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-0c2a65f65e",
+   "notes.rst",
+   "file",
+   "conversational",
+   "conservative",
+   400,
+   "unsupported file type '.rst'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-5d94e71e79",
+   "notes.rst",
+   "file",
+   "conversational",
+   "balanced",
+   400,
+   "unsupported file type '.rst'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-ffd639cdbd",
+   "notes.rst",
+   "file",
+   "conversational",
+   "extensive",
+   400,
+   "unsupported file type '.rst'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-a4e9d9f052",
+   "out__benchmark.csv",
+   "file",
+   "academic",
+   "conservative",
+   400,
+   "unsupported file type '.csv'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-1db941533a",
+   "out__benchmark.csv",
+   "file",
+   "academic",
+   "balanced",
+   400,
+   "unsupported file type '.csv'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-260565c449",
+   "out__benchmark.csv",
+   "file",
+   "academic",
+   "extensive",
+   400,
+   "unsupported file type '.csv'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-ee12bddb50",
+   "out__benchmark.csv",
+   "file",
+   "technical",
+   "conservative",
+   400,
+   "unsupported file type '.csv'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-bad5aef1fe",
+   "out__benchmark.csv",
+   "file",
+   "technical",
+   "balanced",
+   400,
+   "unsupported file type '.csv'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-d6111e7c05",
+   "out__benchmark.csv",
+   "file",
+   "technical",
+   "extensive",
+   400,
+   "unsupported file type '.csv'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-ae9cb23025",
+   "out__benchmark.csv",
+   "file",
+   "general",
+   "conservative",
+   400,
+   "unsupported file type '.csv'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-5376c6c68e",
+   "out__benchmark.csv",
+   "file",
+   "general",
+   "balanced",
+   400,
+   "unsupported file type '.csv'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-c317468567",
+   "out__benchmark.csv",
+   "file",
+   "general",
+   "extensive",
+   400,
+   "unsupported file type '.csv'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-7877355b1a",
+   "out__benchmark.csv",
+   "file",
+   "conversational",
+   "conservative",
+   400,
+   "unsupported file type '.csv'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-ff0805407a",
+   "out__benchmark.csv",
+   "file",
+   "conversational",
+   "balanced",
+   400,
+   "unsupported file type '.csv'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-1eaabbf3f8",
+   "out__benchmark.csv",
+   "file",
+   "conversational",
+   "extensive",
+   400,
+   "unsupported file type '.csv'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-72359a4fb7",
+   "page_image-1.png",
+   "file",
+   "academic",
+   "conservative",
+   400,
+   "unsupported file type '.png'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-9c82f435d7",
+   "page_image-1.png",
+   "file",
+   "academic",
+   "balanced",
+   400,
+   "unsupported file type '.png'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-b7c3feea36",
+   "page_image-1.png",
+   "file",
+   "academic",
+   "extensive",
+   400,
+   "unsupported file type '.png'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-722f7be568",
+   "page_image-1.png",
+   "file",
+   "technical",
+   "conservative",
+   400,
+   "unsupported file type '.png'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-8c4260c94a",
+   "page_image-1.png",
+   "file",
+   "technical",
+   "balanced",
+   400,
+   "unsupported file type '.png'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-029a22a917",
+   "page_image-1.png",
+   "file",
+   "technical",
+   "extensive",
+   400,
+   "unsupported file type '.png'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-d5810c4701",
+   "page_image-1.png",
+   "file",
+   "general",
+   "conservative",
+   400,
+   "unsupported file type '.png'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-15b859eb42",
+   "page_image-1.png",
+   "file",
+   "general",
+   "balanced",
+   400,
+   "unsupported file type '.png'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-b82d932b97",
+   "page_image-1.png",
+   "file",
+   "general",
+   "extensive",
+   400,
+   "unsupported file type '.png'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-5e875367f8",
+   "page_image-1.png",
+   "file",
+   "conversational",
+   "conservative",
+   400,
+   "unsupported file type '.png'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-e903d88603",
+   "page_image-1.png",
+   "file",
+   "conversational",
+   "balanced",
+   400,
+   "unsupported file type '.png'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-f45f2bc74c",
+   "page_image-1.png",
+   "file",
+   "conversational",
+   "extensive",
+   400,
+   "unsupported file type '.png'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-83f96a8436",
+   "sample_review_arxiv_R2.html",
+   "file",
+   "academic",
+   "conservative",
+   400,
+   "unsupported file type '.html'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-2fda086cc8",
+   "sample_review_arxiv_R2.html",
+   "file",
+   "academic",
+   "balanced",
+   400,
+   "unsupported file type '.html'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-697663390a",
+   "sample_review_arxiv_R2.html",
+   "file",
+   "academic",
+   "extensive",
+   400,
+   "unsupported file type '.html'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-3c16d429de",
+   "sample_review_arxiv_R2.html",
+   "file",
+   "technical",
+   "conservative",
+   400,
+   "unsupported file type '.html'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-1239ef1137",
+   "sample_review_arxiv_R2.html",
+   "file",
+   "technical",
+   "balanced",
+   400,
+   "unsupported file type '.html'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-5d0ead38e4",
+   "sample_review_arxiv_R2.html",
+   "file",
+   "technical",
+   "extensive",
+   400,
+   "unsupported file type '.html'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-c7ca4398bf",
+   "sample_review_arxiv_R2.html",
+   "file",
+   "general",
+   "conservative",
+   400,
+   "unsupported file type '.html'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-b9c8404fd9",
+   "sample_review_arxiv_R2.html",
+   "file",
+   "general",
+   "balanced",
+   400,
+   "unsupported file type '.html'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-85de0944d5",
+   "sample_review_arxiv_R2.html",
+   "file",
+   "general",
+   "extensive",
+   400,
+   "unsupported file type '.html'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-edfd16e29d",
+   "sample_review_arxiv_R2.html",
+   "file",
+   "conversational",
+   "conservative",
+   400,
+   "unsupported file type '.html'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-83ea6dcb01",
+   "sample_review_arxiv_R2.html",
+   "file",
+   "conversational",
+   "balanced",
+   400,
+   "unsupported file type '.html'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-4b8d85b335",
+   "sample_review_arxiv_R2.html",
+   "file",
+   "conversational",
+   "extensive",
+   400,
+   "unsupported file type '.html'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-99e85ea260",
+   "server.py",
+   "file",
+   "academic",
+   "conservative",
+   400,
+   "unsupported file type '.py'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-d22da05e08",
+   "server.py",
+   "file",
+   "academic",
+   "balanced",
+   400,
+   "unsupported file type '.py'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-4e0984c9ea",
+   "server.py",
+   "file",
+   "academic",
+   "extensive",
+   400,
+   "unsupported file type '.py'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-6daabb6440",
+   "server.py",
+   "file",
+   "technical",
+   "conservative",
+   400,
+   "unsupported file type '.py'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-475868cf0e",
+   "server.py",
+   "file",
+   "technical",
+   "balanced",
+   400,
+   "unsupported file type '.py'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-9da5d55e92",
+   "server.py",
+   "file",
+   "technical",
+   "extensive",
+   400,
+   "unsupported file type '.py'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-43d64dcc2e",
+   "server.py",
+   "file",
+   "general",
+   "conservative",
+   400,
+   "unsupported file type '.py'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-b8dc92445c",
+   "server.py",
+   "file",
+   "general",
+   "balanced",
+   400,
+   "unsupported file type '.py'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-3fe7249b05",
+   "server.py",
+   "file",
+   "general",
+   "extensive",
+   400,
+   "unsupported file type '.py'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-097e70f692",
+   "server.py",
+   "file",
+   "conversational",
+   "conservative",
+   400,
+   "unsupported file type '.py'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-f3c1dbfc81",
+   "server.py",
+   "file",
+   "conversational",
+   "balanced",
+   400,
+   "unsupported file type '.py'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-720c95fec6",
+   "server.py",
+   "file",
+   "conversational",
+   "extensive",
+   400,
+   "unsupported file type '.py'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-e5d65edbb9",
+   "web__index.html",
+   "file",
+   "academic",
+   "conservative",
+   400,
+   "unsupported file type '.html'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-6fb9deef5a",
+   "web__index.html",
+   "file",
+   "academic",
+   "balanced",
+   400,
+   "unsupported file type '.html'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-d0265bfe7d",
+   "web__index.html",
+   "file",
+   "academic",
+   "extensive",
+   400,
+   "unsupported file type '.html'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-e732007523",
+   "web__index.html",
+   "file",
+   "technical",
+   "conservative",
+   400,
+   "unsupported file type '.html'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-f0a0377f81",
+   "web__index.html",
+   "file",
+   "technical",
+   "balanced",
+   400,
+   "unsupported file type '.html'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-63fdcfeb89",
+   "web__index.html",
+   "file",
+   "technical",
+   "extensive",
+   400,
+   "unsupported file type '.html'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-1e6d1f8f67",
+   "web__index.html",
+   "file",
+   "general",
+   "conservative",
+   400,
+   "unsupported file type '.html'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-7029d9e34d",
+   "web__index.html",
+   "file",
+   "general",
+   "balanced",
+   400,
+   "unsupported file type '.html'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-0439995013",
+   "web__index.html",
+   "file",
+   "general",
+   "extensive",
+   400,
+   "unsupported file type '.html'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-83fb6f93ff",
+   "web__index.html",
+   "file",
+   "conversational",
+   "conservative",
+   400,
+   "unsupported file type '.html'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-da874cd8b3",
+   "web__index.html",
+   "file",
+   "conversational",
+   "balanced",
+   400,
+   "unsupported file type '.html'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ],
+  [
+   "main-8f86738df7",
+   "web__index.html",
+   "file",
+   "conversational",
+   "extensive",
+   400,
+   "unsupported file type '.html'; use .txt, .md, .markdown, .docx, .pdf, .tex"
+  ]
+ ],
+ "not_applicable": [
+  [
+   "binary_garbage.txt",
+   "binary content: nothing a person could paste"
+  ],
+  [
+   "corrupt.docx",
+   "the file yields no extractable text"
+  ],
+  [
+   "corrupt.pdf",
+   "the file yields no extractable text"
+  ],
+  [
+   "document.odt",
+   "binary file of an unsupported type: nothing a person could paste"
+  ],
+  [
+   "image_only_no_text_layer.pdf",
+   "the file yields no extractable text"
+  ],
+  [
+   "page_image-1.png",
+   "binary file of an unsupported type: nothing a person could paste"
+  ]
+ ],
+ "families_applied_total": {
+  "synonym": 18236,
+  "rephrase": 6710,
+  "restructure": 1683,
+  "passive": 15,
+  "lexical": 92,
+  "split": 73,
+  "register": 1872,
+  "cliche": 2206,
+  "dash": 20,
+  "merge": 23,
+  "plain": 812,
+  "opener": 14,
+  "light_verb": 68,
+  "grammar": 64,
+  "wordy": 3204,
+  "repetition": 25,
+  "transition": 1125,
+  "hedge_stack": 864,
+  "discourse": 1863,
+  "redundancy": 516
+ },
+ "families_rejected_total": {
+  "dash": 124,
+  "rephrase": 16,
+  "register": 21,
+  "synonym": 4,
+  "restructure": 64,
+  "passive": 30,
+  "cliche": 2792,
+  "grammar": 8,
+  "discourse": 8,
+  "wordy": 12
+ },
+ "rejection_reasons_top": [
+  [
+   "glossary term count changed",
+   1356
+  ],
+  [
+   "the paragraph would become too short to be read back",
+   42
+  ],
+  [
+   "content word lost",
+   42
+  ],
+  [
+   "content word added",
+   33
+  ],
+  [
+   "re-parse does not show agent as subject and patient as object",
+   30
+  ],
+  [
+   "re-parse changed the main clause (root 'help'/'help', subject None/'fa",
+   16
+  ],
+  [
+   "re-parse changed the main clause (root 'Cells'/'*', subject 'all'/'cli",
+   16
+  ],
+  [
+   "re-parse changed the main clause (root 'Hover'/'*', subject None/'hove",
+   8
+  ]
+ ],
+ "parity_by_type": {
+  ".docx": {
+   "pairs": 24,
+   "identical": 7
+  },
+  ".md": {
+   "pairs": 72,
+   "identical": 0
+  },
+  ".pdf": {
+   "pairs": 60,
+   "identical": 28
+  },
+  ".tex": {
+   "pairs": 48,
+   "identical": 11
+  },
+  ".txt": {
+   "pairs": 180,
+   "identical": 168
+  }
+ },
+ "repeatability": {
+  "fresh server process": {
+   "runs": 70,
+   "identical_text": 70,
+   "identical_all_downloads": 66
+  },
+  "same server process, second request": {
+   "runs": 70,
+   "identical_text": 70,
+   "identical_all_downloads": 66
+  }
+ },
+ "judge": {
+  "pairs": 725,
+  "overall": {
+   "pairs": 725,
+   "fluency": 4.74,
+   "naturalness": 4.05,
+   "coherence": 4.8,
+   "fidelity": 4.42,
+   "suitability": 3.98,
+   "mean": 4.4,
+   "accept": 502,
+   "minor_fix": 133,
+   "reject": 90
+  },
+  "by_intensity": {
+   "balanced": {
+    "pairs": 291,
+    "fluency": 4.7,
+    "naturalness": 3.86,
+    "coherence": 4.78,
+    "fidelity": 4.28,
+    "suitability": 3.91,
+    "mean": 4.31,
+    "accept": 180,
+    "minor_fix": 67,
+    "reject": 44
+   },
+   "conservative": {
+    "pairs": 147,
+    "fluency": 4.91,
+    "naturalness": 4.68,
+    "coherence": 4.96,
+    "fidelity": 4.86,
+    "suitability": 4.67,
+    "mean": 4.82,
+    "accept": 140,
+    "minor_fix": 1,
+    "reject": 6
+   },
+   "extensive": {
+    "pairs": 287,
+    "fluency": 4.7,
+    "naturalness": 3.91,
+    "coherence": 4.75,
+    "fidelity": 4.33,
+    "suitability": 3.69,
+    "mean": 4.28,
+    "accept": 182,
+    "minor_fix": 65,
+    "reject": 40
+   }
+  },
+  "by_mode": {
+   "academic": {
+    "pairs": 175,
+    "fluency": 4.67,
+    "naturalness": 3.93,
+    "coherence": 4.74,
+    "fidelity": 4.23,
+    "suitability": 3.83,
+    "mean": 4.28,
+    "accept": 115,
+    "minor_fix": 29,
+    "reject": 31
+   },
+   "conversational": {
+    "pairs": 196,
+    "fluency": 4.72,
+    "naturalness": 4.14,
+    "coherence": 4.82,
+    "fidelity": 4.57,
+    "suitability": 3.95,
+    "mean": 4.44,
+    "accept": 142,
+    "minor_fix": 32,
+    "reject": 22
+   },
+   "general": {
+    "pairs": 176,
+    "fluency": 4.74,
+    "naturalness": 4.01,
+    "coherence": 4.8,
+    "fidelity": 4.38,
+    "suitability": 4.03,
+    "mean": 4.39,
+    "accept": 118,
+    "minor_fix": 35,
+    "reject": 23
+   },
+   "technical": {
+    "pairs": 178,
+    "fluency": 4.83,
+    "naturalness": 4.11,
+    "coherence": 4.86,
+    "fidelity": 4.49,
+    "suitability": 4.1,
+    "mean": 4.48,
+    "accept": 127,
+    "minor_fix": 37,
+    "reject": 14
+   }
+  },
+  "by_type": {
+   ".docx": {
+    "pairs": 55,
+    "fluency": 4.93,
+    "naturalness": 4.33,
+    "coherence": 4.95,
+    "fidelity": 4.82,
+    "suitability": 4.18,
+    "mean": 4.64,
+    "accept": 48,
+    "minor_fix": 6,
+    "reject": 1
+   },
+   ".md": {
+    "pairs": 149,
+    "fluency": 4.85,
+    "naturalness": 4.3,
+    "coherence": 4.79,
+    "fidelity": 4.68,
+    "suitability": 4.17,
+    "mean": 4.56,
+    "accept": 114,
+    "minor_fix": 25,
+    "reject": 10
+   },
+   ".pdf": {
+    "pairs": 142,
+    "fluency": 4.75,
+    "naturalness": 3.93,
+    "coherence": 4.85,
+    "fidelity": 4.36,
+    "suitability": 3.92,
+    "mean": 4.36,
+    "accept": 92,
+    "minor_fix": 31,
+    "reject": 19
+   },
+   ".tex": {
+    "pairs": 131,
+    "fluency": 4.76,
+    "naturalness": 4.08,
+    "coherence": 4.8,
+    "fidelity": 4.44,
+    "suitability": 3.97,
+    "mean": 4.41,
+    "accept": 88,
+    "minor_fix": 27,
+    "reject": 16
+   },
+   ".txt": {
+    "pairs": 248,
+    "fluency": 4.62,
+    "naturalness": 3.89,
+    "coherence": 4.75,
+    "fidelity": 4.21,
+    "suitability": 3.85,
+    "mean": 4.26,
+    "accept": 160,
+    "minor_fix": 44,
+    "reject": 44
+   }
+  },
+  "error_types": [
+   [
+    "none",
+    500
+   ],
+   [
+    "awkward_word",
+    99
+   ],
+   [
+    "term_damaged",
+    51
+   ],
+   [
+    "meaning_shift",
+    49
+   ],
+   [
+    "grammar",
+    22
+   ],
+   [
+    "register_mismatch",
+    4
+   ]
+  ],
+  "verdicts": [
+   [
+    "accept",
+    502
+   ],
+   [
+    "minor-fix",
+    133
+   ],
+   [
+    "reject",
+    90
+   ]
+  ],
+  "spearman_change_vs_quality": -0.142,
+  "points": 325,
+  "family_attribution": [
+   {
+    "family": "synonym",
+    "passages": "455",
+    "accept": "259",
+    "minor_fix": "122",
+    "reject": "74",
+    "accept_rate": "0.569",
+    "reject_rate": "0.163",
+    "mean_fidelity": "4.21",
+    "mean_naturalness": "3.76"
+   },
+   {
+    "family": "cliche",
+    "passages": "199",
+    "accept": "140",
+    "minor_fix": "28",
+    "reject": "31",
+    "accept_rate": "0.704",
+    "reject_rate": "0.156",
+    "mean_fidelity": "4.43",
+    "mean_naturalness": "3.97"
+   },
+   {
+    "family": "rephrase",
+    "passages": "147",
+    "accept": "92",
+    "minor_fix": "23",
+    "reject": "32",
+    "accept_rate": "0.626",
+    "reject_rate": "0.218",
+    "mean_fidelity": "4.1",
+    "mean_naturalness": "3.73"
+   },
+   {
+    "family": "discourse",
+    "passages": "137",
+    "accept": "85",
+    "minor_fix": "24",
+    "reject": "28",
+    "accept_rate": "0.62",
+    "reject_rate": "0.204",
+    "mean_fidelity": "4.23",
+    "mean_naturalness": "3.94"
+   },
+   {
+    "family": "wordy",
+    "passages": "137",
+    "accept": "102",
+    "minor_fix": "19",
+    "reject": "16",
+    "accept_rate": "0.745",
+    "reject_rate": "0.117",
+    "mean_fidelity": "4.45",
+    "mean_naturalness": "4.15"
+   },
+   {
+    "family": "register",
+    "passages": "78",
+    "accept": "60",
+    "minor_fix": "13",
+    "reject": "5",
+    "accept_rate": "0.769",
+    "reject_rate": "0.064",
+    "mean_fidelity": "4.74",
+    "mean_naturalness": "4.4"
+   },
+   {
+    "family": "hedge_stack",
+    "passages": "56",
+    "accept": "31",
+    "minor_fix": "11",
+    "reject": "14",
+    "accept_rate": "0.554",
+    "reject_rate": "0.25",
+    "mean_fidelity": "3.96",
+    "mean_naturalness": "3.89"
+   },
+   {
+    "family": "restructure",
+    "passages": "38",
+    "accept": "3",
+    "minor_fix": "9",
+    "reject": "26",
+    "accept_rate": "0.079",
+    "reject_rate": "0.684",
+    "mean_fidelity": "2.63",
+    "mean_naturalness": "2.66"
+   },
+   {
+    "family": "plain",
+    "passages": "36",
+    "accept": "17",
+    "minor_fix": "4",
+    "reject": "15",
+    "accept_rate": "0.472",
+    "reject_rate": "0.417",
+    "mean_fidelity": "3.44",
+    "mean_naturalness": "3.67"
+   },
+   {
+    "family": "transition",
+    "passages": "18",
+    "accept": "17",
+    "minor_fix": "0",
+    "reject": "1",
+    "accept_rate": "0.944",
+    "reject_rate": "0.056",
+    "mean_fidelity": "4.72",
+    "mean_naturalness": "4.22"
+   },
+   {
+    "family": "grammar",
+    "passages": "12",
+    "accept": "0",
+    "minor_fix": "0",
+    "reject": "12",
+    "accept_rate": "0.0",
+    "reject_rate": "1.0",
+    "mean_fidelity": "1.5",
+    "mean_naturalness": "2.33"
+   },
+   {
+    "family": "merge",
+    "passages": "7",
+    "accept": "2",
+    "minor_fix": "5",
+    "reject": "0",
+    "accept_rate": "0.286",
+    "reject_rate": "0.0",
+    "mean_fidelity": "4.57",
+    "mean_naturalness": "3.57"
+   },
+   {
+    "family": "light_verb",
+    "passages": "7",
+    "accept": "7",
+    "minor_fix": "0",
+    "reject": "0",
+    "accept_rate": "1.0",
+    "reject_rate": "0.0",
+    "mean_fidelity": "5.0",
+    "mean_naturalness": "4.86"
+   },
+   {
+    "family": "split",
+    "passages": "4",
+    "accept": "3",
+    "minor_fix": "0",
+    "reject": "1",
+    "accept_rate": "0.75",
+    "reject_rate": "0.25",
+    "mean_fidelity": "4.25",
+    "mean_naturalness": "4.0"
+   },
+   {
+    "family": "dash",
+    "passages": "4",
+    "accept": "1",
+    "minor_fix": "3",
+    "reject": "0",
+    "accept_rate": "0.25",
+    "reject_rate": "0.0",
+    "mean_fidelity": "4.25",
+    "mean_naturalness": "3.25"
+   },
+   {
+    "family": "lexical",
+    "passages": "3",
+    "accept": "0",
+    "minor_fix": "0",
+    "reject": "3",
+    "accept_rate": "0.0",
+    "reject_rate": "1.0",
+    "mean_fidelity": "2.0",
+    "mean_naturalness": "2.0"
+   },
+   {
+    "family": "opener",
+    "passages": "3",
+    "accept": "1",
+    "minor_fix": "2",
+    "reject": "0",
+    "accept_rate": "0.333",
+    "reject_rate": "0.0",
+    "mean_fidelity": "4.33",
+    "mean_naturalness": "3.33"
+   },
+   {
+    "family": "passive",
+    "passages": "1",
+    "accept": "0",
+    "minor_fix": "1",
+    "reject": "0",
+    "accept_rate": "0.0",
+    "reject_rate": "0.0",
+    "mean_fidelity": "4.0",
+    "mean_naturalness": "2.0"
+   }
+  ],
+  "rule_blame_top30": [
+   {
+    "rule": "synonym:change->shift",
+    "family": "synonym",
+    "blamed_reject": "19",
+    "blamed_minor_fix": "14",
+    "error_types": "{\"meaning_shift\": 6, \"term_damaged\": 12, \"awkward_word\": 15}",
+    "example_notes": "'change to the codebook'->'shift'; 'independently'->'separately'; awkward fronting | Condition moved to govern all three actions; 'policy variant', 'profile shifts'"
+   },
+   {
+    "rule": "synonym:independently->separately",
+    "family": "synonym",
+    "blamed_reject": "15",
+    "blamed_minor_fix": "9",
+    "error_types": "{\"meaning_shift\": 11, \"term_damaged\": 10, \"awkward_word\": 3}",
+    "example_notes": "'change to the codebook'->'shift'; 'independently'->'separately'; awkward fronting | 'coded independently'->'separately' loses method sense; awkward fronted location"
+   },
+   {
+    "rule": "synonym:systematically->methodically",
+    "family": "synonym",
+    "blamed_reject": "13",
+    "blamed_minor_fix": "1",
+    "error_types": "{\"meaning_shift\": 5, \"term_damaged\": 9}",
+    "example_notes": "'systematically flipped'->'methodically flipped' changes sense; 'in this paper' tacked on end; choppy split | \"systematically flipped\" -> \"methodically flipped\" implies intent; \"reaches robust performance\" awkward."
+   },
+   {
+    "rule": "lt:MORFOLOGIK_RULE_EN_US",
+    "family": "grammar",
+    "blamed_reject": "12",
+    "blamed_minor_fix": "0",
+    "error_types": "{\"term_damaged\": 10, \"meaning_shift\": 2}",
+    "example_notes": "Spanish 'cantidades' corrupted to 'candidates' | Spanish 'cantidades' corrupted to 'candidates'"
+   },
+   {
+    "rule": "synonym:difficulty->challenge",
+    "family": "synonym",
+    "blamed_reject": "7",
+    "blamed_minor_fix": "1",
+    "error_types": "{\"grammar\": 8}",
+    "example_notes": "'difficulty concentrating'->'challenge concentrating' ungrammatical | 'difficulty concentrating'->'challenge concentrating' is ungrammatical."
+   },
+   {
+    "rule": "rephrase:at the same time->simultaneously",
+    "family": "rephrase",
+    "blamed_reject": "7",
+    "blamed_minor_fix": "0",
+    "error_types": "{\"meaning_shift\": 7}",
+    "example_notes": "'at the same time every night'->'simultaneously every night' | \"go to bed simultaneously every night\" wrong sense; \"attempt\" stilted; \"To begin with\"/\"Second\" mismatch."
+   },
+   {
+    "rule": "synonym:achieve->reach",
+    "family": "synonym",
+    "blamed_reject": "6",
+    "blamed_minor_fix": "4",
+    "error_types": "{\"awkward_word\": 4, \"term_damaged\": 5, \"meaning_shift\": 1}",
+    "example_notes": "'reaches strong findings'; 'can potentially reduce'->'can decrease' drops hedge | \"systematically flipped\" -> \"methodically flipped\" implies intent; \"reaches robust performance\" awkward."
+   },
+   {
+    "rule": "cliche:play-a-crucial-role",
+    "family": "cliche",
+    "blamed_reject": "5",
+    "blamed_minor_fix": "0",
+    "error_types": "{\"term_damaged\": 1, \"meaning_shift\": 4}",
+    "example_notes": "'systematically flipped'->'methodically flipped'; 'label noise is crucial for the reliability' distorts | 'label noise is crucial for the reliability' inverts sense; 'methodically flipped' damages 'systematically'."
+   },
+   {
+    "rule": "synonym:use->employ",
+    "family": "synonym",
+    "blamed_reject": "4",
+    "blamed_minor_fix": "7",
+    "error_types": "{\"term_damaged\": 4, \"awkward_word\": 4, \"grammar\": 1, \"meaning_shift\": 2}",
+    "example_notes": "'visual token reduction'->'visual token decrease'; 'Instances of benchmarking'; 'permits employing'. | 'employing pretrained encoders' stilted beside kept 'using'."
+   },
+   {
+    "rule": "synonym:try->attempt",
+    "family": "synonym",
+    "blamed_reject": "4",
+    "blamed_minor_fix": "0",
+    "error_types": "{\"meaning_shift\": 4}",
+    "example_notes": "\"go to bed simultaneously every night\" wrong sense; \"attempt\" stilted; \"To begin with\"/\"Second\" mismatch. | \"go to bed simultaneously every night\" wrong sense; \"attempt to\" stilted."
+   },
+   {
+    "rule": "synonym:version->variant",
+    "family": "synonym",
+    "blamed_reject": "3",
+    "blamed_minor_fix": "0",
+    "error_types": "{\"meaning_shift\": 2, \"term_damaged\": 1}",
+    "example_notes": "Condition moved to govern all three actions; 'policy variant', 'profile shifts' | 'pandoc and Vale versions'->'variants' wrong for software versions"
+   },
+   {
+    "rule": "synonym:rapidly->quickly",
+    "family": "synonym",
+    "blamed_reject": "2",
+    "blamed_minor_fix": "8",
+    "error_types": "{\"awkward_word\": 8, \"term_damaged\": 2}",
+    "example_notes": "'rapidly evolving'->'quickly evolving'; cliche opener kept | 'methodically flipped'; 'quickly evolving research landscape'; 'reaches robust performance'."
+   },
+   {
+    "rule": "synonym:foundational->fundamental",
+    "family": "synonym",
+    "blamed_reject": "2",
+    "blamed_minor_fix": "3",
+    "error_types": "{\"awkward_word\": 1, \"term_damaged\": 4}",
+    "example_notes": "'foundational encoder'->'fundamental encoder' wrong sense | 'foundational encoder'->'fundamental encoder' loses foundation-model sense"
+   },
+   {
+    "rule": "synonym:vary->differ",
+    "family": "synonym",
+    "blamed_reject": "2",
+    "blamed_minor_fix": "2",
+    "error_types": "{\"grammar\": 2, \"awkward_word\": 2}",
+    "example_notes": "'never varied'->'never differed' ungrammatical | 'vary stochastically'->'differ stochastically'"
+   },
+   {
+    "rule": "synonym:paper->study",
+    "family": "synonym",
+    "blamed_reject": "2",
+    "blamed_minor_fix": "2",
+    "error_types": "{\"meaning_shift\": 4}",
+    "example_notes": "'transcription of the original paper'->'original study' | 'two-column papers'->'two-column studies' is wrong for PDF layout."
+   },
+   {
+    "rule": "synonym:example->instance",
+    "family": "synonym",
+    "blamed_reject": "2",
+    "blamed_minor_fix": "2",
+    "error_types": "{\"awkward_word\": 1, \"term_damaged\": 3}",
+    "example_notes": "'deterministic version of k-means' should stay 'variant'; examples->instances ok. | 'visual token reduction'->'visual token decrease'; 'Instances of benchmarking'; 'permits employing'."
+   },
+   {
+    "rule": "rephrase:on top of->in addition to",
+    "family": "rephrase",
+    "blamed_reject": "2",
+    "blamed_minor_fix": "0",
+    "error_types": "{\"meaning_shift\": 2}",
+    "example_notes": "\"on top of the heap\" -> \"in addition to the heap\"; split makes \"This\" ambiguous. | 'on top of the heap'->'in addition to the heap' destroys meaning; 'This is not' ambiguous"
+   },
+   {
+    "rule": "synonym:typical->usual",
+    "family": "synonym",
+    "blamed_reject": "2",
+    "blamed_minor_fix": "0",
+    "error_types": "{\"term_damaged\": 2}",
+    "example_notes": "\"pixel change\" -> \"pixel shift\", \"A usual shift measure\"; changes technical meaning. | 'pixel change'->'pixel shift' (different concept); 'A usual shift measure' awkward."
+   },
+   {
+    "rule": "register:contract:that is",
+    "family": "register",
+    "blamed_reject": "2",
+    "blamed_minor_fix": "0",
+    "error_types": "{\"grammar\": 2}",
+    "example_notes": "\"every execution after that's designed\" misparses; contraction invalid here. | \"every execution after that's built\" wrong contraction; garbles parse."
+   },
+   {
+    "rule": "synonym:reduction->decrease",
+    "family": "synonym",
+    "blamed_reject": "2",
+    "blamed_minor_fix": "0",
+    "error_types": "{\"term_damaged\": 2}",
+    "example_notes": "'visual token reduction'->'visual token decrease'; 'Instances of benchmarking'; 'permits employing'. | 'visual token reduction'->'token decrease'; 'Instances of benchmarking', 'permits employing' awkward."
+   },
+   {
+    "rule": "synonym:allow->permit",
+    "family": "synonym",
+    "blamed_reject": "2",
+    "blamed_minor_fix": "0",
+    "error_types": "{\"term_damaged\": 2}",
+    "example_notes": "'visual token reduction'->'visual token decrease'; 'Instances of benchmarking'; 'permits employing'. | 'visual token reduction'->'token decrease'; 'Instances of benchmarking', 'permits employing' awkward."
+   },
+   {
+    "rule": "synonym:contain->include",
+    "family": "synonym",
+    "blamed_reject": "2",
+    "blamed_minor_fix": "0",
+    "error_types": "{\"meaning_shift\": 2}",
+    "example_notes": "'the plan includes it' reverses 'contains' (mitigates) the risk. | 'the plan contains it'->'includes it' reverses sense: contain = mitigate."
+   },
+   {
+    "rule": "synonym:result->finding",
+    "family": "synonym",
+    "blamed_reject": "1",
+    "blamed_minor_fix": "4",
+    "error_types": "{\"term_damaged\": 1, \"awkward_word\": 4}",
+    "example_notes": "'empty results'->'empty findings' wrong for query results | 'reaches strong findings'; 'can potentially reduce'->'can decrease' drops hedge"
+   },
+   {
+    "rule": "synonym:run->execute",
+    "family": "synonym",
+    "blamed_reject": "1",
+    "blamed_minor_fix": "4",
+    "error_types": "{\"awkward_word\": 4, \"grammar\": 1}",
+    "example_notes": "'may rely on the chosen threshold'; 'executes offline' odd | 'run variability'->'execute variability'"
+   },
+   {
+    "rule": "rephrase:opener:first->to begin with",
+    "family": "rephrase",
+    "blamed_reject": "1",
+    "blamed_minor_fix": "4",
+    "error_types": "{\"meaning_shift\": 1, \"awkward_word\": 3, \"register_mismatch\": 1}",
+    "example_notes": "\"go to bed simultaneously every night\" wrong sense; \"attempt\" stilted; \"To begin with\"/\"Second\" mismatch. | \"To begin with, clone\" wordier than \"First\" in install steps."
+   },
+   {
+    "rule": "synonym:remain->stay",
+    "family": "synonym",
+    "blamed_reject": "1",
+    "blamed_minor_fix": "3",
+    "error_types": "{\"awkward_word\": 4}",
+    "example_notes": "Unrelated facts merged: '...stay unchanged, and the cooldown asset is...' | Unrelated facts merged: '...stay unchanged, and the cooldown asset is...'"
+   },
+   {
+    "rule": "synonym:main->primary",
+    "family": "synonym",
+    "blamed_reject": "1",
+    "blamed_minor_fix": "3",
+    "error_types": "{\"term_damaged\": 1, \"meaning_shift\": 1, \"awkward_word\": 2}",
+    "example_notes": "'main paper'->'primary paper' breaks term, inconsistent with kept 'main-paper'. | 'The main paper'->'The primary study' breaks main paper/supplement distinction."
+   },
+   {
+    "rule": "synonym:suggest->indicate",
+    "family": "synonym",
+    "blamed_reject": "1",
+    "blamed_minor_fix": "1",
+    "error_types": "{\"meaning_shift\": 2}",
+    "example_notes": "'this paper suggests [proposes] a model'->'indicates' wrong sense | 'this paper indicates a GAN-aided diffusion model' wrong; original 'suggests' meant proposes."
+   },
+   {
+    "rule": "lexical:resolve->decide",
+    "family": "lexical",
+    "blamed_reject": "1",
+    "blamed_minor_fix": "0",
+    "error_types": "{\"meaning_shift\": 1}",
+    "example_notes": "'resolves overlaps'->'decides overlaps' wrong"
+   },
+   {
+    "rule": "synonym:manually->by hand",
+    "family": "synonym",
+    "blamed_reject": "1",
+    "blamed_minor_fix": "0",
+    "error_types": "{\"grammar\": 1}",
+    "example_notes": "'does not by hand intervene' ungrammatical"
+   }
+  ]
+ },
+ "meta": {
+  "engine_commit": "d006cf3",
+  "date": "2026-11-25",
+  "report": "DNWE_eval_report.pdf",
+  "judge_model": "Claude Opus 5.5, 9 independent blind sessions"
+ }
+}
