@@ -22,8 +22,16 @@ MAX_BODY = 30 * 2**20                        # base64 of a ~20 MB document
 ACCEPTED = (".txt", ".md", ".markdown", ".docx", ".pdf", ".tex")
 
 LOCAL_ORIGIN = re.compile(r"https?://(127\.0\.0\.1|localhost|\[::1\])(:\d{1,5})?")
+# Extra host names this server may be reached under through a local HTTPS proxy, for example
+# Tailscale Serve: DNWE_ALLOWED_HOSTS=saif.tail95d55f.ts.net. The proxy keeps the visitor's Host
+# header, so without this every proxied request is refused (421). Requests arriving under one of
+# these names must come from that exact https:// origin (no "null" origin, no other site).
+PROXY_HOSTS = {h.strip().lower().rstrip(".") for h in os.environ.get("DNWE_ALLOWED_HOSTS", "").split(",") if h.strip()}
 STATE = {"engine": None, "error": None, "loading_since": time.time(), "ready_at": None}
 ENGINE_LOCK = threading.Lock()              # the engine keeps caches and one LanguageTool server
+# The engine runs one document at a time; a few more may wait their turn, beyond that the server
+# answers 503 at once instead of holding many 20 MB uploads in memory.
+QUEUE = threading.BoundedSemaphore(max(1, int(os.environ.get("DNWE_MAX_QUEUE", "4"))))
 
 
 def load_engine():
@@ -160,7 +168,15 @@ def humanize(req):
 
 class Handler(BaseHTTPRequestHandler):
     server_version = "DNWE/2.0"
+    sys_version = ""
     port = 8765
+    timeout = 120                             # a client that stops sending mid-request is dropped
+
+    def _proxy_host(self):
+        """The allowed proxy host name this request came in under, or None."""
+        host = (self.headers.get("Host") or "").lower().rstrip(".")
+        name = host[:-4] if host.endswith(":443") else host
+        return name if name in PROXY_HOSTS else None
 
     def _allowed_hosts(self):
         return {f"127.0.0.1:{self.port}", f"localhost:{self.port}"}
@@ -168,8 +184,12 @@ class Handler(BaseHTTPRequestHandler):
     def _origin_ok(self):
         """Pages from THIS computer may call the API: server.py's own page, the file opened from disk
         (Origin: null) and local dev servers such as VS Code Live Server (http://127.0.0.1:5500).
+        Through an allowed proxy host only that host's own https:// page may call it.
         Pages from any other site are refused."""
         origin = self.headers.get("Origin")
+        proxied = self._proxy_host()
+        if proxied:
+            return origin is None or origin == f"https://{proxied}"
         return origin is None or origin == "null" or bool(LOCAL_ORIGIN.fullmatch(origin))
 
     def _send(self, code, body, ctype="application/json; charset=utf-8"):
@@ -179,6 +199,8 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Content-Length", str(len(data)))
         self.send_header("Cache-Control", "no-store")
         self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("Referrer-Policy", "no-referrer")
+        self.send_header("Content-Security-Policy", "frame-ancestors 'none'; base-uri 'none'; object-src 'none'")
         origin = self.headers.get("Origin")
         if origin and self._origin_ok():          # page opened from disk (file://) sends Origin: null
             self.send_header("Access-Control-Allow-Origin", origin)
@@ -187,7 +209,7 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(data)
 
     def _guard(self):
-        if self.headers.get("Host") not in self._allowed_hosts():
+        if self.headers.get("Host") not in self._allowed_hosts() and not self._proxy_host():
             self._send(421, {"error": "this server only answers on 127.0.0.1 / localhost"}); return False
         if not self._origin_ok():
             self._send(403, {"error": "requests from other web pages are refused"}); return False
@@ -229,21 +251,29 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(404, {"error": "not found"})
         if STATE["engine"] is None:
             return self._send(503, {"error": STATE["error"] or "the engine is still loading; try again in a few seconds"})
-        n = int(self.headers.get("Content-Length") or 0)
+        try:
+            n = int(self.headers.get("Content-Length") or 0)
+        except ValueError:
+            n = -1
         if n <= 0 or n > MAX_BODY:
             return self._send(413, {"error": f"request must be between 1 byte and {MAX_BODY // 2**20} MB"})
+        if not QUEUE.acquire(blocking=False):
+            return self._send(503, {"error": "the engine is busy with other documents; try again in a minute"})
         try:
             req = json.loads(self.rfile.read(n))
             self._send(200, humanize(req))
         except (ValueError, KeyError, json.JSONDecodeError) as e:
             self._send(400, {"error": str(e)})
-        except Exception as e:
-            traceback.print_exc()
-            self._send(500, {"error": f"{type(e).__name__}: {e}"})
+        except Exception:
+            traceback.print_exc()                 # details stay in the server log, not in the browser
+            self._send(500, {"error": "internal error while rewriting; the details are in the server log"})
+        finally:
+            QUEUE.release()
 
     def log_message(self, fmt, *args):
         if "/api/health" not in (args[0] if args else ""):
-            sys.stderr.write(f"[http] {self.address_string()} {fmt % args}\n")
+            who = self.headers.get("Tailscale-User-Login", "") if getattr(self, "headers", None) else ""
+            sys.stderr.write(f"[http] {self.address_string()}{' ' + who if who else ''} {fmt % args}\n")
 
 
 def main():

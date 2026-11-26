@@ -1,0 +1,7 @@
+# Restarts DNWE if its health endpoint stops answering (a hung process is not a "failure" to systemd).
+[Unit]
+Description=DNWE health check
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c 'curl -fsS --max-time 20 -o /dev/null http://127.0.0.1:8765/api/health || { echo "DNWE not answering: restarting"; systemctl --user restart dnwe.service; }'

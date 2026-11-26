@@ -1,0 +1,34 @@
+# DNWE web app as a systemd USER service: runs in the background, independent of VS Code, Jupyter,
+# terminals and browsers; starts at boot (with `loginctl enable-linger`), restarts on failure and
+# shuts LanguageTool down cleanly on stop. Listens on 127.0.0.1 only; Tailscale Serve publishes it.
+# Install: deploy/install.sh
+[Unit]
+Description=DNWE writing engine (127.0.0.1:8765, published to the tailnet by Tailscale Serve)
+StartLimitIntervalSec=600
+StartLimitBurst=5
+
+[Service]
+Type=simple
+WorkingDirectory=@ROOT@
+ExecStart=@ROOT@/.venv/bin/python server.py --no-browser
+Environment=DNWE_PORT=8765
+Environment=DNWE_ALLOWED_HOSTS=@TSHOST@
+Environment=DNWE_MAX_QUEUE=4
+Environment=PYTHONUNBUFFERED=1
+# uploads live in a private tmpfs folder that is wiped when the service stops
+Environment=TMPDIR=%t/dnwe
+RuntimeDirectory=dnwe
+RuntimeDirectoryMode=0700
+UMask=0077
+NoNewPrivileges=yes
+Nice=5
+MemoryHigh=6G
+Restart=on-failure
+RestartSec=5
+# server.py turns SIGTERM into a clean shutdown that also stops the LanguageTool JVM
+KillSignal=SIGTERM
+KillMode=mixed
+TimeoutStopSec=45
+
+[Install]
+WantedBy=default.target
