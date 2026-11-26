@@ -31,11 +31,43 @@
   html { -webkit-text-size-adjust: 100%; }
   body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.55 var(--sans); }
   :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
-  .wrap { max-width: 1320px; margin: 0 auto; padding: 20px 16px 48px; }
-
-  header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
-  .brand h1 { margin: 0; font: 600 22px/1.2 var(--serif); letter-spacing: .2px; }
-  .brand p { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
+  /* ---- page frame: header / [input | output] / settings / footer ---- */
+  .app { max-width: 1600px; margin: 0 auto; padding: 12px 16px; display: grid; gap: 12px;
+         grid-template-rows: auto minmax(0, 1fr) auto auto; }
+  header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; }
+  .brand { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; }
+  .brand h1 { margin: 0; font: 600 19px/1.2 var(--serif); letter-spacing: .2px; }
+  .brand p { margin: 0; color: var(--muted); font-size: 12.5px; }
+  .panes { display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr); min-block-size: 0; }
+  .pane { display: flex; flex-direction: column; min-block-size: 0; }
+  .pane-in { padding: 12px; gap: 8px; }
+  .pane-in textarea { flex: 1 1 auto; }
+  .pane-in .drop { padding: 8px 12px; }
+  #result[hidden] { display: none; }
+  .settings { padding: 12px; display: grid; gap: 12px 16px; grid-template-columns: minmax(0, 1fr); align-items: start; }
+  .settings .options { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 6px; }
+  .settings .opt { padding: 6px 9px 6px 30px; }
+  .settings .opt input { inset-inline-start: 9px; inset-block-start: 9px; }
+  .settings .opt .desc { font-size: 11.5px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
+  .settings .side { display: grid; gap: 8px; }
+  .settings .actions { gap: 8px 12px; }
+  @media (min-width: 900px) {
+    .panes { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    .settings { grid-template-columns: minmax(0, 4fr) minmax(0, 3fr) minmax(0, 2.6fr); }
+    .settings .options.pairs { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .settings .options.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  /* one window, no page scroll: the two panes share the free height and scroll inside */
+  @media (min-width: 900px) and (min-height: 560px) {
+    html, body { block-size: 100%; }
+    body { overflow: hidden; }
+    .app { block-size: 100dvh; }
+    .pane-in textarea { min-block-size: 0; resize: none; }
+    #output #result { flex: 1 1 auto; min-block-size: 0; display: flex; flex-direction: column; }
+    #output #result[hidden] { display: none; }
+    #output [role="tablist"] { flex: none; }
+    #output [role="tabpanel"]:not([hidden]) { flex: 1 1 auto; min-block-size: 0; overflow: auto; }
+  }
   .status { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border: 1px solid var(--line);
             border-radius: 999px; background: var(--surface); font-size: 13px; }
   .status .dot { inline-size: 9px; block-size: 9px; border-radius: 50%; background: var(--warn); flex: none; }
@@ -135,12 +167,13 @@
   .state-out::before { content: "▲ "; } .state-out { color: var(--warn); font-weight: 600; }
   .table-scroll { overflow-x: auto; }
   .note { font-size: 12.5px; color: var(--muted); margin-top: 12px; }
-  footer { margin-top: 22px; color: var(--muted); font-size: 12.5px; text-align: center; }
+  footer { color: var(--muted); font-size: 11.5px; text-align: center; }
+  .summary { flex: none; }
   @media (prefers-reduced-motion: reduce) { .status .dot, .spinner { animation: none; } }
 </style>
 </head>
 <body>
-<div class="wrap">
+<form id="run" class="app" action="/api/humanize" method="post" novalidate>
   <header>
     <div class="brand">
       <h1>DNWE · Deterministic Natural Writing Engine</h1>
@@ -151,69 +184,31 @@
     </div>
   </header>
 
-  <div class="grid">
+  <div class="panes">
     <!-- ================= input ================= -->
-    <section class="card" aria-labelledby="in-title">
-      <div class="card-body">
-        <h2 id="in-title" class="sr-only" style="position:absolute;inline-size:1px;block-size:1px;overflow:hidden;clip-path:inset(50%)">Input</h2>
-        <form id="run" action="/api/humanize" method="post" novalidate>
-          <div class="field">
-            <label class="lead" for="text">Text to rewrite</label>
-            <textarea id="text" name="text" spellcheck="true" aria-describedby="text-hint"
-                      placeholder="Paste a draft here…"></textarea>
-            <span class="hint" id="text-hint"><span id="wc">0 words</span>. Paragraphs are separated by a blank line; a short line on its own (e.g. “Conclusion”) is read as a heading.</span>
-          </div>
+    <section class="card pane pane-in" aria-labelledby="in-title">
+      <h2 id="in-title" class="sr-only" style="position:absolute;inline-size:1px;block-size:1px;overflow:hidden;clip-path:inset(50%)">Input</h2>
+      <label class="lead" for="text">Text to rewrite</label>
+      <textarea id="text" name="text" spellcheck="true" aria-describedby="text-hint"
+                placeholder="Paste a draft here…"></textarea>
+      <span class="hint" id="text-hint"><span id="wc">0 words</span>. Paragraphs are separated by a blank line; a short line on its own (e.g. “Conclusion”) is read as a heading.</span>
 
-          <div class="field">
-            <span class="lead" id="file-label">…or a document</span>
-            <div class="drop" id="drop">
-              <input type="file" id="file" name="file" accept=".txt,.md,.markdown,.docx,.pdf,.tex" aria-labelledby="file-label file-hint">
-              <span class="drop-text">Drop a file here or <u>browse</u></span>
-              <span class="hint" id="file-hint">Word (.docx), Markdown, text, PDF (text layer) or a single .tex file. Formatting, citations, maths and numbers are kept.</span>
-            </div>
-            <div class="chip" id="chip">
-              <span>Using <strong id="chip-name"></strong> <span class="hint" id="chip-size"></span></span>
-              <button type="button" class="btn ghost" id="chip-clear">Remove file</button>
-            </div>
-          </div>
-
-          <fieldset>
-            <legend>Writing mode</legend>
-            <div class="options pairs">
-              <label class="opt"><input type="radio" name="mode" value="academic" checked><span class="name">Academic</span><span class="desc">Formal register, spells out contractions, keeps semicolons.</span></label>
-              <label class="opt"><input type="radio" name="mode" value="technical"><span class="name">Technical</span><span class="desc">Keeps terms of art; no merges, passives or open swaps.</span></label>
-              <label class="opt"><input type="radio" name="mode" value="general"><span class="name">General</span><span class="desc">Plain language, informal word choices allowed.</span></label>
-              <label class="opt"><input type="radio" name="mode" value="conversational"><span class="name">Conversational</span><span class="desc">Relaxed tone with contractions.</span></label>
-            </div>
-          </fieldset>
-
-          <fieldset>
-            <legend>Intensity</legend>
-            <div class="options">
-              <label class="opt"><input type="radio" name="intensity" value="conservative"><span class="name">Conservative</span><span class="desc">Fixes and stock phrasing only.</span></label>
-              <label class="opt"><input type="radio" name="intensity" value="balanced" checked><span class="name">Balanced</span><span class="desc">Rewords most sentences: vocabulary, phrasing, clause order, transitions.</span></label>
-              <label class="opt"><input type="radio" name="intensity" value="extensive"><span class="name">Extensive</span><span class="desc">Rewords every sentence it safely can, methods and results too.</span></label>
-            </div>
-          </fieldset>
-
-          <div class="field">
-            <label class="lead" for="freeze">Freeze words <span class="hint">(optional)</span></label>
-            <input type="text" id="freeze" name="freeze" autocomplete="off" spellcheck="false" aria-describedby="freeze-hint"
-                   placeholder="e.g. leverage, graph neural network, Morphena">
-            <span class="hint" id="freeze-hint">Comma-separated words or phrases that must come out exactly as they went in.</span>
-          </div>
-
-          <div class="alert" id="error" role="alert"></div>
-          <div class="actions">
-            <button type="submit" class="btn" id="go"><span class="spinner" aria-hidden="true"></span><span id="go-text">Rewrite</span></button>
-            <span class="hint">Tip: <kbd>Ctrl</kbd>+<kbd>Enter</kbd> in the text box.</span>
-          </div>
-        </form>
+      <div class="field">
+        <span class="lead" id="file-label">…or a document</span>
+        <div class="drop" id="drop">
+          <input type="file" id="file" name="file" accept=".txt,.md,.markdown,.docx,.pdf,.tex" aria-labelledby="file-label file-hint">
+          <span class="drop-text">Drop a file here or <u>browse</u></span>
+          <span class="hint" id="file-hint">Word (.docx), Markdown, text, PDF (text layer) or a single .tex file. Formatting, citations, maths and numbers are kept.</span>
+        </div>
+        <div class="chip" id="chip">
+          <span>Using <strong id="chip-name"></strong> <span class="hint" id="chip-size"></span></span>
+          <button type="button" class="btn ghost" id="chip-clear">Remove file</button>
+        </div>
       </div>
     </section>
 
     <!-- ================= output ================= -->
-    <section class="card" aria-labelledby="out-title" id="output" aria-busy="false">
+    <section class="card pane" aria-labelledby="out-title" id="output" aria-busy="false">
       <h2 id="out-title" style="position:absolute;inline-size:1px;block-size:1px;overflow:hidden;clip-path:inset(50%)">Result</h2>
       <div class="summary" id="summary" role="status" aria-live="polite"><span>Your rewritten text will appear here.</span></div>
       <div id="result" hidden>
@@ -270,8 +265,44 @@
       </div>
     </section>
   </div>
+
+  <!-- ================= settings ================= -->
+  <section class="card settings" aria-label="Settings">
+    <fieldset>
+      <legend>Writing mode</legend>
+      <div class="options pairs">
+        <label class="opt" title="Formal register, spells out contractions, keeps semicolons."><input type="radio" name="mode" value="academic" checked><span class="name">Academic</span><span class="desc">Formal register, spells out contractions, keeps semicolons.</span></label>
+        <label class="opt" title="Keeps terms of art; no merges, passives or open swaps."><input type="radio" name="mode" value="technical"><span class="name">Technical</span><span class="desc">Keeps terms of art; no merges, passives or open swaps.</span></label>
+        <label class="opt" title="Plain language, informal word choices allowed."><input type="radio" name="mode" value="general"><span class="name">General</span><span class="desc">Plain language, informal word choices allowed.</span></label>
+        <label class="opt" title="Relaxed tone with contractions."><input type="radio" name="mode" value="conversational"><span class="name">Conversational</span><span class="desc">Relaxed tone with contractions.</span></label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Intensity</legend>
+      <div class="options three">
+        <label class="opt" title="Fixes and stock phrasing only."><input type="radio" name="intensity" value="conservative"><span class="name">Conservative</span><span class="desc">Fixes and stock phrasing only.</span></label>
+        <label class="opt" title="Rewords most sentences: vocabulary, phrasing, clause order, transitions."><input type="radio" name="intensity" value="balanced" checked><span class="name">Balanced</span><span class="desc">Rewords most sentences: vocabulary, phrasing, clause order, transitions.</span></label>
+        <label class="opt" title="Rewords every sentence it safely can, methods and results too."><input type="radio" name="intensity" value="extensive"><span class="name">Extensive</span><span class="desc">Rewords every sentence it safely can, methods and results too.</span></label>
+      </div>
+    </fieldset>
+
+    <div class="side">
+      <div class="field">
+        <label class="lead" for="freeze">Freeze words <span class="hint">(optional)</span></label>
+        <input type="text" id="freeze" name="freeze" autocomplete="off" spellcheck="false" aria-describedby="freeze-hint"
+               placeholder="e.g. leverage, graph neural network, Morphena">
+        <span class="hint" id="freeze-hint">Comma-separated words or phrases that must come out exactly as they went in.</span>
+      </div>
+      <div class="alert" id="error" role="alert"></div>
+      <div class="actions">
+        <button type="submit" class="btn" id="go"><span class="spinner" aria-hidden="true"></span><span id="go-text">Rewrite</span></button>
+        <span class="hint">Tip: <kbd>Ctrl</kbd>+<kbd>Enter</kbd> in the text box.</span>
+      </div>
+    </div>
+  </section>
   <footer>DNWE 2.0 · engine loaded from <code>DNWE_2.ipynb</code> by <code>server.py</code> on 127.0.0.1</footer>
-</div>
+</form>
 
 <script>
 // server.py marks the page it serves (data-served="dnwe") and then the API is on the same address.
