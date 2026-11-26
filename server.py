@@ -53,12 +53,11 @@ def load_engine():
         traceback.print_exc()
 
 
-def word_diff(a, b):
-    """[[op, text], ...] with op in eq | del | ins, on word/space/punctuation tokens."""
+def _token_diff(a, b, out):
     split = lambda s: re.findall(r"\s+|\w+|[^\w\s]", s)
     ta, tb = split(a), split(b)
-    out = []
-    for tag, i1, i2, j1, j2 in difflib.SequenceMatcher(None, ta, tb, autojunk=False).get_opcodes():
+    big = len(ta) * len(tb) > 25_000_000          # one huge unbroken paragraph: let difflib prune frequent tokens
+    for tag, i1, i2, j1, j2 in difflib.SequenceMatcher(None, ta, tb, autojunk=big).get_opcodes():
         if tag == "equal":
             out.append(["eq", "".join(ta[i1:i2])])
             continue
@@ -66,7 +65,32 @@ def word_diff(a, b):
             out.append(["del", "".join(ta[i1:i2])])
         if j2 > j1:
             out.append(["ins", "".join(tb[j1:j2])])
-    return out
+
+
+def word_diff(a, b):
+    """[[op, text], ...] with op in eq | del | ins, on word/space/punctuation tokens.
+    Lines (paragraphs) are aligned first and only changed lines are diffed word by word: one
+    word-level diff over a whole 15 000-word document took over three minutes (quadratic),
+    this takes well under a second and gives the same result where paragraphs line up."""
+    la, lb = a.splitlines(keepends=True), b.splitlines(keepends=True)
+    out = []
+    for tag, i1, i2, j1, j2 in difflib.SequenceMatcher(None, la, lb, autojunk=False).get_opcodes():
+        if tag == "equal":
+            out.append(["eq", "".join(la[i1:i2])])
+        elif tag == "replace" and i2 - i1 == j2 - j1:
+            for x, y in zip(la[i1:i2], lb[j1:j2]):
+                _token_diff(x, y, out)
+        else:
+            _token_diff("".join(la[i1:i2]), "".join(lb[j1:j2]), out)
+    merged = []
+    for op, text in out:
+        if not text:
+            continue
+        if merged and merged[-1][0] == op:
+            merged[-1][1] += text
+        else:
+            merged.append([op, text])
+    return merged
 
 
 def humanize(req):
@@ -97,7 +121,10 @@ def humanize(req):
         freeze = [t.strip() for t in freeze if str(t).strip()][:200]
         t0 = time.perf_counter()
         with ENGINE_LOCK:
-            doc, recs, _, rep = E.process(path, mode, intensity, write=False, freeze=freeze)
+            try:
+                doc, recs, _, rep = E.process(path, mode, intensity, write=False, freeze=freeze)
+            except ValueError as e:                # name the user's file, not the temporary copy
+                raise ValueError(str(e).replace(path.name, str(upload["name"]) if upload else "the text")) from e
             rendered, refused = E.render_document(doc, rep["new_masked"])
             original, _ = E.render_document(doc, {})
             exports = E.export_all(doc, rendered)
